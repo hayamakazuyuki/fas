@@ -1,0 +1,99 @@
+{% extends "layout.html" -%}
+{% block content -%}
+{% include "navbar.html" -%}
+<div class="container mt-4">
+    <div class="mt-5 col-md-5 mx-auto">
+        <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="customer-tab" data-bs-toggle="tab" href="#customer" role="tab"
+                   aria-controls="customer" aria-selected="true">取引先</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="shop-tab" data-bs-toggle="tab" href="#shop" role="tab"
+                   aria-controls="shop" aria-selected="false">事業所</a>
+            </li>
+        </ul>
+
+        <div class="tab-content px-3" id="myTabContent">
+            <div class="tab-pane fade show active" id="customer" role="tabpanel" aria-labelledby="customer-tab">
+                <div class="row mt-5 mb-3">
+                    <div class="col-sm-6">
+                        <h4>取引先の検索</h4>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="m-0 text-end">
+                        <a href="/customer/register" class="text-decoration-none">
+                            <i class="bi bi-person-plus"></i> 取引先を登録</a>
+                        </p>
+                    </div>
+                </div>
+                <form action="/customer" method="GET">
+                    <div class="input-group">
+                        <input type="search" class="form-control rounded" placeholder="取引先名 or 番号"
+                               name="search_string" aria-label="Search-customer" aria-describedby="search-addon">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                    </div>
+                </form>
+                <dl class="mt-3 text-secondary fs-6">
+                    <dt>検索ワード （例）</dt>
+                    <dd>取引先名：それゆけ、あきんど or 2258、14765など</dd>
+                </dl>
+            </div>
+
+            <div class="tab-pane fade" id="shop" role="tabpanel" aria-labelledby="shop-tab">
+                <div class="row mt-5 mb-3">
+                    <h4>事業所（配送先）の検索</h4>
+                </div>
+                <form action="/shop">
+                    <div class="input-group">
+                        <input type="search" class="form-control rounded" placeholder="事業所名で検索" name="search_string"
+                               aria-label="Search-customer" aria-describedby="search-addon">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                    </div>
+                </form>
+                <dl class="mt-3 text-secondary fs-6">
+                    <dt>検索ワード （例）</dt>
+                    <dd>川口店、洋服の青山、それゆけ等</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    {% if customers %}
+
+    <p class="mt-3">{{ result_length }} 件の取引先が見つかりました。</p>
+    <p class="text-start">
+    {% for page_num in customers.iter_pages(left_edge=3, right_edge=3) %}
+        {% if page_num %}
+        {% if customers.page == page_num %}
+        <a class="" href="{{ url_for('customer.index', search_string=search_string, page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+        <a class="text-decoration-none" href="{{ url_for('customer.index', search_string=search_string,
+         page=page_num) }}">
+            {{ page_num }}</a>
+        {% endif %}
+
+        {% else %}
+        ...
+        {% endif %}
+    {% endfor %}
+    </p>
+
+    <table class="table table-sm table-hover mt-3">
+        <thead>
+        <tr>
+            <th>取引先ID</th>
+            <th>取引先名</th>
+            </tr>
+        </thead>
+        {% for customer in customers.items %}
+        <tr>
+            <td>{{ customer.id }}</td>
+            <td><a class="text-decoration-none" href="/customer/{{ customer.id }}">{{ customer.name }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+
+{% endblock %}

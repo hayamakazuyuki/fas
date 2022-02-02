@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="container max-w-6xl mx-auto mt-5">
+    <div class="mt-3">
+    <p class="font-bold text-lg mb-5">受注データ</p>
+    <div class="my-5">
+        <a href="/order_data" class="text-blue-500 hover:underline">日付単位へ</a>
+    </div>
+
+        <form action="/order_data/range" method="GET">
+            <div class="flex items-center">
+                <label for="date_from" class="text-sm">範囲指定</label>
+                <input class="border mx-5" type="date" min="2020-09-01" name="date_from" id="date_from" required>
+
+                <label for="date_to" class="">〜</label>
+                <input class="border ml-5" type="date" min="2020-09-01" name="date_to" id="date_to" required>
+
+                <button type="submit" class="ml-5 bg-blue-600 text-white text-sm py-1 px-3 rounded shadow-lg
+                hover:bg-blue-800 transition duration-200">表示</button>
+
+            </div>
+        </form>
+{#
+        {% if orders %}
+        <div>
+            <p class="text-sm my-5">選択範囲 <span class="ml-5 text-xl text-gray-700">
+                {{ date_from or '' }} 〜 {{ date_to or '' }}</span></p>
+
+            <p class="text-blue-500">
+                {% for page_num in orders.iter_pages(left_edge=3, right_edge=2) %}
+                {% if page_num %}
+
+                {% if orders.page == page_num %}
+                <a class="underline" href="{{ url_for('data_view.date_range', date_from=date_from, date_to=date_to,
+                 page=page_num) }}">{{ page_num }}</a>
+                {% else %}
+                <a class="hover:text-blue-800" href="{{ url_for('data_view.date_range', date_from=date_from,
+                 date_to=date_to, page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+
+                {% endif %}
+                {% endfor %}
+            </p>
+
+            <table class="mt-3 table-auto w-full">
+                <thead>
+                <tr class="border-t border-b">
+                    <th class="py-2">受注番号</th>
+                    <th class="py-2">受注日</th>
+                    <th class="py-2">担当</th>
+                    <th class="py-2">事業所</th>
+                    <th class="py-2">都道府県</th>
+                    <th class="py-2">商品</th>
+                    <th class="py-2">単価</th>
+                    <th class="py-2">数量</th>
+                </tr>
+                </thead>
+                {% for order in orders.items %}
+                <tr>
+                    <td>{{ '{:06d}'.format(order.id) }}</td>
+                    <td>{{ order.date.strftime('%m-%d') }}</td>
+                    <td>{{ order.user_orders.last_name }}</td>
+                    <td>{{ order.customer_id }}-{{ order.shop_id }} {{ order.shop_orders.name }}</td>
+                    <td>{{ order.shop_orders.prefecture }}</td>
+                    <td>{{ order.product_orders.name }}</td>
+                    <td class="text-right">{{ '{:,d}'.format(order.price) }}</td>
+                    <td class="text-right">{{ order.qty }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+        </div>
+        #}
+    </div>
+</div>
+<script type="text/javascript" src="{{ url_for('static', filename='js/date_range.js') }}"></script>
+{% endblock %}

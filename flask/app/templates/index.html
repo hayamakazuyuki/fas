@@ -1,0 +1,96 @@
+{% extends "layout.html" -%}
+{% block content -%}
+{% include "navbar.html" -%}
+{% include "_flashing.html" -%}
+{#
+<div class="container mt-5">
+    <div class="row row-cols-1 row-cols-md-3 mb-3">
+        <div class="col">
+            <div class="card h-100 shadow-sm px-3 py-1 bg-white rounded">
+                <div class="card-body">
+                    <h5 class="card-title">今日の受注 <span class="h6 fw-bold"> {{ strtoday }}</span></h5>
+                    <table class="table table-sm table-borderless mt-3">
+                        <thead>
+                        <tr>
+                            <th class="text-center">受注箱数</th>
+                            <th class="text-center">売上金額</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="text-center">{{ sum_qty_today }}</td>
+                            <td class="text-center">{{ "{:,}".format(sum_amount_today) }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm px-3 py-1 bg-white rounded">
+                <div class="card-body">
+                    <h5 class="card-title">お知らせ</h5>
+                    <p class="card-text ms-2 mt-3">取引先を<span class="text-danger">「取引先番号」</span>でも検索できるようにしました。</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm px-3 py-1 bg-white rounded">
+                <div class="card-body">
+                    <h5 class="card-title">配送情報</h5>
+                    <p class="card-text ms-2 mt-3">
+                        商品の出荷に関する情報はこちらから。（作成中）
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <p class="lead">{{ current_user.last_name }}さんの受注一覧</p>
+        <p>
+            {% for page_num in myorders.iter_pages(left_edge=3, right_edge=2) %}
+            {% if page_num %}
+            {% if myorders.page == page_num %}
+            <a class="" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+            {% else %}
+            <a class="text-decoration-none" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+            {% else %}
+            ...
+            {% endif %}
+            {% endfor %}
+        </p>
+        <table class="table table-sm table-hover mt-3">
+            <thead>
+            <tr>
+                <th>受注ID</th>
+                <th>受注日</th>
+                <th>事業所</th>
+                <th>商品</th>
+                <th class="text-center">単価</th>
+                <th class="text-center">数量</th>
+                <th class="text-center">配送依頼</th>
+            </tr>
+            </thead>
+            {% for order in myorders.items %}
+            <tr>
+                <td><a href="/order/{{ order.id }}" class="text-decoration-none">
+                    {{ '{:06d}'.format(order.id) }}</a></td>
+                <td>{{ order.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ order.customer_id }}-{{ order.shop_id }} {{ order.shop_orders.name }}</td>
+                <td>{{ order.product_orders.name }}</td>
+                <td class="text-end">{{ '{:,d}'.format(order.price) }}</td>
+                <td class="text-end">{{ order.qty }}</td>
+                <td class="text-center">
+                {% if order.delivery_check == 1 %}
+                    <span class="badge bg-warning">なし</span>
+                {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+#}
+{% endblock %}

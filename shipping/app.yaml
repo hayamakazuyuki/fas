@@ -1,0 +1,5 @@
+runtime: python39
+service: shipping
+
+includes:
+  - env_variables.yaml

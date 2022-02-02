@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+
+<!-- alert goes here -->
+{% include "message_flashing.html" -%}
+<div class="container max-w-6xl mx-auto mt-5">
+
+    <p class="font-bold text-lg mb-5">依頼事項の一覧</p>
+    <a href="/requests" class="text-blue-600 hover:text-blue-700 hover:underline items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg><span class="ml-1">表示を更新</span></a>
+        <table class="table-auto my-5">
+            <form action="/ripelawn/delivery_request" method="POST">
+
+        <thead>
+            <tr>
+            <th class="border-black border-b px-4 py-2">済</th>
+            <th class="border-black border-b px-4 py-2">依頼日</th>
+            <th class="border-black border-b px-4 py-2">受注番号</th>
+            <th class="border-black border-b px-4 py-2">配送先名</th>
+            <th class="border-black border-b px-4 py-2">商品</th>
+            <th class="border-black border-b px-4 py-2">数量</th>
+            <th class="border-black border-b px-4 py-2">指定日</th>
+            <th class="border-black border-b px-4 py-2">時間帯</th>
+            <th class="border-black border-b px-4 py-2">依頼事項</th>
+            <th class="border-black border-b px-4 py-2">回答</th>
+            </tr>
+        </thead>
+
+        {% for request in requests %}
+        <tr>
+            <td class="border-b px-4 py-1">
+                <input type="checkbox" name="request_id" value="{{ request.id }}" onchange="confirm_submit();">
+            </td>
+            <td class="border-b px-4 py-1">{{ request.created_at.strftime('%m-%d') }}</td>
+            <td class="border-b px-4 py-1">
+                <a href="/request_detail/{{ request.id }}" class="text-blue-600 hover:underline">
+                {{ '{:06d}'.format(request.order_id) }}</a></td>
+            <td class="border-b px-4 py-1">{{ request.product_order.shop_orders.name |truncate(10) }}</td>
+            <td class="border-b px-4 py-1">{{ request.product_order.product_orders.name[10:] }}</td>
+            <td class="border-b px-4 py-1">{{ request.product_order.qty }}</td>
+            <td class="border-b px-4 py-1">
+                {% if request.delivery_date %}
+                {{ request.delivery_date.strftime('%m-%d') }}
+                {% endif %}
+            </td>
+            <td class="border-b px-4 py-1">{{ request.time_range or '' }}</td>
+            <td class="border-b px-4 py-1">{{ request.memo or '' }}</td>
+            <td class="border-b px-4 py-1">{{ request.reply or '' }}</td>
+         </tr>
+
+        {% endfor %}
+            </form>
+
+    </table>
+</div>
+{% endblock %}

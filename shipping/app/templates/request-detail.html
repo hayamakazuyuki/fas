@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+
+<div class="container max-w-6xl mx-auto mt-5">
+    <p class="font-bold text-lg mb-5">依頼事項の詳細</p>
+    <a href="javascript: history.back()" class="text-blue-600 hover:underline">
+        <div class="flex mx-3">
+        <p>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+            </svg>
+        </p>
+        <p>前のページに戻る</p>
+        </div>
+    </a>
+    <div class="flex mt-3">
+        <p class="w-1/6 mx-3">依頼番号</p>
+        <p>{{ delivery_request.id }}</p>
+    </div>
+    <div class="flex mt-3">
+        <p class="w-1/6 mx-3">受注番号</p>
+        <p>{{ delivery_request.order_id }}</p>
+    </div>
+    <div class="flex mt-3">
+        <p class="w-1/6 mx-3">登録日時</p>
+        <p>{{ delivery_request.created_at }}</p>
+    </div>
+    <div class="flex mt-3">
+        <p class="w-1/6 mx-3">配送先</p>
+        <p>{{ delivery_request.product_order.shop_orders.name }}</p>
+    </div>
+    <div class="flex mt-3">
+        <p class="w-1/6 mx-3">商品</p>
+        <p>{{ delivery_request.product_order.product_orders.name }}</p>
+    </div>
+    <div class="flex mt-3">
+        <p class="w-1/6 mx-3">数量</p>
+        <p>{{ delivery_request.product_order.qty }}</p>
+    </div>
+    <div class="flex mt-3">
+        <p class="w-1/6 mx-3">指定日</p>
+        <p>{{ delivery_request.delivery_date }}</p>
+    </div>
+        <div class="flex mt-3">
+            <p class="w-1/6 mx-3">時間帯</p>
+            <p>{{ delivery_request.time_range }}</p>
+    </div>
+    <div class="flex mt-3">
+        <p class="w-1/6 mx-3">依頼事項</p>
+        <p>{{ delivery_request.memo }}</p>
+    </div>
+    <div class="flex mt-3">
+        <p class="w-1/6 mx-3">回答</p>
+        <div>{% if delivery_request.reply %}
+        {{ delivery_request.reply }}
+        {% else %}
+        <form action="/request_detail/{{ delivery_request.id }}" method="POST">
+        <input type="hidden" name="id" value="{{ delivery_request.id }}">
+        <input type="text" class="w-72 border-b border-blue-500 focus:border-indigo-300" id="reply"
+               maxlength="255" name="reply" required>
+        <button type="button" class="ml-5 bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded" onclick="submit()">
+            登録</button>
+        </form>
+
+        {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% macro render_field_with_errors(field) %}
+    {{ field.label }} {{ field(**kwargs)|safe }}
+    {% if field.errors %}
+      <ul>
+      {% for error in field.errors %}
+        <li style="color:red;">{{ error }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+{% endmacro %}
+
+{% macro render_order_edit_form_field(field, current_value) %}
+    <div class="row ms-3 mb-2">
+        <div class="col-sm-2">
+            <label for="{{ field.name }}" class="col-form-label">{{ field.label.text}}</label>
+        </div>
+        <div class="col-auto">
+            {{ field(class_="form-control form-control-sm", value=current_value)|safe }}
+            <ul>
+                {% for error in field.errors %}
+                <li style="color:red">{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro render_item_select_field(field, current_value) %}
+    <div class="row ms-3 mb-2">
+        <div class="col-sm-2">
+            <label for="{{ field.name }}" class="col-form-label">{{ field.label.text}}</label>
+        </div>
+        <div class="col-auto">{{ field(class_="form-control form-control-sm")|safe }}</div>
+    </div>
+    <ul>
+        {% for error in field.errors %}
+            <li style="color:red">{{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+
+{##### log-in form ######}
+{% macro render_login_field_label(field, label_text) %}
+  {{ field.label(class_="block text-gray-700 text-sm mb-2 ml-3", text=label_text) }}
+{% endmacro %}
+
+{% macro render_login_field(field) %}
+  {{ field(**kwargs)|safe }}
+{% endmacro %}
+
+{% macro render_login_form_error() %}
+{% for field in varargs %}
+{% if field.errors %}
+{% for error in field.errors %}
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+  <p class="text-center"><span class="block sm:inline">{{ error }}</span></p>
+</div>
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endmacro %}

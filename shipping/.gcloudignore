@@ -1,0 +1,11 @@
+.gcloudignore
+.git
+.gitignore
+.env
+.idea
+.DS_Store
+
+venv
+
+__pycache__/
+/setup.cfg

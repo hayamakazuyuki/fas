@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: fas
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: Asia/Tokyo
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+
+  fastapi:
+    build: ./fastapi
+    container_name: fastapi
+    ports:
+      - 8000:8000
+    tty: true
+    volumes:
+      - ./fastapi:/fastapi
+
+    command: uvicorn main:app --reload --host=0.0.0.0
+
+  flask:
+    build: ./flask
+    container_name: flask
+    ports:
+      - 5000:5000
+    tty: true
+    environment:
+      FLASK_APP: main.py
+      FLASK_ENV: development
+
+    volumes:
+      - ./flask:/flask
+    
+    command: flask run --host=0.0.0.0
+
+  shipping:
+    build: ./shipping
+    container_name: shipping
+    ports:
+      - 55000:5000
+    tty: true
+    environment:
+      FLASK_APP: main.py
+      FLASK_ENV: development
+
+    volumes:
+      - ./shipping:/flask
+
+    command: flask run --host=0.0.0.0
