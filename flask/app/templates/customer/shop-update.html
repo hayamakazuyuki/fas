@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+{% from "_macros.html" import render_field_with_errors, render_input_field %}
+
+<div class="container max-w-6xl mx-auto my-10">
+    <div class="max-w-md mx-auto">
+    <h1 class="text-2xl">事業所情報の更新</h1>
+
+    <div class="my-5">
+    <form action="/customer/shop/{{ shop.customer_id }}/{{ shop.id }}?mode=edit" method="POST">
+        {{ form.csrf_token }}
+
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.customer_id, class_="w-full border-b px-3 text-lg", value=shop.customer_id, readonly=True)}}
+        </div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.id, class_="w-full border-b px-3 text-lg", value=shop.id, readonly=True)}}
+        </div>
+        <div id="error_id" style="color: red;"></div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.name, class_="w-full border-b px-3 text-lg", value=shop.name)}}
+        </div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.department, class_="w-full border-b px-3 text-lg", value=shop.department)}}
+        </div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.zip, class_="w-full border-b px-3 text-lg", value=shop.zip)}}
+        </div>
+        <div id="error_zip" style="color: red;"></div>
+        <div class="flex my-3">
+            {{ render_input_field(form.prefecture, class_="w-full border-b px-3 text-lg", readonly=True, value=shop.prefecture)}}
+            {{ render_input_field(form.city, class_="w-full border-b px-3 text-lg", readonly=True, value=shop.city)}}
+            {{ render_input_field(form.town, class_="w-full border-b px-3 text-lg", readonly=True, value=shop.town)}}
+        </div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.address, class_="w-full border-b px-3 text-lg", value=shop.address)}}
+        </div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.building, class_="w-full border-b px-3 text-lg", value=shop.building)}}
+        </div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.email, class_="w-full border-b px-3 text-lg", value=shop.email)}}
+        </div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.telephone, class_="w-full border-b px-3 text-lg", value=shop.telephone)}}
+        </div>
+        <div id="error_tel" style="color: red;"></div>
+    </div>
+        <p>
+            <a href="/customer/shop/{{ shop.customer_id }}/{{ shop.id}}" class="text-blue-500 hover:underline hover:text-blue-800">キャンセル</a>
+            <button class="bg-blue-500 hover:bg-blue-800 text-white mx-7 py-1 px-7 rounded-full" type="submit">登録</button>
+        </p>
+    </form>
+</div>
+</div>
+
+<!--java script -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/shop.js') }}"></script>
+
+<!-- 住所補完JavaScriptライブラリの読み込み -->
+<script type="text/javascript" src="https://postcode-jp.com/js/postcodejp.js" charset="utf-8"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/postcode.js') }}"></script>
+{% endblock %}

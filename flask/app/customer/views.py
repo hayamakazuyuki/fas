@@ -152,14 +152,29 @@ def shop_register():
 def shop_profile(customer_id, id):
 
     shop = Shop.query.get_or_404((customer_id, id))
-
+    
     mode = request.args.get('mode')
 
     if mode == 'edit':
         form = ShopForm()
 
-        # if form.validate_on_submit:
-        #     return '編集完了'
+        if request.method == 'POST':
+            shop.name = request.form['name']
+            shop.department = request.form['department']
+            shop.zip = request.form['zip']
+            shop.prefecture = request.form['prefecture']
+            shop.city = request.form['city']
+            shop.town = request.form['town']
+            shop.address = request.form['address']
+            shop.building = request.form['building']
+            shop.email = request.form['email']
+            shop.telephone = request.form['telephone']
+
+            db.session.commit()
+
+            flash('事業所の情報を更新しました。', 'success')
+
+            return redirect(url_for('customer.shop_profile', customer_id=customer_id, id=id))
 
         return render_template('customer/shop-update.html', shop=shop, form=form)
 
