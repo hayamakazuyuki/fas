@@ -1,12 +1,15 @@
+from email.policy import default
 from flask import Blueprint, request, render_template, redirect, url_for, flash
+from flask_login import login_required
 from ..extentions import db
 from ..models import Customer, Shop
-from .forms import CustomerForm
+from .forms import CustomerForm, ShopForm
 
 
 customer = Blueprint('customer', __name__, url_prefix='/customer')
 
 @customer.route('/')
+@login_required
 def index():
     
     if not request.args:
@@ -33,6 +36,7 @@ def index():
 
 # register customer
 @customer.route('/register', methods=['GET', 'POST'])
+@login_required
 def register():
     form = CustomerForm()
 
@@ -58,6 +62,7 @@ def register():
 
 # show and update customer profile
 @customer.route('/<int:id>', methods=['GET', 'POST'])
+@login_required
 def profile(id):
     page = request.args.get('page', 1, type=int)
     mode = request.args.get('mode')
@@ -80,3 +85,31 @@ def profile(id):
 
     else:
         return render_template('customer/profile.html', customer=customer, shops=shops)
+
+
+@customer.route('/shop')
+@login_required
+def shop():
+
+    q = request.args.get('q')
+
+    if not q:
+        return render_template('customer/shop.html')
+
+    search = "%{}%".format(q)
+    page = request.args.get('page', default=1, type=int)
+    shops = Shop.query.filter(Shop.name.like(search)).paginate(page=page, per_page=20)
+    count = len(Shop.query.filter(Shop.name.like(search)).all())
+
+    return render_template('customer/shop.html', shops=shops, count=count, q=q)
+
+
+@customer.route('/shop/register', methods=['GET', 'POST'])
+@login_required
+def shop_register():
+
+    form = ShopForm()
+    customer_id = request.args.get('customer_id')
+
+
+    return render_template('customer/shop-register.html', form=form, customer_id=customer_id)
