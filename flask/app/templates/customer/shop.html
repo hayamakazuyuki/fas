@@ -40,7 +40,7 @@
             </div>
 
             <div class="my-16" x-show="open === 2">
-                <form action="/customer/shop">
+                <form action="/customer/shop" method="GET">
                     <div class="flex relative">
                         <input class="w-full border-b bg-white h-10 px-5 pr-16 focus:outline-none focus:shadow" type="search" name="q" placeholder="事業所名キーワード">
                         <button type="submit" class="absolute right-0 top-0 mt-3 mr-4">
@@ -60,7 +60,7 @@
 <!-- test -->
 
     {% if shops %}
-    <div class="max-w-lg mx-auto">
+    <div class="max-w-xl mx-auto">
 
     <p class="">{{ count }} 件の事業所が見つかりました。</p>
 
@@ -83,15 +83,22 @@
     <table class="table-auto w-full my-5">
         <thead>
         <tr class="border-black border-b">
-            <th>取引先ID</th>
-            <th>取引先名</th>
+            <th>顧客ID</th>
+            <th>事業所ID</th>
+            <th>事業所名</th>
+            <th>住所</th>
+            <th>TEL</th>
         </tr>
         </thead>
 
         {% for shop in shops.items %}
         <tr class="border-b">
+            <td>{{ shop.customer_id }}</td>
             <td>{{ shop.id }}</td>
-            <td><a class="text-blue-500 hover:text-blue-800" href="/customer/shop/{{ shop.id }}">{{ shop.name }}</a></td>
+            <td><a href="/customer/shop/{{ shop.customer_id }}/{{ shop.id }}" class="text-blue-500 hover:text-blue-800">
+                {{ shop.name }}</a></td>
+            <td>{{ shop.prefecture }}{{ shop.city }}{{ shop.town }}</td>
+            <td>{{ shop.telephone }}</td>
         </tr>
         {% endfor %}
     </table>

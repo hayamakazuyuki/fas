@@ -88,6 +88,7 @@ def profile(id):
 
 
 @customer.route('/shop')
+@customer.route('/shop/')
 @login_required
 def shop():
 
