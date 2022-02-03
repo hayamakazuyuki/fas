@@ -9,6 +9,10 @@
     {% endif %}
 {% endmacro %}
 
+{% macro render_input_field(field) %}
+      {{ field(**kwargs)|safe }}
+{% endmacro %}
+
 {% macro render_order_edit_form_field(field, current_value) %}
     <div class="row ms-3 mb-2">
         <div class="col-sm-2">

@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 {% include "navbar.html" %}
-{% from "_macros.html" import render_field_with_errors %}
+{% from "_macros.html" import render_field_with_errors, render_input_field %}
 
 <div class="container max-w-6xl mx-auto my-10">
     <div class="max-w-md mx-auto">
@@ -11,93 +11,47 @@
     <form action="/customer/shop/register?customer_id={{ customer_id }}" method="POST">
         {{ form.csrf_token }}
 
-        <div class="form-group row mb-4">
-            {{ form.customer_id.label(class="col-sm-1 col-form-label") }}
-            <div class="col-sm-5">{{ form.customer_id(class_="form-control", readonly=True, value=customer_id) }}</div>
-
-            {{ form.id.label(class="col-sm-1 col-form-label") }}
-            <div class="col-sm-5">{{ form.id(class_="form-control", placeholder="半角数字 最大５桁") }}
-            <div id="error_id" style="color: red;"></div>
-            </div>
-                <ul class="mb-0">
-                {% for error in form.id.errors %}
-                <li style="color:red;">{{ error }}</li>
-                {% endfor %}
-            </ul>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.customer_id, class_="w-full border-b px-3 text-lg", value=customer_id, readonly=True)}}
         </div>
-
-        <div class="form-group row mb-4">
-            {{ form.name.label(class="col-sm-1 col-form-label") }}
-            <div class="col-sm-5">{{ form.name(class_="form-control") }}</div>
-            {{ form.department.label(class="col-sm-1 col-form-label") }}
-            <div class="col-sm-5">{{ form.department(class_="form-control") }}</div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.id, class_="w-full border-b px-3 text-lg", placeholder="半角数字 最大５桁")}}
         </div>
-
-        <div class="form-group row mb-4">
-            {{ form.zip.label(class="col-sm-1 col-form-label") }}
-            <div class="col-sm-3">
-            {{ form.zip(class_="form-control",placeholder="ハイフンなし、7桁") }}
-            <div id="error_zip" style="color: red;"></div>
-            <ul class="mb-0">
-                {% for error in form.zip.errors %}
-                <li style="color:red;">{{ error }}</li>
-                {% endfor %}
-            </ul>
-            </div>
-                {{ form.prefecture.label(class="col-sm-1 col-form-label") }}
-            <div class="col-sm-3">
-                {{ form.prefecture(class_="form-control", readonly=True) }}
-            </div>
-                {{ form.city.label(class="col-sm-1 col-form-label") }}
-            <div class="col-sm-3">
-                {{ form.city(class_="form-control", readonly=True) }}
-            </div>
-
+        <div id="error_id" style="color: red;"></div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.name, class_="w-full border-b px-3 text-lg")}}
         </div>
-
-        <div class="form-group row mb-4">
-            {{ form.town.label(class="col-sm-1 col-form-label") }}
-            <div class="col-sm-3">
-            {{ form.town(class_="form-control", readonly=True) }}
-            </div>
-                {{ form.address.label(class="col-sm-1 col-form-label") }}
-            <div class="col-sm-3">
-                {{ form.address(class_="form-control") }}
-            </div>
-                {{ form.building.label(class="col-sm-1 col-form-label") }}
-            <div class="col-sm-3">
-                {{ form.building(class_="form-control") }}
-            </div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.department, class_="w-full border-b px-3 text-lg")}}
         </div>
-
-    <div class="form-group row mb-4">
-            {{ form.email.label(class="col-sm-1 col-form-label") }}
-        <div class="col-sm-5">
-            {{ form.email(class_="form-control") }}
-            <ul class="mb-0">
-                {% for error in form.email.errors %}
-                <li style="color:red;">{{ error }}</li>
-                {% endfor %}
-            </ul>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.zip, class_="w-full border-b px-3 text-lg", placeholder="ハイフンなし、7桁")}}
         </div>
-            {{ form.telephone.label(class="col-sm-1 col-form-label") }}
-            <div class="col-sm-5">
-            {{ form.telephone(class_="form-control", maxlength=13) }}
-            <div id="error_tel" style="color: red;"></div>
-
-            <ul class="mb-0">
-                {% for error in form.telephone.errors %}
-                <li style="color:red;">{{ error }}</li>
-                {% endfor %}
-            </ul>
-            </div>
+        <div id="error_zip" style="color: red;"></div>
+        <div class="flex my-3">
+            {{ render_input_field(form.prefecture, class_="w-full border-b px-3 text-lg", readonly=True)}}
+            {{ render_input_field(form.city, class_="w-full border-b px-3 text-lg", readonly=True)}}
+            {{ render_input_field(form.town, class_="w-full border-b px-3 text-lg", readonly=True)}}
+        </div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.address, class_="w-full border-b px-3 text-lg")}}
+        </div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.building, class_="w-full border-b px-3 text-lg")}}
+        </div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.email, class_="w-full border-b px-3 text-lg")}}
+        </div>
+        <div class="text-sm my-3">
+            {{ render_field_with_errors(form.telephone, class_="w-full border-b px-3 text-lg")}}
+        </div>
+        <div id="error_tel" style="color: red;"></div>
     </div>
         <p>
-            <a href="/customer/{{ customer_id }}" class="text-decoration-none">キャンセル</a>
-            <button class="btn btn-primary mx-3" type="submit">登録</button>
+            <a href="/customer/{{ customer_id }}" class="text-blue-500 hover:underline hover:text-blue-800">キャンセル</a>
+            <button class="bg-blue-500 hover:bg-blue-800 text-white mx-7 py-1 px-7 rounded-full" type="submit">登録</button>
         </p>
     </form>
-</div>
 </div>
 </div>
 

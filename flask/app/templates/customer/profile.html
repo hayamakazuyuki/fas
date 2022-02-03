@@ -53,9 +53,9 @@
         {% endfor %}
     </p>
 
-    <table class="table table-sm">
+    <table class="table-auto w-full my-5">
         <thead>
-            <tr>
+            <tr class="border-b border-black">
             <th>事業所ID</th>
             <th>事業所名</th>
             <th>郵便番号</th>
@@ -65,15 +65,15 @@
         </thead>
 
     {% for shop in shops.items %}
-        <tr>
+        <tr class="border-b">
            <td>{{ shop.id }}</td>
-           <td><a href="/shop/{{ shop.customer_id }}/{{ shop.id }}" class="text-decoration-none">
+           <td><a href="/customer/shop/{{ shop.customer_id }}/{{ shop.id }}" class="text-blue-500 hover:underline hover:text-blue-800">
                {{ shop.name }}</a></td>
            <td>{{ '{}-{}'.format(shop.zip[:3], shop.zip[3:]) }}</td>
            <td>{{ shop.prefecture }}{{ shop.city }}{{ shop.town }}{{ shop.address }}</td>
            <td>{{ shop.telephone }}</td>
-
         </tr>
+
     {% endfor %}
     </table>
     {% else %}

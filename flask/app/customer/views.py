@@ -104,6 +104,7 @@ def shop():
     return render_template('customer/shop.html', shops=shops, count=count, q=q)
 
 
+# register shop
 @customer.route('/shop/register', methods=['GET', 'POST'])
 @login_required
 def shop_register():
@@ -111,5 +112,56 @@ def shop_register():
     form = ShopForm()
     customer_id = request.args.get('customer_id')
 
+    if form.validate_on_submit():
+        customer_id = request.form['customer_id']
+        id = request.form['id']
 
+        # check if shop already exists in the db
+        exists = Shop.query.get((customer_id, id))
+
+        if exists:
+            return redirect(url_for('customer.shop_profile', customer_id=customer_id, id=id))
+
+        new_shop = Shop()
+        new_shop.customer_id = request.form['customer_id']
+        new_shop.id = request.form['id']
+        new_shop.name = request.form['name']
+        new_shop.department = request.form['department']
+        new_shop.zip = request.form['zip']
+        new_shop.prefecture = request.form['prefecture']
+        new_shop.city = request.form['city']
+        new_shop.town = request.form['town']
+        new_shop.address = request.form['address']
+        new_shop.building = request.form['building']
+        new_shop.email = request.form['email']
+        new_shop.telephone = request.form['telephone']
+
+        db.session.add(new_shop)
+        db.session.commit()
+
+        flash('事業所を登録しました。', 'success')
+
+        return redirect(url_for('customer.profile', id=customer_id))
+    
     return render_template('customer/shop-register.html', form=form, customer_id=customer_id)
+
+
+# show shop information
+@customer.route('/shop/<int:customer_id>/<int:id>', methods=['GET', 'POST'])
+@login_required
+def shop_profile(customer_id, id):
+
+    shop = Shop.query.get_or_404((customer_id, id))
+
+    mode = request.args.get('mode')
+
+    if mode == 'edit':
+        form = ShopForm()
+
+        # if form.validate_on_submit:
+        #     return '編集完了'
+
+        return render_template('customer/shop-update.html', shop=shop, form=form)
+
+    return render_template('customer/shop-profile.html', shop=shop)
+

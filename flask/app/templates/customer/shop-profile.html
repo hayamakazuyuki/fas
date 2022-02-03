@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+
+<div class="container max-w-6xl mx-auto mt-5">
+    <p class="font-bold text-xl text-gray-800">事業所情報</p>
+
+    <div class="max-w-lg py-4 px-8 bg-white shadow-lg rounded-lg my-10">
+        <div>
+            <p class="mt-2 text-gray-600">{{ shop.customer_id }} - {{ shop.id }}  {{ shop.customer.name }}</p>
+            <h2 class="mt-2 text-gray-800 text-3xl">{{ shop.name }}</h2>
+            <p class="mt-2 text-gray-600">{{ shop.department }}</p>
+            <p class="mt-2 text-gray-600">{{ '〒{}-{}'.format(shop.zip[:3], shop.zip[3:]) }} {{ shop.prefecture }} {{ shop.city }}
+            {{ shop.town }} {{ shop.address }} {{ shop.building }}</p>
+            <p class="mt-2 text-gray-600">{{ shop.email }}</p>
+            <p class="mt-2 text-gray-600">TEL: {{ shop.telephone }}</p>
+
+            <div class="mt-5">
+                <a href="/customer/shop/{{ shop.customer_id }}/{{ shop.id }}?mode=edit" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg><span class="align-middle ml-1">編集</span>
+                </a>
+            </div>
+    
+        </div>
+    </div>
+
+    <div class="flex my-5">
+        <button type="submit" class="bg-blue-500 text-white text-sm mx-5 py-1 px-7 rounded-full shadow-lg
+                hover:bg-blue-800 transition duration-200"
+                onclick="location.href='/order?customer_id={{ shop.customer_id }}&id={{ shop.id }}'">
+            受注登録</button>
+    </div>
+
+    <p class="font-bold text-lg my-5">受注履歴</p>
+
+    <table class="table-auto my-5 w-full">
+        <thead>
+        <tr class="border-black border-b px-4 py-2">
+            <th>受注ID</th>
+            <th>受注日</th>
+            <th>担当</th>
+            <th>商品</th>
+            <th>単価</th>
+            <th>数量</th>
+            </tr>
+        </thead>
+    {% for order in orders %}
+        <tr class="border-b px-4 py-1">
+            <td><a href="/order/{{ order.id }}" class="text-decoration-none">
+                    {{ '{:06d}'.format(order.id) }}</a></td>
+            <td>{{ order.date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ order.user_orders.last_name }}</td>
+            <td>{{ order.product_orders.name }}</td>
+            <td>{{ order.price }}</td>
+            <td>{{ order.qty }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+</div>
+
+{% endblock %}
+
