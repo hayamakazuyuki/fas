@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+{% from "_macros.html" import render_field_with_errors %}
+{% include "navbar.html" %}
+
+<div class="max-w-6xl mx-auto">
+    <div class="max-w-md mx-auto my-10">
+        <p class="text-2xl">顧客情報の編集</p>
+        <form action="/customer/{{ customer.id }}?mode=edit" method="POST">
+        {{ form.csrf_token }}
+        <div class="my-5">
+            {{ render_field_with_errors(form.id, class_="w-full text-gran-800 border-b px-5 py-1", value=customer.id, readonly=True)}}
+        </div>
+        <div class="my-5">
+            {{ render_field_with_errors(form.name, class_="w-full text-gran-800 border-b px-5 py-1", value=customer.name)}}
+        </div>
+
+        <p class=""><a href="/customer/{{ customer.id }}" class="text-blue-500 hover:underline hover:text-blue-800">キャンセル</a>
+            <button class="bg-blue-500 hover:bg-blue-800 text-white mx-7 py-1 px-7 rounded-full" type="submit">登録</button></p>
+    </form>
+</div>
+</div>
+{% endblock %}

@@ -71,6 +71,9 @@ def profile(id):
         if request.method == 'POST':
             customer.name = request.form['name']
             db.session.commit()
+            
+            flash('取引先情報を更新しました。', 'success')
+
             return redirect(url_for('customer.profile', id=id))
 
         return render_template('customer/update.html', customer=customer, form=form)
