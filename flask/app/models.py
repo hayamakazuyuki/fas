@@ -1,12 +1,38 @@
-from .extentions import db, admin
+from werkzeug.security import generate_password_hash, check_password_hash
+from .extentions import db, admin, login_manager
 from flask_admin import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 
-from sqlalchemy import ForeignKeyConstraint, func
+from flask_login import UserMixin
+from sqlalchemy import ForeignKeyConstraint, func, event
 
 from datetime import datetime, timedelta, timezone
 
 JST = timezone(timedelta(hours=+9), 'JST')
+
+
+class Staff(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    last_name = db.Column(db.String(30), nullable=False)
+    first_name = db.Column(db.String(30), nullable=False)
+    email = db.Column(db.String(255), nullable=False, unique=True)
+    password = db.Column(db.String(255), nullable=False)
+    is_inactive = db.Column(db.Boolean, nullable=True)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
+
+@event.listens_for(Staff.password, 'set', retval=True)
+def hash_staff_password(target, value, oldvalue, initiator):
+    if value != oldvalue:
+        return generate_password_hash(value)
+    return value
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Staff.query.get(int(user_id))
 
 
 class Product(db.Model):
@@ -40,24 +66,23 @@ class Shop(db.Model):
     # orders = db.relationship('PurchaseOrder', backref=db.backref('shop', lazy=True))
 
 
+class ProductOrder(db.Model):
+    __tablename__ = 'product_order'
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, default=func.now())
+    sales_by = db.Column(db.Integer, db.ForeignKey('staff.id'))
+    customer_id = db.Column(db.Integer)
+    shop_id = db.Column(db.Integer)
+    item = db.Column(db.Integer)
+    # item = db.Column(db.Integer, db.ForeignKey('product.id'))
+    price = db.Column(db.Integer)
+    qty = db.Column(db.Integer)
+    delivery_check = db.Column(db.Integer, nullable=True)
+    exported = db.Column(db.Integer, nullable=True)
+    # request = db.relationship('DeliveryRequest', backref='purchase_order', uselist=False,
+    #                           cascade="save-update, merge, delete")
 
-
-# class PurchaseOrder(db.Model):
-#     __tablename__ = 'purchase_order'
-#     id = db.Column(db.Integer, primary_key=True)
-#     date = db.Column(db.DateTime, default=func.now(JST))
-#     sales_by = db.Column(db.Integer, db.ForeignKey('user.id'))
-#     customer_id = db.Column(db.Integer)
-#     shop_id = db.Column(db.Integer)
-#     item = db.Column(db.Integer, db.ForeignKey('product.id'))
-#     price = db.Column(db.Integer)
-#     qty = db.Column(db.Integer)
-#     delivery_check = db.Column(db.Integer, nullable=True)
-#     exported = db.Column(db.Integer, nullable=True)
-#     request = db.relationship('DeliveryRequest', backref='purchase_order', uselist=False,
-#                               cascade="save-update, merge, delete")
-
-#     __table_args__ = (ForeignKeyConstraint(['customer_id', 'shop_id'], ['shop.customer_id', 'shop.id']),)
+    __table_args__ = (ForeignKeyConstraint(['customer_id', 'shop_id'], ['shop.customer_id', 'shop.id']),)
 
 
 class DeliveryRequest(db.Model):
@@ -77,5 +102,5 @@ class ProductAdminView(ModelView):
     form_columns = ['id', 'name', 'thickness', 'qty', 'size', 'box_size']
     column_list = ['id', 'name', 'thickness', 'qty', 'size', 'box_size']
 
-
+admin.add_view(ModelView(Staff, db.session, endpoint="staffview"))
 admin.add_view(ProductAdminView(Product, db.session))

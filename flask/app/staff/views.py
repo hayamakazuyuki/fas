@@ -2,7 +2,7 @@ import email
 from flask import Blueprint, request, redirect, url_for, flash, render_template
 from flask_login import login_user, login_required, logout_user, current_user
 
-from .models import Staff
+from ..models import Staff
 from .forms import LoginForm
 
 
