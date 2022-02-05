@@ -4,9 +4,11 @@
 {% include "_flashing.html" %}
 
 <div class="container max-w-6xl mx-auto mt-5">
+    <div class="max-w-lg mx-auto">
+
     <p class="font-bold text-xl text-gray-800">事業所情報</p>
 
-    <div class="max-w-lg py-4 px-8 bg-white shadow-lg rounded-lg my-10">
+    <div class="mx-auto py-4 px-8 bg-white shadow-lg rounded-lg my-10">
         <div>
             <p class="mt-2 text-gray-600">{{ shop.customer_id }} - {{ shop.id }}  {{ shop.customer.name }}</p>
             <h2 class="mt-2 text-gray-800 text-3xl">{{ shop.name }}</h2>
@@ -27,7 +29,7 @@
         </div>
     </div>
 
-    <div class="flex my-5">
+    <div class="flex my-5 justify-center">
         <button type="submit" class="bg-blue-500 text-white text-sm mx-5 py-1 px-7 rounded-full shadow-lg
                 hover:bg-blue-800 transition duration-200"
                 onclick="location.href='/order?customer_id={{ shop.customer_id }}&id={{ shop.id }}'">
@@ -36,7 +38,7 @@
 
     <p class="font-bold text-lg my-5">受注履歴</p>
 
-    <table class="table-auto my-5 w-full">
+    <table class="table-auto my-5">
         <thead>
         <tr class="border-black border-b px-4 py-2">
             <th>受注ID</th>
@@ -59,6 +61,7 @@
         </tr>
     {% endfor %}
     </table>
+</div>
 
 </div>
 

@@ -80,3 +80,10 @@ def index():
         return redirect(url_for('customer.index'))
 
     return render_template('order/register.html', shop=shop)
+
+
+@order.route('/data')
+@login_required
+def data():
+    return 'データ'
+    
