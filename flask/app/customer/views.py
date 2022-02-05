@@ -2,7 +2,7 @@ from email.policy import default
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from flask_login import login_required
 from ..extentions import db
-from ..models import Customer, Shop
+from ..models import Customer, Shop, ProductOrder
 from .forms import CustomerForm, ShopForm
 
 
@@ -153,6 +153,7 @@ def shop_register():
 def shop_profile(customer_id, id):
 
     shop = Shop.query.get_or_404((customer_id, id))
+    orders = ProductOrder.query.filter_by(customer_id=customer_id).filter_by(shop_id=id).order_by(ProductOrder.id.desc()).all()
     
     mode = request.args.get('mode')
 
@@ -179,5 +180,5 @@ def shop_profile(customer_id, id):
 
         return render_template('customer/shop-update.html', shop=shop, form=form)
 
-    return render_template('customer/shop-profile.html', shop=shop)
+    return render_template('customer/shop-profile.html', shop=shop, orders=orders)
 

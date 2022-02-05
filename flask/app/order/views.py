@@ -29,39 +29,54 @@ def index():
         delivery = request.form.get('delivery')
 
         # item 1
-        new_order = ProductOrder()
-        new_order.sales_by = staff
-        new_order.customer_id = customer_id
-        new_order.shop_id = id
-        new_order.item = request.form['item']
-        new_order.price = request.form['price']
-        new_order.qty = request.form['qty']
-        new_order.delivery_check = request.form.get('noDelivery')
+        order = ProductOrder()
+        order.sales_by = staff
+        order.customer_id = customer_id
+        order.shop_id = id
+        order.item = request.form['item']
+        order.price = request.form['price']
+        order.qty = request.form['qty']
+        order.delivery_check = request.form.get('noDelivery')
 
-        db.session.add(new_order)
+        db.session.add(order)
 
+        if item2:
+            order2 = ProductOrder()
+            order2.sales_by = staff
+            order2.customer_id = customer_id
+            order2.shop_id = id
+            order2.item = request.form['item2']
+            order2.price = request.form['price2']
+            order2.qty = request.form['qty2']
+            order2.delivery_check = request.form.get('noDelivery2')
 
-        # if delivery:
-        #     sales_by = staff
-        #     customer_id = customer_id
-        #     id = id
-        #     item = request.form['delivery']
-        #     price = request.form['deliveryPrice']
-        #     qty = request.form['deliveryQty']
-        
+            db.session.add(order2)
+
+        if item3:
+            order3 = ProductOrder()
+            order3.sales_by = staff
+            order3.customer_id = customer_id
+            order3.shop_id = id
+            order3.item = request.form['item3']
+            order3.price = request.form['price3']
+            order3.qty = request.form['qty3']
+            order3.delivery_check = request.form.get('noDelivery3')
+
+            db.session.add(order3)
+
+        if delivery:
+            orderd = ProductOrder()
+            orderd.sales_by = staff
+            orderd.customer_id = customer_id
+            orderd.shop_id = id
+            orderd.item = request.form['delivery']
+            orderd.price = request.form['deliveryPrice']
+            orderd.qty = request.form['deliveryQty']
+
+            db.session.add(orderd)
+
         db.session.commit()
 
         return redirect(url_for('customer.index'))
-
-        # if item2:
-        #     sales_by = staff
-        #     customer_id = customer_id
-        #     id = id
-        #     item = request.form['item2']
-        #     price = request.form['price2']
-        #     qty = request.form['qty2']
-        #     delivery_check = request.form.get('noDelivery2')
-            
-        #     return f'{item}'
 
     return render_template('order/register.html', shop=shop)

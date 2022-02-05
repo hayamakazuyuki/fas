@@ -5,7 +5,7 @@ appendInputs.addEventListener('click', (e) => {
     const divItem = document.getElementById('divItem'); // grab div for item;
     const item2 = document.getElementById('item2'); // grab div for item2;
     const item3 = document.getElementById('item3'); // grab div for item3;
-    
+
     if (!item2.hasChildNodes()){
         // clone divItem nodes to divItem2;
         let divItem2 = divItem.cloneNode(true);
@@ -27,25 +27,57 @@ appendInputs.addEventListener('click', (e) => {
         selects2[0].setAttribute('name', 'item2');
         
         // change ids and names of inputs2;
+        inputs2[0].setAttribute('id','price2');
+        inputs2[0].setAttribute('name','price2');
+        inputs2[0].value = '';
+        inputs2[1].setAttribute('id','qty2');
+        inputs2[1].setAttribute('name','qty2');
+        inputs2[1].value = '';
+        inputs2[2].setAttribute('id','noDelivery2');
+        inputs2[2].setAttribute('name','noDelivery2');
+
+        return item2.appendChild(divItem2);
+    };
+
+    if (!item3.hasChildNodes()){
+        // clone divItem nodes to divItem2;
+        let divItem3 = divItem.cloneNode(true);
+        // change divItem2 id from divItem to divItem2;
+        divItem3.id = 'divItem3';
+
+        let labels3 = divItem3.getElementsByTagName('label'); // grab labels in divItem2;
+        let selects3 = divItem3.getElementsByTagName('select'); // grab selects in divItem2;
+        let inputs3 = divItem3.getElementsByTagName('input'); // grab inputs in divItem2;
+
+        // change labels
+        labels3[0].htmlFor = 'item3';
+        labels3[1].htmlFor = 'price3';
+        labels3[2].htmlFor = 'qty3';
+        labels3[3].htmlFor = 'noDelivery3';
+
+        // change ids and names of selects2;
+        selects3[0].setAttribute('id', 'item3');
+        selects3[0].setAttribute('name', 'item3');
+        
+        // change ids and names of inputs2;
+        inputs3[0].setAttribute('id','price3');
+        inputs3[0].setAttribute('name','price3');
+        inputs3[0].value = '';
+        inputs3[1].setAttribute('id','qty3');
+        inputs3[1].setAttribute('name','qty3');
+        inputs3[1].value = '';
+        inputs3[2].setAttribute('id','noDelivery3');
+        inputs3[2].setAttribute('name','noDelivery3');
+
+        return item3.appendChild(divItem3);
+    };
 
 
-    }
 
 }, false);
 
 //     if (!area_item2.hasChildNodes()) {
 
-//         // inputの各idとnameを変更
-//         inputs2[0].setAttribute('id','item2_price');
-//         inputs2[0].setAttribute('name','item2_price');
-//         inputs2[0].value = '';
-//         inputs2[1].setAttribute('id','item2_qty');
-//         inputs2[1].setAttribute('name','item2_qty');
-//         inputs2[1].value = '';
-//         inputs2[2].setAttribute('id','no_delivery2');
-//         inputs2[2].setAttribute('name','no_delivery2');
-//         // area_item2にアペンドする
-//         return area_item2.appendChild(div_item2);
 
 //         } else if (!area_item3.hasChildNodes()) {
 //             div_item3 = div_item1.cloneNode(true);

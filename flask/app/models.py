@@ -18,6 +18,7 @@ class Staff(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     is_inactive = db.Column(db.Boolean, nullable=True)
+    orders = db.relationship('ProductOrder', backref=db.backref('staff', lazy=True))
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
@@ -42,7 +43,7 @@ class Product(db.Model):
     qty = db.Column(db.Integer)
     size = db.Column(db.String(100))
     box_size = db.Column(db.String(100))
-    # orders = db.relationship('PurchaseOrder', backref=db.backref('product', lazy=True))
+    orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -73,8 +74,7 @@ class ProductOrder(db.Model):
     sales_by = db.Column(db.Integer, db.ForeignKey('staff.id'))
     customer_id = db.Column(db.Integer)
     shop_id = db.Column(db.Integer)
-    item = db.Column(db.Integer)
-    # item = db.Column(db.Integer, db.ForeignKey('product.id'))
+    item = db.Column(db.Integer, db.ForeignKey('product.id'))
     price = db.Column(db.Integer)
     qty = db.Column(db.Integer)
     delivery_check = db.Column(db.Integer, nullable=True)

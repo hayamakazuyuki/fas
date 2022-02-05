@@ -49,11 +49,11 @@
         </thead>
     {% for order in orders %}
         <tr class="border-b px-4 py-1">
-            <td><a href="/order/{{ order.id }}" class="text-decoration-none">
+            <td><a href="/order/{{ order.id }}" class="text-blue-500">
                     {{ '{:06d}'.format(order.id) }}</a></td>
             <td>{{ order.date.strftime('%Y-%m-%d') }}</td>
-            <td>{{ order.user_orders.last_name }}</td>
-            <td>{{ order.product_orders.name }}</td>
+            <td>{{ order.staff.last_name }}</td>
+            <td>{{ order.product.name }}</td>
             <td>{{ order.price }}</td>
             <td>{{ order.qty }}</td>
         </tr>
