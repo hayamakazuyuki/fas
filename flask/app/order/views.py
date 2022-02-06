@@ -1,6 +1,8 @@
 from crypt import methods
+from datetime import datetime, timezone, timedelta
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import current_user, login_required
+from sqlalchemy import func
 
 from ..extentions import db
 
@@ -8,6 +10,8 @@ from ..models import Shop, ProductOrder
 
 
 order = Blueprint('order', __name__, url_prefix='/order')
+
+JST = timezone(timedelta(hours=+9), 'JST')
 
 @order.route('/', methods=['GET', 'POST'])
 @login_required
@@ -85,5 +89,39 @@ def index():
 @order.route('/data')
 @login_required
 def data():
-    return 'データ'
-    
+    target = request.args.get("target")
+
+    if target is None:
+        today = datetime.now(JST)
+        target = today.strftime('%Y-%m-%d')
+
+    sum_qty = db.session.query(func.sum(ProductOrder.qty)).filter(func.date(ProductOrder.date) == target)\
+        .filter(ProductOrder.item != 901).scalar()
+    sum_price = db.session.query(func.sum(ProductOrder.price * ProductOrder.qty))\
+        .filter(func.date(ProductOrder.date) == target).filter(ProductOrder.item != 901).scalar()
+    sum_delivery_price = db.session.query(func.sum(ProductOrder.price * ProductOrder.qty)).filter(func.date(ProductOrder.date) == target)\
+        .filter(ProductOrder.item == 901).scalar()
+    total_price = db.session.query(func.sum(ProductOrder.price * ProductOrder.qty)).filter(func.date(ProductOrder.date) == target)\
+        .scalar()
+
+    orders = ProductOrder.query.filter(func.DATE(ProductOrder.date) == target).all()
+
+    return render_template('order/data.html', target=target, orders=orders, sum_qty=sum_qty, sum_price=sum_price,
+    sum_delivery_price=sum_delivery_price, total_price=total_price)
+
+
+@order.route('/range')
+@login_required
+def date_range():
+
+    page = request.args.get('page', 1, type=int)
+    date_from = request.args.get('date_from')
+    date_to = request.args.get('date_to')
+
+    if date_from and date_to:
+        orders = ProductOrder.query.filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
+            .paginate(page=page, per_page=100)
+
+        return render_template('order/range.html', date_from=date_from, date_to=date_to, orders=orders)
+
+    return render_template('order/range.html')

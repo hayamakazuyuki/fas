@@ -64,7 +64,7 @@ class Shop(db.Model):
     building = db.Column(db.String(50))
     email = db.Column(db.String(100))
     telephone = db.Column(db.String(15), nullable=False)
-    # orders = db.relationship('PurchaseOrder', backref=db.backref('shop', lazy=True))
+    orders = db.relationship('ProductOrder', backref=db.backref('shop', lazy=True))
 
 
 class ProductOrder(db.Model):
