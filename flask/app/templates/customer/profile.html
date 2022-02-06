@@ -7,7 +7,7 @@
     <div class="max-w-md mx-auto">
     <p class="font-bold text-lg my-5">取引先情報</p>
     <div class="max-w-xl rounded shadow-lg my-5 px-3 py-5">
-        <p class="my-3">取引先ID：{{ customer.id }}</p>
+        <p class="my-3 text-lg font-bold">{{ '%05d' % customer.id }}</p>
         <p class="text-2xl">{{ customer.name }}</p>
         <div class="mt-5">
             <a href="/customer/{{ customer.id }}?mode=edit" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">
