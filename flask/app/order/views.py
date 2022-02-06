@@ -1,8 +1,10 @@
 from crypt import methods
 from datetime import datetime, timezone, timedelta
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, make_response
 from flask_login import current_user, login_required
 from sqlalchemy import func
+from io import StringIO
+import csv
 
 from ..extentions import db
 
@@ -90,10 +92,32 @@ def index():
 @login_required
 def data():
     target = request.args.get("target")
+    dl = request.args.get('dl')
 
     if target is None:
         today = datetime.now(JST)
         target = today.strftime('%Y-%m-%d')
+
+    orders = ProductOrder.query.filter(func.DATE(ProductOrder.date) == target).all()
+
+    if dl == 'csv':
+        file = StringIO()
+        writer = csv.writer(file, lineterminator="\n")
+        writer.writerow(
+            ['注文番号', '登録日', '営業担当', '顧客ID', '事業所ID', '事業所名', '都道府県', '商品番号', '商品名', '単価', '数量']
+        )
+
+        for order in orders:
+            writer.writerow([
+                order.id, order.date, order.staff.last_name, order.customer_id, order.shop_id, order.shop.name, 
+                order.shop.prefecture, order.item, order.product.name, order.price, order.qty
+            ])
+
+        response = make_response()
+        response.data = file.getvalue().encode('sjis', 'replace')
+        response.headers['Content-Type'] = 'text/csv'
+        response.headers['Content-Disposition'] = 'attachment; filename=orders-' + target + '.csv'
+        return response
 
     sum_qty = db.session.query(func.sum(ProductOrder.qty)).filter(func.date(ProductOrder.date) == target)\
         .filter(ProductOrder.item != 901).scalar()
@@ -103,8 +127,6 @@ def data():
         .filter(ProductOrder.item == 901).scalar()
     total_price = db.session.query(func.sum(ProductOrder.price * ProductOrder.qty)).filter(func.date(ProductOrder.date) == target)\
         .scalar()
-
-    orders = ProductOrder.query.filter(func.DATE(ProductOrder.date) == target).all()
 
     return render_template('order/data.html', target=target, orders=orders, sum_qty=sum_qty, sum_price=sum_price,
     sum_delivery_price=sum_delivery_price, total_price=total_price)

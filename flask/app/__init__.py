@@ -5,7 +5,6 @@ from .main.views import main
 from .customer.views import customer
 from .delivery.views import delivery
 from .order.views import order
-from .order_data.views import order_data
 from .staff.views import staff
 
 
@@ -26,6 +25,5 @@ def create_app(config_file='settings.py'):
     app.register_blueprint(staff)
     app.register_blueprint(delivery)
     app.register_blueprint(order)
-    app.register_blueprint(order_data)
 
     return app
