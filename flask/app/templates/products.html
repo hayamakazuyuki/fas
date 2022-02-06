@@ -6,24 +6,24 @@
     <p class="font-bold text-lg mb-5">商品一覧</p>
     <table class="table-auto my-5 w-full">
         <thead>
-        <tr>
-            <th class="border-black border-b px-4 py-2">番号</th>
-            <th class="border-black border-b px-4 py-2">商品名</th>
-            <th class="border-black border-b px-4 py-2">厚み（mm） </th>
-            <th class="border-black border-b px-4 py-2">入数（枚）</th>
-            <th class="border-black border-b px-4 py-2">サイズ（WxH,mm）</th>
-            <th class="border-black border-b px-4 py-2">箱サイズ（WxDxH,mm）</th>
+        <tr class="border-black border-b mx-3">
+            <th>番号</th>
+            <th>商品名</th>
+            <th>厚み（mm） </th>
+            <th>入数（枚）</th>
+            <th>サイズ（WxH,mm）</th>
+            <th>箱サイズ（WxDxH,mm）</th>
         </tr>
         </thead>
         <tbody>
         {% for product in products %}
-        <tr>
-            <td class="border-b px-4 py-1">{{ product.id }}</td>
-            <td class="border-b px-4 py-1">{{ product.name }}</td>
-            <td class="border-b px-4 py-1">{{ product.thickness }}</td>
-            <td class="border-b px-4 py-1">{{ product.qty or '' }}</td>
-            <td class="border-b px-4 py-1">{{ product.size or '' }}</td>
-            <td class="border-b px-4 py-1">{{ product.box_size or '' }}</td>
+        <tr class="border-b mx-3">
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.thickness or '' }}</td>
+            <td>{{ product.qty or '' }}</td>
+            <td>{{ product.size or '' }}</td>
+            <td>{{ product.box_size or '' }}</td>
         </tr>
         {% endfor %}
         </tbody>
