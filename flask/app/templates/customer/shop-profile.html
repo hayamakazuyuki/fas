@@ -10,13 +10,14 @@
 
     <div class="mx-auto py-4 px-8 bg-white shadow-lg rounded-lg my-10">
         <div>
-            <p class="mt-2 text-gray-600">{{ shop.customer_id }} - {{ shop.id }}  {{ shop.customer.name }}</p>
+            <p class="mt-2 text-gray-600">{{ shop.customer_id }} - {{ shop.id }}</p>
+            <p class="mt-2 text-gray-600">{{ shop.customer.name }}</p>
             <h2 class="mt-2 text-gray-800 text-3xl">{{ shop.name }}</h2>
             <p class="mt-2 text-gray-600">{{ shop.department }}</p>
             <p class="mt-2 text-gray-600">{{ '〒{}-{}'.format(shop.zip[:3], shop.zip[3:]) }} {{ shop.prefecture }} {{ shop.city }}
             {{ shop.town }} {{ shop.address }} {{ shop.building }}</p>
             <p class="mt-2 text-gray-600">{{ shop.email }}</p>
-            <p class="mt-2 text-gray-600">TEL: {{ shop.telephone }}</p>
+            <p class="mt-2 text-gray-600">{{ shop.telephone }}</p>
 
             <div class="mt-5">
                 <a href="/customer/shop/{{ shop.customer_id }}/{{ shop.id }}?mode=edit" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">
@@ -38,7 +39,7 @@
 
     <p class="font-bold text-lg my-5">受注履歴</p>
 
-    <table class="table-auto my-5">
+    <table class="table-auto my-5 w-full">
         <thead>
         <tr class="border-black border-b px-4 py-2">
             <th>受注ID</th>
