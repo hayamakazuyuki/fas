@@ -22,7 +22,7 @@ def index():
         result = Customer.query.get(q)
 
         if result:
-            return 'ある'
+            return redirect(url_for('customer.profile', id=q))
         else:
             return redirect(url_for('customer.index'))
 
