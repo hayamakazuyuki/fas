@@ -126,31 +126,19 @@ removeInputs.addEventListener('click', (e) => {
     };
 }, false)
 
-//商品入力欄を削除（減らす）
-//     if (area_item3.hasChildNodes()) {
-//         div_item3.remove();
-//         return;
-//     } else if (area_item2.hasChildNodes()) {
-//         div_item2.remove();
-//         return;
-//     } else {
-//         return;
-//         };//     }, false);
-
-
 
 // removing and appending delivery fee inputs;
 const deliveryInclude = document.getElementById('deliveryInclude'); // grab deliveryInclude checkbox
 const divDelivery = document.getElementById('divDelivery'); // grab div divDelivery
-const inputs = divDelivery.querySelectorAll('input'); // grab all inputs for delivery
+const deliveryInputs = divDelivery.querySelectorAll('input'); // grab all inputs for delivery
 
 deliveryInclude.addEventListener('change', (e) => {
     const deliveryError = document.getElementById('deliveryError');
 
     if(deliveryInclude.checked){
         for (var i=0; i<3; i++){
-            inputs[i].value = '';
-            divDelivery.removeChild(inputs[i]);
+            deliveryInputs[i].value = '';
+            divDelivery.removeChild(deliveryInputs[i]);
         };
 
     if(deliveryError.textContent){
@@ -159,10 +147,32 @@ deliveryInclude.addEventListener('change', (e) => {
 
     } else {
         for (var i=0; i<3; i++){
-            divDelivery.appendChild(inputs[i]);
+            divDelivery.appendChild(deliveryInputs[i]);
         };
     };
 }, false);
+
+
+// calculating the total delivery quantity
+
+if(deliveryInputs[1]){
+
+    const item2 = document.getElementById('item2'); // grab div for item2;
+    const item3 = document.getElementById('item3'); // grab div for item3;
+
+    deliveryInputs[2].addEventListener('focus', (e) => {
+        let qty = parseInt(document.getElementById('qty').value);
+        let qty2 = '';
+        let qty3 = '';
+        if(item2.hasChildNodes()){
+            qty2 = parseInt(document.getElementById('qty2').value);
+            }
+        if(item3.hasChildNodes()){
+            qty3 = parseInt(document.getElementById('qty3').value);
+            }
+        deliveryInputs[2].value = qty + qty2 + qty3;
+        },false);
+    }
 
 
 // order form validation;

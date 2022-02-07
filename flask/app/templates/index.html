@@ -6,7 +6,7 @@
     <div class="my-5 flex">
 
         <div class="w-1/3 mx-auto py-4 px-8 bg-white shadow-lg rounded-lg">
-            <h1 class="text-lg font-bold">{{ today.strftime('%Y-%m-%d') }}</h1>
+            <h1 class="text-lg font-bold">{{ today }}</h1>
             <table class="my-3 w-full">
                 <thead>
                 <tr class="border-b border-black">
@@ -55,7 +55,7 @@
             <tr class="border-b">
                 <td><a href="/order/{{ order.id }}" class="text-blue-500 hover:text-blue-800 hover:underline">
                     {{ '{:06d}'.format(order.id) }}</a></td>
-                <td>{{ order.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ order.date.strftime('%Y-%m-%d') }}</td>
                 <td>{{ order.customer_id }}-{{ order.shop_id }} {{ order.shop.name }}</td>
                 <td>{{ order.product.name }}</td>
                 <td class="text-right">{{ '{:,d}'.format(order.price) }}</td>

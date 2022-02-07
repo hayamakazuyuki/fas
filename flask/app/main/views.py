@@ -17,7 +17,8 @@ JST = timezone(timedelta(hours=+9), 'JST')
 def index():
     page = request.args.get('page', 1, type=int)
     orders = ProductOrder.query.filter(ProductOrder.sales_by == current_user.id).order_by(ProductOrder.id.desc()).paginate(page=page, per_page=20)
-    today = date.today()
+    # today = date.today()
+    today = datetime.now(JST).strftime('%Y-%m-%d')
 
     sum_qty_today = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.sales_by ==current_user.id)\
         .filter(func.date(ProductOrder.date) == today).filter(ProductOrder.item != 901).scalar()
