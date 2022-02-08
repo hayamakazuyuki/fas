@@ -79,8 +79,8 @@ class ProductOrder(db.Model):
     qty = db.Column(db.Integer)
     delivery_check = db.Column(db.Integer, nullable=True)
     exported = db.Column(db.Integer, nullable=True)
-    # request = db.relationship('DeliveryRequest', backref='purchase_order', uselist=False,
-    #                           cascade="save-update, merge, delete")
+    request = db.relationship('DeliveryRequest', backref='product_order', uselist=False,
+                              cascade="save-update, merge, delete")
 
     __table_args__ = (ForeignKeyConstraint(['customer_id', 'shop_id'], ['shop.customer_id', 'shop.id']),)
 

@@ -95,52 +95,58 @@ removeInputs.addEventListener('click', (e) => {
 }, false)
 
 
-// removing and appending delivery fee inputs;
-const deliveryInclude = document.getElementById('deliveryInclude'); // grab deliveryInclude checkbox
+const hideDelivery = document.getElementById('hideDelivery');
+const showDelivery = document.getElementById('showDelivery');
+const deliveryError = document.getElementById('deliveryError');
 const divDelivery = document.getElementById('divDelivery'); // grab div divDelivery
 const deliveryInputs = divDelivery.querySelectorAll('input'); // grab all inputs for delivery
 
-deliveryInclude.addEventListener('change', (e) => {
-    const deliveryError = document.getElementById('deliveryError');
+const toggleHidden = () => {
+    deliveryError.textContent = '';
+    hideDelivery.classList.toggle('hidden');
+    showDelivery.classList.toggle('hidden');
+}
 
-    if(deliveryInclude.checked){
-        for (var i=0; i<3; i++){
-            deliveryInputs[i].value = '';
-            divDelivery.removeChild(deliveryInputs[i]);
-        };
-
-    if(deliveryError.textContent){
-        deliveryError.textContent = '';
+hideDelivery.addEventListener('click', () => {
+    for (var i=0; i<deliveryInputs.length; i++) {
+        deliveryInputs[i].value = '';
+        divDelivery.removeChild(deliveryInputs[i]);
     };
 
-    } else {
-        for (var i=0; i<3; i++){
-            divDelivery.appendChild(deliveryInputs[i]);
-        };
-    };
+    toggleHidden();
+
 }, false);
+
+showDelivery.addEventListener('click', () => {
+    for (var i=0; i<deliveryInputs.length; i++) {
+        divDelivery.appendChild(deliveryInputs[i]);
+    };
+
+    toggleHidden();
+
+}, false)
 
 
 // calculating the total delivery quantity
 
-if(deliveryInputs[1]){
+// if(deliveryInputs[1]){
 
-    const item2 = document.getElementById('item2'); // grab div for item2;
-    const item3 = document.getElementById('item3'); // grab div for item3;
+//     const item2 = document.getElementById('item2'); // grab div for item2;
+//     const item3 = document.getElementById('item3'); // grab div for item3;
 
-    deliveryInputs[2].addEventListener('focus', (e) => {
-        let qty = parseInt(document.getElementById('qty').value);
-        let qty2 = '';
-        let qty3 = '';
-        if(item2.hasChildNodes()){
-            qty2 = parseInt(document.getElementById('qty2').value);
-            }
-        if(item3.hasChildNodes()){
-            qty3 = parseInt(document.getElementById('qty3').value);
-            }
-        deliveryInputs[2].value = qty + qty2 + qty3;
-        },false);
-    }
+//     deliveryInputs[2].addEventListener('focus', (e) => {
+//         let qty = parseInt(document.getElementById('qty').value);
+//         let qty2 = '';
+//         let qty3 = '';
+//         if(item2.hasChildNodes()){
+//             qty2 = parseInt(document.getElementById('qty2').value);
+//             }
+//         if(item3.hasChildNodes()){
+//             qty3 = parseInt(document.getElementById('qty3').value);
+//             }
+//         deliveryInputs[2].value = qty + qty2 + qty3;
+//         },false);
+//     }
 
 
 // order form validation;
@@ -151,7 +157,6 @@ confirmButton.addEventListener('click', (e) => {
     const priceInputs = document.getElementsByClassName('price');
     const qtyInputs = document.getElementsByClassName('qty');
 
-    const deliveryInclude = document.getElementById('deliveryInclude');
     const deliveryInputs = document.getElementById('divDelivery').querySelectorAll('input');
 
     const itemErrors = document.getElementsByClassName('itemError');
@@ -174,7 +179,7 @@ confirmButton.addEventListener('click', (e) => {
     };
 
     // check if delivery price and qty are number and more than 1 
-    if(!deliveryInclude.checked){
+    if(deliveryInputs){
         for (var i=0; i<deliveryInputs.length; i++){
             value = deliveryInputs[i].value;
             if (isNaN(value) || value == ''){
