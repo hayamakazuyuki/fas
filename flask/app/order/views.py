@@ -88,6 +88,12 @@ def index():
     return render_template('order/register.html', shop=shop)
 
 
+@order.route('/<int:id>')
+@login_required
+def order_detail(id):
+
+    return render_template('order/order-detail.html')
+
 @order.route('/data')
 @login_required
 def data():

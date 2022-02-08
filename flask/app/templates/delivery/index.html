@@ -8,30 +8,27 @@
 
     <p class="font-bold text-lg mb-5">配送関連依頼の一覧</p>
         <table class="table-auto my-5">
-            <form action="/ripelawn/delivery_request" method="POST">
-
         <thead>
-            <tr>
-                <th class="border-black border-b px-4 py-2">依頼日</th>
-                <th class="border-black border-b px-4 py-2">配送先名</th>
-                <th class="border-black border-b px-4 py-2">商品</th>
-                <th class="border-black border-b px-4 py-2">数量</th>
-                <th class="border-black border-b px-4 py-2">指定日</th>
-                <th class="border-black border-b px-4 py-2">時間帯</th>
-                <th class="border-black border-b px-4 py-2">SF→RL</th>
-                <th class="border-black border-b px-4 py-2">RL→SF</th>
-                <th class="border-black border-b px-4 py-2">RL確認</th>
-
+            <tr class="border-black border-b">
+                <th class="px-4">依頼日</th>
+                <th class="px-4">配送先名</th>
+                <th class="px-4">商品</th>
+                <th class="px-4">数量</th>
+                <th class="px-4">指定日</th>
+                <th class="px-4">時間帯</th>
+                <th class="px-4">SF→RL</th>
+                <th class="px-4">RL→SF</th>
+                <th class="px-4">RL確認</th>
             </tr>
         </thead>
 
         {% for request in requests %}
-        <tr>
-            <td class="border-b px-4 py-1">{{ request.created_at.strftime('%m-%d') }}</td>
-            <td class="border-b px-4 py-1">{{ request.product_order.shop.name }}</td>
-            <td class="border-b px-4 py-1">{{ request.product_order.product.name[10:] }}</td>
-            <td class="border-b px-4 py-1">{{ request.product_order.qty }}</td>
-            <td class="border-b px-4 py-1">
+        <tr class="border-b">
+            <td class="px-4">{{ request.created_at.strftime('%m-%d') }}</td>
+            <td class="px-4">{{ request.product_order.shop.name }}</td>
+            <td class="px-4">{{ request.product_order.product.name[10:] }}</td>
+            <td class="px-4">{{ request.product_order.qty }}</td>
+            <td class="px-4">
                 {% if request.delivery_date %}
                 {{ request.delivery_date.strftime('%m-%d') }}
                 {% endif %}
