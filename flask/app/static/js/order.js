@@ -76,38 +76,6 @@ appendInputs.addEventListener('click', (e) => {
 
 }, false);
 
-//     if (!area_item2.hasChildNodes()) {
-
-
-//         } else if (!area_item3.hasChildNodes()) {
-//             div_item3 = div_item1.cloneNode(true);
-//             div_item3.id = 'div_item3';
-//             let labels3 = div_item3.getElementsByTagName('label');
-//             let select3 = div_item3.getElementsByTagName('select');
-//             let inputs3 = div_item3.getElementsByTagName('input');
-//             // 各labelのforを変更する
-//             labels3[0].htmlFor = 'item3';
-//             labels3[1].htmlFor = 'item3_price';
-//             labels3[2].htmlFor = 'item3_qty';
-//             labels3[3].htmlFor = 'no_delivery3';
-//             // selectのidとnameを変更
-//             select3[0].setAttribute('id','item3');
-//             select3[0].setAttribute('name','item3');
-//             // inputの各idとnameを変更
-//             inputs3[0].setAttribute('id','item3_price');
-//             inputs3[0].setAttribute('name','item3_price');
-//             inputs3[0].value = '';
-//             inputs3[1].setAttribute('id','item3_qty');
-//             inputs3[1].setAttribute('name','item3_qty');
-//             inputs3[1].value = '';
-//             inputs3[2].setAttribute('id','no_delivery3');
-//             inputs3[2].setAttribute('name','no_delivery3');
-//             // area_item3にアペンドする
-//             return area_item3.appendChild(div_item3);
-//         } else {
-//             return;
-//         };
-//     }, false);
 
 // reducing item inputs;
 const removeInputs = document.getElementById('removeInputs');
@@ -179,74 +147,39 @@ if(deliveryInputs[1]){
 const confirmButton = document.getElementById('confirmButton'); // grab confirmButton;
 
 confirmButton.addEventListener('click', (e) => {
+    const selects = document.getElementsByTagName('select')
+    const priceInputs = document.getElementsByClassName('price');
+    const qtyInputs = document.getElementsByClassName('qty');
+
     const deliveryInclude = document.getElementById('deliveryInclude');
-    const deliveryError = document.getElementById('deliveryError');
     const deliveryInputs = document.getElementById('divDelivery').querySelectorAll('input');
 
-    const reGreater1 = /^[1-9]\d*$/; //半角数字1以上の正規表現
+    const itemErrors = document.getElementsByClassName('itemError');
+    const deliveryError = document.getElementById('deliveryError');
 
-    const msgGreater1 = '数量は1以上を入力してください。';
-    
+    // clear error messages.
+    deliveryError.textContent = '';
+
+    // check if items are selected.
+    for (var i=0; i<selects.length; i++) {
+        itemErrors[i].textContent = '';
+
+        if (selects[i].options[selects[i].selectedIndex].value == '') {
+            return itemErrors[i].textContent = '商品を選択してください。';
+        } else if (!priceInputs[i].value || isNaN(priceInputs[i].value)) {
+            return itemErrors[i].textContent = '単価を入力してください。';
+        } else if (isNaN(qtyInputs[i].value) || qtyInputs[i].value == 0) {
+            return itemErrors[i].textContent = '数量は 1 以上を入力してください。';
+        }
+    };
+
+    // check if delivery price and qty are number and more than 1 
     if(!deliveryInclude.checked){
-        for (var i=0; i<3; i++){
-            if(!deliveryInputs[i].value.match(reGreater1)){
-                return deliveryError.textContent = '送料単価と数量は 1 以上を入力してください。';
+        for (var i=0; i<deliveryInputs.length; i++){
+            value = deliveryInputs[i].value;
+            if (isNaN(value) || value == ''){
+                return deliveryError.textContent = '単価と数量は 1 以上を入力してください。';
             };
         };
     };
 }, false);
-
-
-// 注文フォームのバリデーション
-// const regexNumOnly = /^[0-9]+$/; //半角数字（空文字NG）の正規表現。0はオッケー
-
-// const error_order = document.getElementById('error_order'); //商品のエラーメッセージを表示させる場所
-// const area_items = document.getElementById('area_items'); //商品入力エリア
-
-// let item_inputs = area_items.getElementsByTagName('input'); //商品入力エリア内のinputタグ
-
-// to_confirm.addEventListener('click', function(e){
-//     const msg_select_item = '商品を選択してください。'
-//     const msg_number_only = '単価と数量は半角数字で入力してください。';
-//     const msg_greater1 = '数量は1以上を入力してください。';
-
-//     if(item.options[item.selectedIndex].value == ''){
-//         return error_order.textContent = msg_select_item
-//         }
-
-//     if(area_item2.hasChildNodes()){
-//         if(item2.options[item2.selectedIndex].value == ''){
-//             return error_order.textContent = msg_select_item
-//             }
-//         }
-
-//     if(area_item3.hasChildNodes()){
-//         if(item3.options[item3.selectedIndex].value == ''){
-//             return error_order.textContent = msg_select_item
-//             }
-//         }
-
-//     for(let j=0; j<item_inputs.length; j++){
-//             let item_value = item_inputs[j].value;
-//             if(!item_value.match(regexNumOnly)){
-//                 return error_order.textContent = msg_number_only;
-//             } else if(!item_inputs[1].value.match(regexGreater1)){
-//                 return error_order.textContent = msg_greater1;
-//             }
-//         }
-
-//     if(item_inputs.length == 9){
-//        if(!item_inputs[7].value.match(regexGreater1)){
-//             return error_order.textContent = msg_greater1;
-//        }
-//     }
-
-//     if(item_inputs.length == 6){
-//        if(!item_inputs[4].value.match(regexGreater1)){
-//             return error_order.textContent = msg_greater1;
-//        }
-//     }
-
-
-//     modal();
-// }, false);

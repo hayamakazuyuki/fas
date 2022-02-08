@@ -39,7 +39,7 @@ def index():
         order.sales_by = staff
         order.customer_id = customer_id
         order.shop_id = id
-        order.item = request.form['item']
+        order.item = request.form['item1']
         order.price = request.form['price']
         order.qty = request.form['qty']
         order.delivery_check = request.form.get('noDelivery')
