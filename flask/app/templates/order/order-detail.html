@@ -4,11 +4,26 @@
 <div class="container max-w-5xl mx-auto">
     <div class="flex justify-center my-5 mx-3">
         <div class="border p-6">
-            <p class="font-bold text-lg">ご注文詳細データ</p>
-            <p class="font-bold text-lg">ご注文これっっっっっっっっっっっっっっkd</p>
-    
+            <h1 class="font-bold text-lg">注文詳細</h1>
+            <p class="font-bold my-3"><span class="text-sm font-normal text-gray-500">No.</span> {{ '{:06d}'.format(order.id) }}</p>
+            <p class="my-3">{{ order.date.strftime('%Y-%m-%d %H:%M') }}</p>
+            <p class="font-bold my-3"><span class="text-base font-normal text-gray-500">
+                {{ order.customer_id }}-{{ order.shop_id }}
+            </span> {{ order.shop.name }}</p>
+            <p class="my-3">{{ order.shop.prefecture }}{{ order.shop.city }}{{ order.shop.town }}
+                {{ order.shop.address }}{{ order.shop.bldg }}
+            </p>
+            <p class="font-bold my-3"><span class="text-base font-normal text-gray-500">
+                {{ order.item }}
+            </span> {{ order.product.name }}</p>
+            <p class="font-bold my-3">{{ order.price }}
+                <span class="text-sm font-normal text-gray-500">円</span>
+            </p>
+            <p class="font-bold my-3">{{ order.qty }} <span class="text-sm font-normal text-gray-500">個</span></p>
+            <p class="font-bold my-3">
+                {% if order.delivery_check == 1 %}配送依頼無し{% endif %}
+            </p>
         </div>
-
     </div>
 </div>
 {% endblock %}

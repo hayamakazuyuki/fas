@@ -92,7 +92,9 @@ def index():
 @login_required
 def order_detail(id):
 
-    return render_template('order/order-detail.html')
+    order = ProductOrder.query.get(id)
+
+    return render_template('order/order-detail.html', order=order)
 
 @order.route('/data')
 @login_required
