@@ -4,7 +4,7 @@ class BaseConfig(object):
     DEBUG = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = 'secret'
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://mysql_user:password@mysql/fas?charset=utf8'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://user:password@mysql/fas?charset=utf8'
 
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
