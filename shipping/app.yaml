@@ -3,3 +3,8 @@ service: shipping
 
 includes:
   - env_variables.yaml
+
+handlers:
+-  url: /.*
+   secure: always
+   script: auto
