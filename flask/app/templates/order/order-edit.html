@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+{% from "_macros.html" import render_order_select, render_order_input %}
+
+<div class="container max-w-5xl mx-auto">
+    <div class="flex justify-center my-5 mx-3">
+        <div class="">
+            <div class="p-6">
+                <h1 class="font-bold text-lg">注文の編集</h1>
+                <p class="font-bold my-3"><span class="text-sm font-normal text-gray-500">No.</span> {{ '{:06d}'.format(order.id) }}</p>
+                <p class="my-3">{{ order.date.strftime('%Y-%m-%d %H:%M') }}</p>
+                <p class="font-bold my-3"><span class="text-base font-normal text-gray-500">
+                    {{ order.customer_id }}-{{ order.shop_id }}
+                </span> {{ order.shop.name }}</p>
+                <p class="font-bold my-3">{{ order.shop.prefecture }}{{ order.shop.city }}{{ order.shop.town }}
+                    {{ order.shop.address }}{{ order.shop.bldg }}
+                </p>            
+            </div>
+            <div class="px-6 border rounded-lg shadow-lg">
+                <form action="/order/{{ order.id }}?mode=edit" method="POST">
+                    {{ form.csrf_token }}
+                    <p class="w-full my-5 text-sm text-gray-500">
+                        {{ render_order_select(form.item, order.item, class_="px-5 text-lg text-gray-800")}}
+                    <p class="w-full my-5 text-sm text-gray-500">
+                        {{ render_order_input(form.price, value=order.price, class_="px-5 text-lg border-b text-gray-800" )}}
+                    </p>
+                    <p class="w-full my-5 text-sm text-gray-500">
+                        {{ render_order_input(form.qty, value=order.qty, class_="px-5 text-lg border-b text-gray-800" )}}
+                    </p>
+                    <button class="my-3 w-full text-white rounded-lg bg-blue-500 hover:bg-blue-800">修正</button> 
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

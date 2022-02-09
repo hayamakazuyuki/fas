@@ -1,6 +1,6 @@
 from crypt import methods
 from datetime import datetime, timezone, timedelta
-from flask import Blueprint, render_template, request, redirect, url_for, make_response
+from flask import Blueprint, render_template, request, redirect, url_for, make_response, flash
 from flask_login import current_user, login_required
 from sqlalchemy import func
 from io import StringIO
@@ -9,6 +9,8 @@ import csv
 from ..extentions import db
 
 from ..models import Shop, ProductOrder
+
+from .forms import order_edit_form
 
 
 order = Blueprint('order', __name__, url_prefix='/order')
@@ -88,13 +90,49 @@ def index():
     return render_template('order/register.html', shop=shop)
 
 
-@order.route('/<int:id>')
+@order.route('/<int:id>', methods=['GET', 'POST'])
 @login_required
 def order_detail(id):
 
     order = ProductOrder.query.get(id)
 
+    mode = request.args.get('mode')
+
+    current_item = order.product.id
+    OrderEditForm = order_edit_form(current_item)
+    form = OrderEditForm()
+
+    # get 2hours before and remove timezone info
+    before2hours = datetime.now(JST) - timedelta(seconds=7200)
+    before2h = before2hours.replace(tzinfo=None)
+
+    # generate min and max dates for delivery date specification.
+    min_date = datetime.now(JST) + timedelta(days=4)
+    max_date = datetime.now(JST) + timedelta(days=15)
+
+    if mode == 'edit':
+        if form.validate_on_submit():
+
+            flash('受注情報を変更しました。')
+            return redirect(url_for('order.order_detail', id=id))
+
+        return render_template('order/order-edit.html', order=order, form=form)
+
     return render_template('order/order-detail.html', order=order)
+
+
+# delete order
+@order.route('/delete/<int:id>')
+@login_required
+def order_delete(id):
+    order = ProductOrder.query.get(id)
+    db.session.delete(order)
+    db.session.commit()
+
+    flash('注文を削除しました。', 'warning')
+
+    return redirect(url_for('main.index'))
+
 
 @order.route('/data')
 @login_required

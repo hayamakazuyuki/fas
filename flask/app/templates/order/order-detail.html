@@ -1,28 +1,53 @@
 {% extends "layout.html" %}
 {% block content %}
 {% include "navbar.html" %}
+{% include "_flashing.html" -%}
+
 <div class="container max-w-5xl mx-auto">
-    <div class="flex justify-center my-5 mx-3">
-        <div class="border p-6">
-            <h1 class="font-bold text-lg">注文詳細</h1>
-            <p class="font-bold my-3"><span class="text-sm font-normal text-gray-500">No.</span> {{ '{:06d}'.format(order.id) }}</p>
-            <p class="my-3">{{ order.date.strftime('%Y-%m-%d %H:%M') }}</p>
-            <p class="font-bold my-3"><span class="text-base font-normal text-gray-500">
-                {{ order.customer_id }}-{{ order.shop_id }}
-            </span> {{ order.shop.name }}</p>
-            <p class="my-3">{{ order.shop.prefecture }}{{ order.shop.city }}{{ order.shop.town }}
-                {{ order.shop.address }}{{ order.shop.bldg }}
-            </p>
-            <p class="font-bold my-3"><span class="text-base font-normal text-gray-500">
-                {{ order.item }}
-            </span> {{ order.product.name }}</p>
-            <p class="font-bold my-3">{{ order.price }}
-                <span class="text-sm font-normal text-gray-500">円</span>
-            </p>
-            <p class="font-bold my-3">{{ order.qty }} <span class="text-sm font-normal text-gray-500">個</span></p>
-            <p class="bg-orange-500 text-white py-1 px-4 rounded-full">
-                {% if order.delivery_check == 1 %}配送依頼無し{% endif %}
-            </p>
+    <div class="flex justify-center mx-3">
+        <div class="my-10">
+        <!-- order details go here-->
+            <div class="border p-6 rounded-lg shadow-lg">
+                <h1 class="font-bold text-lg">受注情報</h1>
+                <p class="font-bold my-3"><span class="text-sm font-normal text-gray-500">No.</span> {{ '{:06d}'.format(order.id) }}</p>
+                <p class="my-3">{{ order.date.strftime('%Y-%m-%d %H:%M') }}</p>
+                <p class="font-bold my-3"><span class="text-base font-normal text-gray-500">
+                    {{ order.customer_id }}-{{ order.shop_id }}
+                </span> {{ order.shop.name }}</p>
+                <p class="my-3">{{ order.shop.prefecture }}{{ order.shop.city }}{{ order.shop.town }}
+                    {{ order.shop.address }}{{ order.shop.bldg }}
+                </p>
+                <p class="font-bold my-3"><span class="text-base font-normal text-gray-500">
+                    {{ order.item }}
+                </span> {{ order.product.name }}</p>
+                <p class="font-bold my-3">{{ order.price }}
+                    <span class="text-sm font-normal text-gray-500">円</span>
+                </p>
+                <p class="font-bold my-3">{{ order.qty }} <span class="text-sm font-normal text-gray-500">個</span></p>
+                <p class="bg-orange-500 text-white py-1 px-4 rounded-full">
+                    {% if order.delivery_check == 1 %}配送依頼無し{% endif %}
+                </p>
+
+                {% if order.exported is none %}
+                <div class="flex justify-between">
+                    <p class="text-blue-500 hover:text-blue-800 hover:underline">
+                        <a href="/order/{{ order.id }}?mode=edit">編集</a>
+                    </p>
+                    <p class="text-blue-500 hover:text-red-700 hover:underline">
+                        <a href="/order/delete/{{ order.id }}">削除</a>
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- order requests go here-->
+            {% if order.item != 901 %}
+            <div class="flex justify-center my-5 mx-3">
+                <div class="border p-6 rounded-lg shadow-lg">
+                    <h2 class="text-base font-bold">配送に関する情報</h2>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

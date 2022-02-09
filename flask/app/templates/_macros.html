@@ -13,36 +13,6 @@
       {{ field(**kwargs)|safe }}
 {% endmacro %}
 
-{% macro render_order_edit_form_field(field, current_value) %}
-    <div class="row ms-3 mb-2">
-        <div class="col-sm-2">
-            <label for="{{ field.name }}" class="col-form-label">{{ field.label.text}}</label>
-        </div>
-        <div class="col-auto">
-            {{ field(class_="form-control form-control-sm", value=current_value)|safe }}
-            <ul>
-                {% for error in field.errors %}
-                <li style="color:red">{{ error }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-{% endmacro %}
-
-{% macro render_item_select_field(field, current_value) %}
-    <div class="row ms-3 mb-2">
-        <div class="col-sm-2">
-            <label for="{{ field.name }}" class="col-form-label">{{ field.label.text}}</label>
-        </div>
-        <div class="col-auto">{{ field(class_="form-control form-control-sm")|safe }}</div>
-    </div>
-    <ul>
-        {% for error in field.errors %}
-            <li style="color:red">{{ error }}</li>
-        {% endfor %}
-    </ul>
-{% endmacro %}
-
 
 {##### log-in form ######}
 {% macro render_login_field_label(field, label_text) %}
@@ -63,4 +33,19 @@
 {% endfor %}
 {% endif %}
 {% endfor %}
+{% endmacro %}
+
+
+{% macro render_order_select(field, current_value) %}
+    {{ field.label }}{{ field(**kwargs)|safe }}
+{% endmacro %}
+
+
+{% macro render_order_input(field, current_value) %}
+    {{ field.label }}{{ field(**kwargs)|safe }}
+    <ul>
+        {% for error in field.errors %}
+            <li style="color:red">{{ error }}</li>
+        {% endfor %}
+    </ul>
 {% endmacro %}
