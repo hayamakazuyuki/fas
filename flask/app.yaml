@@ -3,3 +3,8 @@ service: sf
 
 includes:
   - env_variables.yaml
+
+handlers:
+-  url: /.*
+   secure: always
+   script: auto
