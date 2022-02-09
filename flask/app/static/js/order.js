@@ -94,7 +94,7 @@ const appendInputs = document.getElementById('appendInputs');
 //     };
 // }, false)
 
-
+// item 2 inputs show and hide
 const showItem2 = document.getElementById('showItem2');
 const hideItem2 = document.getElementById('hideItem2');
 
@@ -110,7 +110,7 @@ hideItem2.addEventListener('click', () => {
 
 }, false)
 
-
+// item3 inputs show and hide
 const showItem3 = document.getElementById('showItem3');
 const hideItem3 = document.getElementById('hideItem3');
 
