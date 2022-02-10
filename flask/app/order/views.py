@@ -134,7 +134,8 @@ def register_request(id):
     deliveryreq = DeliveryRequest()
     deliveryreq.order_id = id
     deliveryreq.requested_by = current_user.id
-    deliveryreq.delivery_date = request.form.get('delivery_date')
+    if request.form['delivery_date']:
+        deliveryreq.delivery_date = request.form['delivery_date']
     deliveryreq.memo = request.form.get('memo')
 
     db.session.add(deliveryreq)

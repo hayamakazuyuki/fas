@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, DateField, StringField
-from wtforms.validators import InputRequired, NumberRange
+from wtforms import IntegerField, DateField, StringField, SelectField
+from wtforms.validators import InputRequired, NumberRange, Optional
 
 from wtforms_sqlalchemy.fields import QuerySelectField
 
@@ -21,5 +21,6 @@ def order_edit_form(current_item):
     return OrderEditForm
 
 class DeliveryRequestForm(FlaskForm):
-    delivery_date = DateField('指定日')
-    memo = StringField('依頼事項')
+    delivery_date = DateField('指定日', [Optional()])
+    time_range = SelectField('時間帯', choices=[('', ''), ('am', '午前'), ('pm', '午後')])
+    

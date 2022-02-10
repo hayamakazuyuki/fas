@@ -13,6 +13,9 @@
       {{ field(**kwargs)|safe }}
 {% endmacro %}
 
+{% macro render_select_field(field) %}
+    {{ field.label }} {{ field(**kwargs)|safe }}
+{% endmacro %}
 
 {##### log-in form ######}
 {% macro render_login_field_label(field, label_text) %}
