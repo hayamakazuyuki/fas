@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField
+from wtforms import IntegerField, DateField, StringField
 from wtforms.validators import InputRequired, NumberRange
 
 from wtforms_sqlalchemy.fields import QuerySelectField
@@ -19,3 +19,7 @@ def order_edit_form(current_item):
         qty = IntegerField('数量', validators=[InputRequired('数量を入力してください'),
                                              NumberRange(min=1, message='数量は 1 以上を入力してください')])
     return OrderEditForm
+
+class DeliveryRequestForm(FlaskForm):
+    delivery_date = DateField('指定日')
+    memo = StringField('依頼事項')

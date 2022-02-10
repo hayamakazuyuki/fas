@@ -8,9 +8,9 @@ import csv
 
 from ..extentions import db
 
-from ..models import Shop, ProductOrder
+from ..models import DeliveryRequest, Shop, ProductOrder
 
-from .forms import order_edit_form
+from .forms import order_edit_form, DeliveryRequestForm
 
 
 order = Blueprint('order', __name__, url_prefix='/order')
@@ -98,10 +98,6 @@ def order_detail(id):
 
     mode = request.args.get('mode')
 
-    current_item = order.product.id
-    OrderEditForm = order_edit_form(current_item)
-    form = OrderEditForm()
-
     # get 2hours before and remove timezone info
     before2hours = datetime.now(JST) - timedelta(seconds=7200)
     before2h = before2hours.replace(tzinfo=None)
@@ -110,7 +106,18 @@ def order_detail(id):
     min_date = datetime.now(JST) + timedelta(days=4)
     max_date = datetime.now(JST) + timedelta(days=15)
 
+    form = DeliveryRequestForm()
+
+    if mode == 'request':
+        if form.validate_on_submit():
+            return register_request(id)
+ 
     if mode == 'edit':
+        current_item = order.product.id
+        OrderEditForm = order_edit_form(current_item)
+
+        form = OrderEditForm()
+
         if form.validate_on_submit():
 
             flash('受注情報を変更しました。')
@@ -118,7 +125,24 @@ def order_detail(id):
 
         return render_template('order/order-edit.html', order=order, form=form)
 
-    return render_template('order/order-detail.html', order=order)
+    return render_template('order/order-detail.html', order=order, before2h=before2h, 
+                    min_date=min_date, max_date=max_date, form=form)
+
+
+# func register delivery request
+def register_request(id):
+    deliveryreq = DeliveryRequest()
+    deliveryreq.order_id = id
+    deliveryreq.requested_by = current_user.id
+    deliveryreq.delivery_date = request.form.get('delivery_date')
+    deliveryreq.memo = request.form.get('memo')
+
+    db.session.add(deliveryreq)
+    db.session.commit()
+
+    flash('配送に関する依頼を登録しました。', 'success')
+
+    return redirect(url_for('order.order_detail', id=id))
 
 
 # delete order

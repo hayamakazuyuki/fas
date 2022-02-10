@@ -1,14 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
 {% include "navbar.html" %}
+{% from "_macros.html" import render_field_with_errors %}
+
 {% include "_flashing.html" -%}
 
-<div class="container max-w-5xl mx-auto">
+
+<div class="container max-w-5xl mx-auto" x-data="{ open: false }">
     <div class="flex justify-center mx-3">
         <div class="my-10">
         <!-- order details go here-->
             <div class="border p-6 rounded-lg shadow-lg">
-                <h1 class="font-bold text-lg">受注情報</h1>
+                <h1 class="font-bold text-lg border-b">受注情報</h1>
                 <p class="font-bold my-3"><span class="text-sm font-normal text-gray-500">No.</span> {{ '{:06d}'.format(order.id) }}</p>
                 <p class="my-3">{{ order.date.strftime('%Y-%m-%d %H:%M') }}</p>
                 <p class="font-bold my-3"><span class="text-base font-normal text-gray-500">
@@ -30,25 +33,83 @@
 
                 {% if order.exported is none %}
                 <div class="flex justify-between">
-                    <p class="text-blue-500 hover:text-blue-800 hover:underline">
+                    <p class="px-3 py-1 text-blue-500 hover:text-blue-800 hover:underline">
                         <a href="/order/{{ order.id }}?mode=edit">編集</a>
                     </p>
-                    <p class="text-blue-500 hover:text-red-700 hover:underline">
-                        <a href="/order/delete/{{ order.id }}">削除</a>
-                    </p>
+                    <div @click="open = true" class="cursor-pointer text-gray-500 text-sm p-1 rounded-full hover:bg-red-100 hover:text-red-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                    </div>
                 </div>
                 {% endif %}
+
             </div>
 
             <!-- order requests go here-->
             {% if order.item != 901 %}
             <div class="flex justify-center my-5 mx-3">
                 <div class="border p-6 rounded-lg shadow-lg">
-                    <h2 class="text-base font-bold">配送に関する情報</h2>
+                    <h2 class="text-base font-bold border-b mb-3">配送に関する依頼事項</h2>
+
+                    {% if order.date > before2h and not order.request.id %}
+                    <form action="/order/{{ order.id }}?mode=request" method="POST">
+                        {{ form.csrf_token }}
+                        <p class="w-full my-5 text-sm text-gray-500">
+                            {{ render_field_with_errors(form.delivery_date, class_="px-5 text-lg text-gray-800") }}    
+                        </p>
+                        <p class="w-full my-5 text-sm text-gray-500">
+                            {{ render_field_with_errors(form.memo, class_="px-5 text-lg text-gray-800") }}    
+                        </p>
+                        <button type="submit" class="w-full bg-blue-500 text-white px-7 py-1 rounded-full">登録</button>
+                    </form>
+
+                    {% elif order.request.id %}
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b">
+                                <th>依頼日時</th>
+                                <th>指定日</th>
+                                <th>時間帯</th>
+                                <th>SF→RL</th>
+                                <th>RL→SF</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ order.request.created_at.strftime('%Y-%m-%d') }}</td>
+                                <td>{{ order.request.delivery_date or '' }}</td>
+                                <td>{{ order.request.time_range or '' }}</td>
+                                <td>{{ order.request.memo or '' }}</td>
+                                <td>{{ order.request.reply or '' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {% else %}
+                    <p>なし</p>
+                    {% endif %}
+
                 </div>
             </div>
             {% endif %}
         </div>
     </div>
+    
+    <!-- modal content goes here -->
+    <div x-show="open" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center">
+        <div class="bg-white border p-6 shadow-md">
+            <h2 class="font-bold text-sm">受注の削除</h2>
+            <p class="text-gray-500 text-sm mt-5">「{{ order.shop.name }}」の受注を削除しようとしています。</p>
+            <p class="text-gray-500 text-sm mt-3">削除していいですか？</p>
+            <p class="font-bold mt-5 text-right">
+                <span @click="open = false" class="px-3 py-1 rounded-md text-gray-500 cursor-pointer hover:bg-gray-100">中止</span>
+                <span class="ml-8 px-3 py-1 rounded-md text-blue-500 cursor-pointer hover:bg-blue-100">
+                    <a href="/order/delete/{{ order.id }}"></a>削除</span>
+            </p>
+        </div>
+    </div>
+
+
 </div>
 {% endblock %}

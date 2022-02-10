@@ -22,6 +22,7 @@
                     {{ form.csrf_token }}
                     <p class="w-full my-5 text-sm text-gray-500">
                         {{ render_order_select(form.item, order.item, class_="px-5 text-lg text-gray-800")}}
+                    </p>
                     <p class="w-full my-5 text-sm text-gray-500">
                         {{ render_order_input(form.price, value=order.price, class_="px-5 text-lg border-b text-gray-800" )}}
                     </p>
