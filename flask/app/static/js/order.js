@@ -95,6 +95,33 @@ showItem3.addEventListener('click', () => {
 
     let inputsItem3 = inputsItem1.cloneNode(true);
     inputsItem3.id = 'inputsItem3'
+
+    const labels = inputsItem3.getElementsByTagName('label');
+    const selects = inputsItem3.getElementsByTagName('select');
+    const inputs = inputsItem3.getElementsByTagName('input');
+
+    // change labels
+    labels[0].htmlFor = 'item3';
+    labels[1].htmlFor = 'price3';
+    labels[2].htmlFor = 'qty3';
+    labels[3].htmlFor = 'noDelivery3';
+
+    // change ID and name of selects2;
+    selects[0].setAttribute('id', 'item3');
+    selects[0].setAttribute('name', 'item3');
+
+    // change IDs and names of inputs2
+    inputs[0].setAttribute('id', 'price3');
+    inputs[0].setAttribute('name', 'price3');
+    inputs[0].value = '';
+
+    inputs[1].setAttribute('id', 'qty3')
+    inputs[1].setAttribute('name', 'qty3')
+    inputs[1].value = '';
+
+    inputs[2].setAttribute('id', 'noDelivery3')
+    inputs[2].setAttribute('name', 'noDelivery3')
+
     return divInputs3.appendChild(inputsItem3);
 
 }, false)
@@ -106,10 +133,6 @@ hideItem3.addEventListener('click', () => {
     return inputsItem3.remove();
 
 }, false)
-
-const getLabels = () => {
-
-}
 
 // delivery fee inputs 
 const hideDelivery = document.getElementById('hideDelivery');
