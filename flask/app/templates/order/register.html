@@ -20,11 +20,8 @@
                 <p class="mt-2 text-gray-600">{{ shop.telephone }}</p>
             </div>
 
-            <!-- errors go here -->
-            <div id="errorOrder" style="color: red;"></div>
-
             <!-- div for item 1 -->
-            <div id="divItem" class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
+            <div id="blockItem1" class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
                 <h2 class="text-base font-bold mb-3 text-gray-800">商品 1</h2>
 
                 <div id="inputsItem1">
@@ -33,8 +30,8 @@
                     <div class="itemError text-red-400 font-bold"></div>
 
                     <div class="mt-3">
-                    <label for="item1" class="mr-3" id="labelItem1">商品</label>
-                    <select name="item1" id="item1" class="border-b text-gray-800 text-lg" required>
+                    <label for="item" class="mr-3" id="labelItem">商品</label>
+                    <select name="item" id="item" class="border-b text-gray-800 text-lg" required>
                         <option value="" disabled selected>-- 選択 --</option>
                         <optgroup label="透明">
                             <option value="602">（透明）45L</option>
@@ -96,7 +93,7 @@
             </div>
 
             <!-- items2 goes here-->
-            <div id="item2" class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
+            <div id="blockItem2" class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
                 <div class="flex justify-between">
                     <h2 class="text-base font-bold text-gray-800">商品 2</h2>
                     <div class="rounded-full">
@@ -109,12 +106,14 @@
                         </svg>
                     </div>
                 </div>
+
+                <!-- inputs for item2 goes here-->
                 <div id="divInputs2"></div>
 
             </div>
 
             <!-- items3 go here -->
-            <div id="item3" class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
+            <div id="blockItem3" class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
                 <div class="flex justify-between">
                     <h2 class="text-base font-bold text-gray-800">商品 3</h2>
                     <svg xmlns="http://www.w3.org/2000/svg" id="showItem3" class="h-6 w-6 rounded-full cursor-pointer hover:bg-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -124,9 +123,10 @@
                     <svg xmlns="http://www.w3.org/2000/svg" id="hideItem3" class="h-6 w-6 rounded-full cursor-pointer hover:bg-gray-200 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-
                 </div>
-                <div id="inputsItem3"></div>
+
+                <!-- inputs for item2 goes here-->
+                <div id="divInputs3"></div>
             </div>
 
             <!--
@@ -139,7 +139,7 @@
             -->
 
             <!-- div for delivery fee -->
-            <div class="max-w-lg my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
+            <div id="blockDelivery" class="max-w-lg my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
                 <div class="flex items-center justify-between">
                     <div class="text-base font-bold text-gray-800">送料</div>
 
@@ -159,7 +159,7 @@
                     <div class="mx-5  text-red-400 font-bold" id="deliveryError"></div>
 
                     <label for="delivery" class="hidden mr-5 mt-3">送料</label>
-                    <input type="hidden" name="delivery" value="901">
+                    <input type="hidden" id="delivery" name="delivery" value="901">
 
                     <label for="deliveryPrice" class="hidden mr-5 mt-3">単価</label>
                     <input type="text" class="mt-3 border-b text-gray-800 text-lg mx-5" id="deliveryPrice" name="deliveryPrice" placeholder="1箱あたり送料" required>
@@ -212,10 +212,10 @@
                 <p></p>
             </div>
 
-            <p class="font-bold mt-5 text-right text-gray-500">
-                <span class="px-3 py-1 rounded-md cursor-pointer hover:bg-gray-100">戻る</span>
-                <span class="ml-8 px-3 py-1 rounded-md cursor-pointer text-blue-500 hover:bg-blue-100" onclick="submit();">登録</span>
-            </p>
+            <div class="mt-5 text-right">
+                <button class="font-bold mx-8 px-3 rounded-md cursor-pointer text-gray-500 hover:bg-gray-100">戻る</button>
+                <button type="submit" class="font-bold px-3 rounded-md cursor-pointer text-blue-500 hover:bg-blue-100">登録</button>
+            </div>
         </div>
     </div>
 </div>

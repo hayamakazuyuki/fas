@@ -36,12 +36,12 @@ def index():
         item3 = request.form.get('item3')
         delivery = request.form.get('delivery')
 
-        # item 1
+        # item
         order = ProductOrder()
         order.sales_by = staff
         order.customer_id = customer_id
         order.shop_id = id
-        order.item = request.form['item1']
+        order.item = request.form['item']
         order.price = request.form['price']
         order.qty = request.form['qty']
         order.delivery_check = request.form.get('noDelivery')

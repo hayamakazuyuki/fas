@@ -54,11 +54,11 @@
                     <form action="/order/{{ order.id }}?mode=request" method="POST">
                         {{ form.csrf_token }}
                         <p class="w-full my-5 text-sm text-gray-500">
-                            {{ render_field_with_errors(form.delivery_date, class_="px-5 text-lg text-gray-800",
+                            {{ render_field_with_errors(form.delivery_date, class_="border-b px-5 text-lg text-gray-800",
                              min=min_date.strftime('%Y-%m-%d'), max=max_date.strftime('%Y-%m-%d')) }}
                         </p>
                         <p class="w-full my-5 text-sm text-gray-500">
-                            {{ render_select_field(form.time_range, class_="px-5 text-lg text-gray-800") }}
+                            {{ render_select_field(form.time_range, class_="px-5 text-lg text-gray-800 border-b") }}
                         </p>
                         <button x-bind:disabled="!buttonDisabled" type="submit" class="w-full bg-blue-500 text-white px-7 py-1 rounded-full">登録</button>
                     </form>
