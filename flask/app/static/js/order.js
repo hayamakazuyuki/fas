@@ -1,37 +1,3 @@
-//     if (!item3.hasChildNodes()){
-//         // clone divItem nodes to divItem2;
-//         let divItem3 = divItem.cloneNode(true);
-//         // change divItem2 id from divItem to divItem2;
-//         divItem3.id = 'divItem3';
-
-//         let labels3 = divItem3.getElementsByTagName('label'); // grab labels in divItem2;
-//         let selects3 = divItem3.getElementsByTagName('select'); // grab selects in divItem2;
-//         let inputs3 = divItem3.getElementsByTagName('input'); // grab inputs in divItem2;
-
-//         // change labels
-//         labels3[0].htmlFor = 'item3';
-//         labels3[1].htmlFor = 'price3';
-//         labels3[2].htmlFor = 'qty3';
-//         labels3[3].htmlFor = 'noDelivery3';
-
-//         // change ids and names of selects2;
-//         selects3[0].setAttribute('id', 'item3');
-//         selects3[0].setAttribute('name', 'item3');
-        
-//         // change ids and names of inputs2;
-//         inputs3[0].setAttribute('id','price3');
-//         inputs3[0].setAttribute('name','price3');
-//         inputs3[0].value = '';
-//         inputs3[1].setAttribute('id','qty3');
-//         inputs3[1].setAttribute('name','qty3');
-//         inputs3[1].value = '';
-//         inputs3[2].setAttribute('id','noDelivery3');
-//         inputs3[2].setAttribute('name','noDelivery3');
-
-//         return item3.appendChild(divItem3);
-//     };
-
-
 // item 2 inputs show and hide
 const showItem2 = document.getElementById('showItem2');
 const hideItem2 = document.getElementById('hideItem2');
@@ -223,4 +189,16 @@ confirmButton.addEventListener('click', (e) => {
             };
         };
     };
+    modal();
 }, false);
+
+const modal = () => {
+    const delivery = document.getElementById('delivery')
+    const mItem1 = document.getElementById('mItem1');
+    const mItem2 = document.getElementById('mItem2');
+    const mItem3 = document.getElementById('mItem3');
+    const mItemD = document.getElementById('mItemD');
+
+    alert(mItem1.id)
+    
+}
