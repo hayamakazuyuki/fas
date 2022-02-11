@@ -97,16 +97,25 @@ const appendInputs = document.getElementById('appendInputs');
 // item 2 inputs show and hide
 const showItem2 = document.getElementById('showItem2');
 const hideItem2 = document.getElementById('hideItem2');
+const divInputs2 = document.getElementById('divInputs2');
 
 showItem2.addEventListener('click', () => {
+    const inputsItem1 = document.getElementById('inputsItem1')
+
     showItem2.classList.toggle('hidden');
     hideItem2.classList.toggle('hidden');
+
+    let inputsItem2 = inputsItem1.cloneNode(true);
+    inputsItem2.id = 'inputsItem2'
+    return divInputs2.appendChild(inputsItem2);
 
 }, false)
 
 hideItem2.addEventListener('click', () => {
     hideItem2.classList.toggle('hidden');
     showItem2.classList.toggle('hidden');
+
+    return inputsItem2.remove();
 
 }, false)
 
