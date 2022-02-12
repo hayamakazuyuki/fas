@@ -12,7 +12,7 @@
         <div>
             <p class="mt-2 text-gray-600">{{ shop.customer_id }} - {{ shop.id }}</p>
             <p class="mt-2 text-gray-600">{{ shop.customer.name }}</p>
-            <h2 class="mt-2 text-gray-800 text-3xl">{{ shop.name }}</h2>
+            <h2 class="mt-2 text-gray-800 text-2xl">{{ shop.name }}</h2>
             <p class="mt-2 text-gray-600">{{ shop.department }}</p>
             <p class="mt-2 text-gray-600">{{ '〒{}-{}'.format(shop.zip[:3], shop.zip[3:]) }} {{ shop.prefecture }} {{ shop.city }}
             {{ shop.town }} {{ shop.address }} {{ shop.building }}</p>
@@ -57,8 +57,8 @@
             <td>{{ order.date.strftime('%Y-%m-%d') }}</td>
             <td>{{ order.staff.last_name }}</td>
             <td>{{ order.product.name }}</td>
-            <td>{{ order.price }}</td>
-            <td>{{ order.qty }}</td>
+            <td class="text-right">{{ order.price }}</td>
+            <td class="text-right">{{ order.qty }}</td>
         </tr>
     {% endfor %}
     </table>

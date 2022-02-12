@@ -3,19 +3,17 @@
 {% include "navbar.html" -%}
 {% include "_flashing.html" -%}
 
-<div class="container max-w-4xl mx-auto mt-7">
+<div class="container max-w-2xl mx-auto mt-7">
     <div class="max-w-md mx-auto">
     <p class="font-bold text-lg my-5">取引先情報</p>
-    <div class="max-w-xl rounded shadow-lg my-5 px-3 py-5">
-        <p class="my-3 text-lg font-bold">{{ '%05d' % customer.id }}</p>
-        <p class="text-2xl">{{ customer.name }}</p>
-        <div class="mt-5">
-            <a href="/customer/{{ customer.id }}?mode=edit" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                </svg><span class="align-middle ml-1">取引先情報の編集</span>
-            </a>
+    <div class="max-w-xl rounded shadow-lg my-5 p-6">
+        <div class="flex justify-between items-center">
+            <p class="my-3 text-lg font-bold">{{ '%05d' % customer.id }}</p>
+            <p class="my-3 text-blue-500 hover:underline">
+                <a href="/customer/{{ customer.id }}?mode=edit">編集</a>
+            </p>
         </div>
+        <p class="text-2xl">{{ customer.name }}</p>
     </div>
 
             {% if current_user.id == 1 %}
@@ -33,7 +31,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          <span class="align-middle text-base">事業所を登録する</span></a>
+          <span class="align-middle text-base">事業所を登録</span></a>
     </p>
 
 </div>
@@ -59,7 +57,6 @@
             <tr class="border-b border-black">
             <th>事業所ID</th>
             <th>事業所名</th>
-            <th>郵便番号</th>
             <th>住所</th>
             <th>TEL</th>
             </tr>
@@ -70,7 +67,6 @@
            <td>{{ shop.id }}</td>
            <td><a href="/customer/shop/{{ shop.customer_id }}/{{ shop.id }}" class="text-blue-500 hover:underline hover:text-blue-800">
                {{ shop.name }}</a></td>
-           <td>{{ '{}-{}'.format(shop.zip[:3], shop.zip[3:]) }}</td>
            <td>{{ shop.prefecture }}{{ shop.city }}{{ shop.town }}{{ shop.address }}</td>
            <td>{{ shop.telephone }}</td>
         </tr>
