@@ -25,7 +25,7 @@ const qty = document.getElementById('qty');
 const noDelivery = document.getElementById('noDelivery');
 
 item.addEventListener('change', () => {
-    let value = item.value;
+    let value = item.options[document.getElementById('item').selectedIndex].text;
     mItem.textContent = value;
 });
 
@@ -76,7 +76,7 @@ showItem2.addEventListener('click', () => {
     selects[0].setAttribute('id', 'item2');
     selects[0].setAttribute('name', 'item2');
     selects[0].addEventListener('change', () => {
-        let value = item2.value;
+        let value = item2.options[document.getElementById('item2').selectedIndex].text
         mItem2.textContent = value;
     });
 
@@ -306,3 +306,7 @@ confirmButton.addEventListener('click', () => {
         };
     };    
 }, false);
+
+const onlyNumbers = n => {
+    return n.replace(/[０-９]/g,s => String.fromCharCode(s.charCodeAt(0) - 65248)).replace(/\D/g,'');
+}

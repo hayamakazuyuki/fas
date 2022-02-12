@@ -4,10 +4,10 @@
 
 <!-- alert goes here -->
 {% include "_flashing.html" -%}
-<div class="container max-w-5xl mx-auto mt-5">
+<div class="container max-w-4xl mx-auto mt-5">
 
     <p class="font-bold text-lg mb-5">配送関連依頼の一覧</p>
-        <table class="table-auto my-5 text-sm">
+        <table class="table-auto w-full my-5 text-sm">
         <thead>
             <tr class="border-black border-b">
                 <th class="px-4">依頼日</th>
@@ -16,8 +16,6 @@
                 <th class="px-4">数量</th>
                 <th class="px-4">指定日</th>
                 <th class="px-4">時間帯</th>
-                <th class="px-4">SF→RL</th>
-                <th class="px-4">RL→SF</th>
                 <th class="px-4">RL確認</th>
             </tr>
         </thead>
@@ -34,8 +32,6 @@
                 {% endif %}
             </td>
             <td class="border-b px-4 py-1">{{ request.time_range or '' }}</td>
-            <td class="border-b px-4 py-1">{{ request.memo or '' }}</td>
-            <td class="border-b px-4 py-1">{{ request.reply or '' }}</td>
             <td class="border-b px-4 py-1">
                 {% if request.checked == 1 %}
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
