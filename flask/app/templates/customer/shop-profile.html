@@ -3,30 +3,25 @@
 {% include "navbar.html" %}
 {% include "_flashing.html" %}
 
-<div class="container max-w-6xl mx-auto mt-5">
+<div class="container max-w-2xl mx-auto mt-5">
     <div class="max-w-lg mx-auto">
 
     <p class="font-bold text-xl text-gray-800">事業所情報</p>
 
-    <div class="mx-auto py-4 px-8 bg-white shadow-lg rounded-lg my-10">
-        <div>
-            <p class="mt-2 text-gray-600">{{ shop.customer_id }} - {{ shop.id }}</p>
-            <p class="mt-2 text-gray-600">{{ shop.customer.name }}</p>
-            <h2 class="mt-2 text-gray-800 text-2xl">{{ shop.name }}</h2>
-            <p class="mt-2 text-gray-600">{{ shop.department }}</p>
-            <p class="mt-2 text-gray-600">{{ '〒{}-{}'.format(shop.zip[:3], shop.zip[3:]) }} {{ shop.prefecture }} {{ shop.city }}
+    <div class="mx-auto p-6 bg-white shadow-lg rounded-lg my-10">
+        <div class="flex justify-between items-center">
+            <p class=text-gray-600">{{ shop.customer_id }} - {{ shop.id }}</p>
+            <p class="text-blue-500 px-3 rounded-full hover:bg-blue-100">
+                <a href="/customer/shop/{{ shop.customer_id }}/{{ shop.id }}?mode=edit">編集</a>
+            </p>
+        </div>
+        <p class="mt-2 text-gray-600">{{ shop.customer.name }}</p>
+        <h2 class="mt-2 text-gray-800 text-2xl">{{ shop.name }}</h2>
+        <p class="mt-2 text-gray-600">{{ shop.department }}</p>
+        <p class="mt-2 text-gray-600">{{ '〒{}-{}'.format(shop.zip[:3], shop.zip[3:]) }} {{ shop.prefecture }} {{ shop.city }}
             {{ shop.town }} {{ shop.address }} {{ shop.building }}</p>
-            <p class="mt-2 text-gray-600">{{ shop.email }}</p>
-            <p class="mt-2 text-gray-600">{{ shop.telephone }}</p>
-
-            <div class="mt-5">
-                <a href="/customer/shop/{{ shop.customer_id }}/{{ shop.id }}?mode=edit" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg><span class="align-middle ml-1">編集</span>
-                </a>
-            </div>
-    
+        <p class="mt-2 text-gray-600">{{ shop.email }}</p>
+        <p class="mt-2 text-gray-600">{{ shop.telephone }}</p>
         </div>
     </div>
 
