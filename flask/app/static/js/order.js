@@ -1,4 +1,24 @@
-// modal elements here
+// ------- grab selects, inputs and checkboxes ------- //
+const item = document.getElementById('item');
+const price = document.getElementById('price')
+const qty = document.getElementById('qty');
+const noDelivery = document.getElementById('noDelivery');
+
+const item2 = document.querySelector('item2');
+const price2 = document.getElementById('price2');
+const qty2 = document.getElementById('qty2');
+const noDelivery2 = document.getElementById('noDelivery2');
+
+const item3 = document.querySelector('item3');
+const price3 = document.getElementById('price3');
+const qty3 = document.getElementById('qty3');
+const noDelivery3 = document.getElementById('noDelivery3');
+
+const delivery = document.getElementById('delivery');
+const deliveryPrice = document.getElementById('deliveryPrice')
+const deliveryQty = document.getElementById('deliveryQty');
+
+// ------------grab Modal targets --------------- //
 const mItem = document.getElementById('mItem');
 const mPrice = document.getElementById('mPrice')
 const mQty = document.getElementById('mQty');
@@ -18,100 +38,40 @@ const mItemD = document.getElementById('mItemD');
 const mPriceD = document.getElementById('mPriceD')
 const mQtyD = document.getElementById('mQtyD');
 
-// item1 mirror inputs to modal
-const item = document.getElementById('item');
-const price = document.getElementById('price')
-const qty = document.getElementById('qty');
-const noDelivery = document.getElementById('noDelivery');
+// --------- copy selects, inputs and checkboxes to modal -------- //
 
-item.addEventListener('change', () => {
-    let value = item.options[document.getElementById('item').selectedIndex].text;
-    mItem.textContent = value;
-});
+let selectToModal = (target, value, text) => {
+    valueText = value + text;
+    target.textContent = valueText;
+};
 
-price.addEventListener('change', () => {
-    let value = price.value;
-    mPrice.textContent = value;
-});
+let inputToModal = (target, value) => {
+    target.textContent = value;
+};
 
-qty.addEventListener('change', () => {
-    let value = qty.value;
-    mQty.textContent = value;
-});
-
-noDelivery.addEventListener('change', () => {
-    if (noDelivery.checked) {
-        mNoDelivery.textContent = 'なし';
-    } else { 
-        mNoDelivery.textContent = ''
+let checkToModal = (elem, target) => {
+    if (elem.checked) {
+        target.textContent = 'なし';
+    } else {
+        target.textContent = '';
     };
-});
+};
 
-
-// item 2 inputs show and hide
+// -------- item2 inputs show/hide --------------- //
 const showItem2 = document.getElementById('showItem2');
 const hideItem2 = document.getElementById('hideItem2');
-const divInputs2 = document.getElementById('divInputs2');
-const inputsItem1 = document.getElementById('inputsItem1')
+
+const inputs2 = document.getElementById('inputs2');
 
 showItem2.addEventListener('click', () => {
 
     showItem2.classList.toggle('hidden');
     hideItem2.classList.toggle('hidden');
 
-    const inputsItem2 = inputsItem1.cloneNode(true);
-    inputsItem2.id = 'inputsItem2';
+    let template = document.getElementById('templateItem2');
+    let clone = template.content.cloneNode(true);
 
-    const labels = inputsItem2.getElementsByTagName('label');
-    const selects = inputsItem2.getElementsByTagName('select');
-    const inputs = inputsItem2.getElementsByTagName('input');
-
-    // change labels
-    labels[0].htmlFor = 'item2';
-    labels[1].htmlFor = 'price2';
-    labels[2].htmlFor = 'qty2';
-    labels[3].htmlFor = 'noDelivery2';
-
-    // change ID and name of selects2;
-    selects[0].setAttribute('id', 'item2');
-    selects[0].setAttribute('name', 'item2');
-    selects[0].addEventListener('change', () => {
-        let value = item2.options[document.getElementById('item2').selectedIndex].text
-        mItem2.textContent = value;
-    });
-
-    // change IDs and names of inputs2
-    inputs[0].setAttribute('id', 'price2');
-    inputs[0].setAttribute('name', 'price2');
-    inputs[0].value = '';
-
-    inputs[0].addEventListener('change', () => {
-        let value = price2.value;
-        mPrice2.textContent = value;
-    });
-
-    inputs[1].setAttribute('id', 'qty2')
-    inputs[1].setAttribute('name', 'qty2')
-    inputs[1].value = '';
-
-    inputs[1].addEventListener('change', () => {
-        let value = qty2.value;
-        mQty2.textContent = value;
-    });
-
-    inputs[2].setAttribute('id', 'noDelivery2')
-    inputs[2].setAttribute('name', 'noDelivery2')
-    inputs[2].removeAttribute('checked')
-
-    inputs[2].addEventListener('change', () => {
-        if (noDelivery2.checked) {
-            mNoDelivery2.textContent = 'なし';
-        } else { 
-            mNoDelivery2.textContent = ''
-        };
-    });
-
-    return divInputs2.appendChild(inputsItem2);
+    inputs2.appendChild(clone);
 
 }, false)
 
@@ -120,89 +80,50 @@ hideItem2.addEventListener('click', () => {
     mPrice2.textContent = '';
     mQty2.textContent = '';
     mNoDelivery2.textContent = '';
+
     hideItem2.classList.toggle('hidden');
     showItem2.classList.toggle('hidden');
 
-    return inputsItem2.remove();
+    while (inputs2.firstChild){
+        inputs2.removeChild(inputs2.firstChild);
+    };
 
 }, false)
 
-// item3 inputs show and hide
+// -------- item3 inputs show/hide --------------- //
 const showItem3 = document.getElementById('showItem3');
 const hideItem3 = document.getElementById('hideItem3');
-const divInputs3 = document.getElementById('divInputs3');
+
+const inputs3 = document.getElementById('inputs3');
 
 showItem3.addEventListener('click', () => {
+
     showItem3.classList.toggle('hidden');
     hideItem3.classList.toggle('hidden');
 
-    let inputsItem3 = inputsItem1.cloneNode(true);
-    inputsItem3.id = 'inputsItem3'
+    let template = document.getElementById('templateItem3');
+    let clone = template.content.cloneNode(true);
 
-    const labels = inputsItem3.getElementsByTagName('label');
-    const selects = inputsItem3.getElementsByTagName('select');
-    const inputs = inputsItem3.getElementsByTagName('input');
-
-    // change labels
-    labels[0].htmlFor = 'item3';
-    labels[1].htmlFor = 'price3';
-    labels[2].htmlFor = 'qty3';
-    labels[3].htmlFor = 'noDelivery3';
-
-    // change ID and name of selects3
-    selects[0].setAttribute('id', 'item3');
-    selects[0].setAttribute('name', 'item3');
-    selects[0].addEventListener('change', () => {
-        let value = item3.value;
-        mItem3.textContent = value;
-    });
-
-    // change IDs and names of inputs3
-    inputs[0].setAttribute('id', 'price3');
-    inputs[0].setAttribute('name', 'price3');
-    inputs[0].value = '';
-    inputs[0].addEventListener('change', () => {
-        let value = price3.value;
-        mPrice3.textContent = value;
-    });
-
-    inputs[1].setAttribute('id', 'qty3')
-    inputs[1].setAttribute('name', 'qty3')
-    inputs[1].value = '';
-    inputs[1].addEventListener('change', () => {
-        let value = qty3.value;
-        mQty3.textContent = value;
-    });
-
-    inputs[2].setAttribute('id', 'noDelivery3')
-    inputs[2].setAttribute('name', 'noDelivery3')
-    inputs[2].value = '';
-
-    inputs[2].addEventListener('change', () => {
-        if (noDelivery3.checked) {
-            mNoDelivery3.textContent = 'なし';
-        } else { 
-            mNoDelivery3.textContent = ''
-        };
-    });
-
-    return divInputs3.appendChild(inputsItem3);
+    inputs3.appendChild(clone);
 
 }, false)
 
 hideItem3.addEventListener('click', () => {
+    mItem3.textContent = '';
+    mPrice3.textContent = '';
+    mQty3.textContent = '';
+    mNoDelivery3.textContent = '';
+    
     hideItem3.classList.toggle('hidden');
     showItem3.classList.toggle('hidden');
 
-    return inputsItem3.remove();
+    while (inputs3.firstChild){
+        inputs3.removeChild(inputs3.firstChild);
+    };
 
 }, false)
 
-// show and hide delivery inputs 
-// delivery mirror inputs to modal
-const delivery = document.getElementById('delivery');
-const deliveryPrice = document.getElementById('deliveryPrice')
-const deliveryQty = document.getElementById('deliveryQty');
+// ---------- delivery inputs show/hide -------------- //
 
 deliveryPrice.addEventListener('change', () => {
     mItemD.textContent = '901 送料';
@@ -210,18 +131,14 @@ deliveryPrice.addEventListener('change', () => {
     mPriceD.textContent = value;
 });
 
-deliveryQty.addEventListener('blur', () => {
-    let value = deliveryQty.value;
-    mQtyD.textContent = value;
-});
-
 const hideDelivery = document.getElementById('hideDelivery');
 const showDelivery = document.getElementById('showDelivery');
 const deliveryError = document.getElementById('deliveryError');
-const divDelivery = document.getElementById('divDelivery'); // grab div divDelivery
-const deliveryInputs = divDelivery.querySelectorAll('input'); // grab all inputs for delivery
+const inputsDelivery = document.getElementById('inputsDelivery'); // grab div divDelivery
+const deliveryInputs = inputsDelivery.querySelectorAll('input'); // grab all inputs for delivery
+const blockDelivery = document.getElementById('blockDelivery');
 
-const toggleHidden = () => {
+const showHideDelivery = () => {
     deliveryError.textContent = '';
     hideDelivery.classList.toggle('hidden');
     showDelivery.classList.toggle('hidden');
@@ -229,27 +146,21 @@ const toggleHidden = () => {
 
 hideDelivery.addEventListener('click', () => {
     for (var i=0; i<deliveryInputs.length; i++) {
-        deliveryInputs[i].value = '';
-        mItemD.textContent = '';
-        mPriceD.textContent = '';
-        mQtyD.textContent = '';
-        divDelivery.removeChild(deliveryInputs[i]);
+        deliveryInputs[i].value = ''
     };
 
-    toggleHidden();
+    inputsDelivery.remove();
+    showHideDelivery();
 
 }, false);
 
 showDelivery.addEventListener('click', () => {
-    for (var i=0; i<deliveryInputs.length; i++) {
-        divDelivery.appendChild(deliveryInputs[i]);
-    };
-
-    toggleHidden();
+    blockDelivery.append(inputsDelivery);
+    showHideDelivery();
 
 }, false)
 
-// calculating the total delivery quantity
+// ------- calculating the total delivery qty -------- //
 if(delivery){
     const deliveryQty = document.getElementById('deliveryQty');
     const qtys = document.getElementsByClassName('qty');
@@ -261,11 +172,12 @@ if(delivery){
         };
 
         deliveryQty.value = sum;
+        mQtyD.textContent = sum;
 
     },false);
 };
 
-// order form validation;
+// ------ order form validation -------------- //
 const confirmButton = document.getElementById('confirmButton'); // grab confirmButton;
 
 confirmButton.addEventListener('click', () => {
@@ -273,13 +185,8 @@ confirmButton.addEventListener('click', () => {
     const priceInputs = document.getElementsByClassName('price');
     const qtyInputs = document.getElementsByClassName('qty');
 
-    const deliveryInputs = document.getElementById('divDelivery').querySelectorAll('input');
-
     const itemErrors = document.getElementsByClassName('itemError');
     const deliveryError = document.getElementById('deliveryError');
-
-    // clear error messages.
-    deliveryError.textContent = '';
 
     // check if items are selected.
     for (var i=0; i<selects.length; i++) {
@@ -295,8 +202,8 @@ confirmButton.addEventListener('click', () => {
         };
     };
 
-    if(deliveryInputs){
-        // check if delivery price and qty are number and more than 1 
+    if(blockDelivery.inputsDelivery){
+        // check if delivery price and qty are number and more than 1
         for (var i=0; i<deliveryInputs.length; i++){
             value = deliveryInputs[i].value;
     
@@ -304,8 +211,16 @@ confirmButton.addEventListener('click', () => {
                 return deliveryError.textContent = '単価と数量は 1 以上を入力してください。';
             };
         };
-    };    
+    };
+
+    showModal();
+
 }, false);
+
+const showModal = () => {
+    modal = document.getElementById('modal');
+    modal.classList.toggle('hidden');
+}
 
 const onlyNumbers = n => {
     return n.replace(/[０-９]/g,s => String.fromCharCode(s.charCodeAt(0) - 65248)).replace(/\D/g,'');

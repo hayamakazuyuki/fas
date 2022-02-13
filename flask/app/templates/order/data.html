@@ -11,15 +11,14 @@
 
         <div class="flex items-center mt-7">
             <form action="/order/data" method="GET">
-                <label for="target" class="text-sm">受注登録日</label>
-                <input class="border ml-5" type="date" min="2020-09-01" name="target" id="date_selected" required>
+                <input class="border" type="date" min="2020-09-01" name="target" id="date_selected" required>
                 <button type="submit" class="bg-blue-500 hover:bg-blue-800 text-sm text-white mx-7 py-1 px-7 rounded-full shadow-xl">
                     検索</button>
             </form>
         </div>
         
         <div class="my-5">
-            <p class="text-sm">受注日 <span class="text-xl">{{ target }}</span></p>
+            <p class="text-xl">{{ target }}</p>
             <table class="table-auto w-full mt-3">
                 <thead>
                 <tr class="border-black border-b">
