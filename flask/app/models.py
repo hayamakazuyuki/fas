@@ -98,9 +98,46 @@ class DeliveryRequest(db.Model):
     checked = db.Column(db.Integer, nullable=True)
 
 
+class Supplier(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    is_inactive = db.Column(db.Boolean, nullable=True)
+    users = db.relationship('SupplierUser', backref=db.backref('supplier', lazy=True))
+
+class SupplierAdminView(ModelView):
+    form_columns = ['id', 'name', 'is_inactive']
+    column_list = ['id', 'name', 'is_inactive']
+
+
+class SupplierUser(db.Model):
+    __tablename__ = 'supplier_user'
+    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.id'), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    last_name = db.Column(db.String(30), nullable=False)
+    first_name = db.Column(db.String(30), nullable=False)
+    email = db.Column(db.String(255), nullable=False, unique=True)
+    password = db.Column(db.String(255), nullable=False)
+    is_inactive = db.Column(db.Boolean, nullable=True)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
+
+@event.listens_for(SupplierUser.password, 'set', retval=True)
+def hash_staff_password(target, value, oldvalue, initiator):
+    if value != oldvalue:
+        return generate_password_hash(value)
+    return value
+
+
 class ProductAdminView(ModelView):
     form_columns = ['id', 'name', 'thickness', 'qty', 'size', 'box_size']
     column_list = ['id', 'name', 'thickness', 'qty', 'size', 'box_size']
 
+
 admin.add_view(ModelView(Staff, db.session, endpoint="staffview"))
 admin.add_view(ProductAdminView(Product, db.session))
+
+admin.add_view(SupplierAdminView(Supplier,db.session))
+admin.add_view(ModelView(SupplierUser, db.session))
+
