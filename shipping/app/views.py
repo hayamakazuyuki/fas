@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response
+from flask_login import login_required
 from datetime import datetime, timezone, timedelta
 from io import StringIO
 import csv
@@ -7,13 +8,13 @@ from .models import Order, DeliveryRequest
 from .extentions import db
 from .email import send_email
 
-
 shipping = Blueprint('shipping', __name__)
 JST = timezone(timedelta(hours=+9), 'JST')
 
 
 @shipping.route('/')
 @shipping.route('/home')
+@login_required
 def index():
 
     dl = request.args.get("dl")
@@ -39,15 +40,20 @@ def index():
         filename = 'dl-' + str_now + '.csv'
 
         # email attachment to sf
-        attachment = file.getvalue().encode('sjis', 'replace')
-        send_email('ライプロンのDLデータ', recipients=['hayama@sfinter.com'], body='ライプロンのダウンロードデータです。',
-                   filename=filename, attachment=attachment)
+        # attachment = file.getvalue().encode('sjis', 'replace')
+        # send_email('ライプロンのDLデータ', recipients=['hayama@sfinter.com'], body='ライプロンのダウンロードデータです。',
+        #            filename=filename, attachment=attachment)
 
         # prepare DL data for ripe lawn
         response = make_response()
         response.data = file.getvalue().encode('sjis', 'replace')
         response.headers['Content-Type'] = 'text/csv'
         response.headers['Content-Disposition'] = 'attachment; filename=' + filename
+
+        if orders:
+            for order in orders:
+                order.delivery_check = 2
+            db.session.commit()
 
         return response
 
@@ -57,6 +63,7 @@ def index():
 
 
 @shipping.route('/requests', methods=['GET', 'POST'])
+@login_required
 def requests():
 
     requests = DeliveryRequest.query.filter(DeliveryRequest.checked.is_(None)).order_by(DeliveryRequest.id.desc()).all()
@@ -74,6 +81,7 @@ def requests():
 
 
 @shipping.route('/request_detail/<int:id>', methods=['GET', 'POST'])
+@login_required
 def request_detail(id):
 
     delivery_request = DeliveryRequest.query.get(id)
@@ -86,3 +94,5 @@ def request_detail(id):
         return redirect(url_for('shipping.requests'))
 
     return render_template('request-detail.html', delivery_request=delivery_request)
+
+

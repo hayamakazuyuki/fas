@@ -9,7 +9,8 @@ user = Blueprint('user', __name__)
 @user.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('view.index'))
+        return 'ログインしてます'
+        # return redirect(url_for('shipping.index'))
 
     form = LoginForm()
 
@@ -24,7 +25,8 @@ def login():
             return redirect(url_for('user.login'))
 
         login_user(user, remember=True)
-        return redirect(url_for('view.index'))
+
+        return redirect(url_for('shipping.index'))
 
     return render_template('login.html', form=form)
 

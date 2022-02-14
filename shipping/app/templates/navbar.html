@@ -21,14 +21,8 @@
 
         <!-- secondary nav -->
         <div class="hidden md:flex items-center space-x-5">
-            <div>
-            {#
-            {% if current_user.is_authenticated %}
-                {{ current_user.email }}
-            {% endif %}
-            #}
-        </div>
-            <a href="" class="text-blue-600 hover:underline hover:text-blue-800">ログアウト</a>
+            <div>{{ current_user.email }}</div>
+            <a href="/logout" class="text-blue-600 hover:underline hover:text-blue-800">ログアウト</a>
         </div>
 
             <!-- mobile button goes here -->
@@ -49,12 +43,10 @@
     <a href="/requests" class="block py-2 px-3 text-gray-700 hover:bg-gray-200">
                         配送依頼事項</a>
     <div class="block py-2 px-3">
-        {#
         {% if current_user.is_authenticated %}
         {{ current_user.email }}
         {% endif %}
-        #}
     </div>
-    <a href="" class="block py-2 px-3 text-blue-600 hover:bg-gray-200">ログアウト</a>
+    <a href="/logout" class="block py-2 px-3 text-blue-600 hover:bg-gray-200">ログアウト</a>
     </div>
 </nav>

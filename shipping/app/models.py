@@ -10,7 +10,7 @@ class Supplier(db.Model):
     is_inactive = db.Column(db.Boolean, nullable=True)
     users = db.relationship('SupplierUser', backref=db.backref('supplier', lazy=True))
 
-class SupplierUser(db.Model):
+class SupplierUser(db.Model, UserMixin):
     __tablename__ = 'supplier_user'
     supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.id'), nullable=False)
     id = db.Column(db.Integer, primary_key=True)
@@ -23,9 +23,10 @@ class SupplierUser(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+
 @login_manager.user_loader
 def load_user(user_id):
-    return Supplier.query.get(user_id)
+    return SupplierUser.query.get(user_id)
     
 
 class Product(db.Model):
@@ -64,7 +65,7 @@ class Order(db.Model):
     __tablename__ = 'product_order'
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime)
-    sales_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+    sales_by = db.Column(db.Integer)
     customer_id = db.Column(db.Integer)
     shop_id = db.Column(db.Integer)
     item = db.Column(db.Integer, db.ForeignKey('product.id'))
