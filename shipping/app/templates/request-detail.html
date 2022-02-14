@@ -1,17 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
 {% include "navbar.html" %}
+<div class="container mx-auto">
+    <div class="max-w-3xl mx-auto mt-5">
 
-<div class="container max-w-6xl mx-auto mt-5">
     <p class="font-bold text-lg mb-5">依頼事項の詳細</p>
-    <a href="javascript: history.back()" class="text-blue-600 hover:underline">
+    <a href="/requests" class="text-blue-600 hover:underline">
         <div class="flex mx-3">
         <p>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
             </svg>
         </p>
-        <p>前のページに戻る</p>
+        <p>一覧に戻る</p>
         </div>
     </a>
     <div class="flex mt-3">
@@ -66,6 +67,7 @@
         {% endif %}
         </div>
     </div>
+</div>
 
 </div>
 {% endblock %}
