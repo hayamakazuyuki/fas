@@ -26,6 +26,6 @@ def create_app():
     login_manager.login_message = False
 
     app.register_blueprint(shipping)
-    app.register_blueprint(user)
+    # app.register_blueprint(user)
 
     return app
