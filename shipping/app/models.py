@@ -1,4 +1,5 @@
-from .extentions import db
+from werkzeug.security import check_password_hash
+from .extentions import db, login_manager
 from flask_login import UserMixin
 from sqlalchemy import ForeignKeyConstraint
 
@@ -6,18 +7,26 @@ from sqlalchemy import ForeignKeyConstraint
 class Supplier(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    users = db.relationship('User', backref=db.backref('supplier', lazy=True))
+    is_inactive = db.Column(db.Boolean, nullable=True)
+    users = db.relationship('SupplierUser', backref=db.backref('supplier', lazy=True))
 
-
-class User(db.Model, UserMixin):
+class SupplierUser(db.Model):
+    __tablename__ = 'supplier_user'
+    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.id'), nullable=False)
     id = db.Column(db.Integer, primary_key=True)
     last_name = db.Column(db.String(30), nullable=False)
     first_name = db.Column(db.String(30), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
-    active = db.Column(db.Boolean)
-    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.id'))
+    is_inactive = db.Column(db.Boolean, nullable=True)
 
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Supplier.query.get(user_id)
+    
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
