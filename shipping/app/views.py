@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response
-from flask_login import login_required
+from flask_login import login_required, current_user
 from datetime import datetime, timezone, timedelta
 from io import StringIO
 
 import csv
-
 
 from .models import Order, DeliveryRequest
 from .extentions import db
@@ -19,15 +18,27 @@ JST = timezone(timedelta(hours=+9), 'JST')
 @login_required
 def index():
 
+    shipper = current_user.shipper_id
+
+    # get orders
+    if shipper == 5388:
+        orders = Order.query.filter(Order.item != 901).filter(Order.item != 680).filter(Order.delivery_check.is_(None)).all()
+
+    elif shipper == 9999:
+        orders = Order.query.filter(Order.item != 901).filter(Order.item == 680).filter(Order.delivery_check.is_(None)).all()
+
+    else:
+        orders = ''
+
     dl = request.args.get("dl")
 
-    if dl == 'csv':  # csvダウンロードがクリックされた時の実行
+    # if csv data requested
+    if dl == 'csv':
         now = datetime.now(JST)
         str_now = now.strftime('%Y%m%d-%H%M')
 
         file = StringIO()
         writer = csv.writer(file, lineterminator="\n")
-        orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check.is_(None)).all()
 
         writer.writerow(['荷受人コード', '電話番号', 'FAX番号', '住所1', '住所2', '住所3', '名前1', '名前2', '予約', '郵便番号',
                          'カナ略称', '一斉出荷区分', '特殊計', '着店コード', '商品（色）', '商品数'])
@@ -42,11 +53,11 @@ def index():
         filename = 'dl-' + str_now + '.csv'
 
         # email attachment to sf
-        attachment = file.getvalue().encode('sjis', 'replace')
-        send_email('ライプロンDLデータ', recipients=['hayama@sfinter.com'], body='ライプロンのダウンロードデータです。',
-                   filename=filename, attachment=attachment)
+        # attachment = file.getvalue().encode('sjis', 'replace')
+        # send_email('test ライプロンDLデータ', recipients=['hayama@sfinter.com'], body='ライプロンのダウンロードデータです。',
+        #            filename=filename, attachment=attachment)
 
-        # prepare DL data for ripe lawn
+        # prepare DL data 
         response = make_response()
         response.data = file.getvalue().encode('sjis', 'replace')
         response.headers['Content-Type'] = 'text/csv'
@@ -59,8 +70,6 @@ def index():
 
         return response
 
-    # when accessed to index
-    orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check.is_(None)).all()
     return render_template('index.html', orders=orders, now=datetime.now(JST))
 
 
@@ -98,6 +107,6 @@ def request_detail(id):
     return render_template('request-detail.html', delivery_request=delivery_request)
 
 
-@shipping.route('/conf')
-def conf():
-    return current_app.config['SECRET_KEY']
+# @shipping.route('/conf')
+# def conf():
+#     return current_app.config['SECRET_KEY']
