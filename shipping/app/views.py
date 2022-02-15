@@ -2,7 +2,9 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from flask_login import login_required
 from datetime import datetime, timezone, timedelta
 from io import StringIO
+
 import csv
+
 
 from .models import Order, DeliveryRequest
 from .extentions import db
@@ -41,7 +43,7 @@ def index():
 
         # email attachment to sf
         attachment = file.getvalue().encode('sjis', 'replace')
-        send_email('ライプロンのDLデータ', recipients=['hayama@sfinter.com'], body='ライプロンのダウンロードデータです。',
+        send_email('ライプロンDLデータ', recipients=['hayama@sfinter.com'], body='ライプロンのダウンロードデータです。',
                    filename=filename, attachment=attachment)
 
         # prepare DL data for ripe lawn
@@ -96,3 +98,6 @@ def request_detail(id):
     return render_template('request-detail.html', delivery_request=delivery_request)
 
 
+@shipping.route('/conf')
+def conf():
+    return current_app.config['SECRET_KEY']
