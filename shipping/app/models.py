@@ -4,15 +4,15 @@ from flask_login import UserMixin
 from sqlalchemy import ForeignKeyConstraint
 
 
-class Supplier(db.Model):
+class Shipper(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     is_inactive = db.Column(db.Boolean, nullable=True)
-    users = db.relationship('SupplierUser', backref=db.backref('supplier', lazy=True))
+    users = db.relationship('ShipperUser', backref=db.backref('shipper', lazy=True))
 
-class SupplierUser(db.Model, UserMixin):
-    __tablename__ = 'supplier_user'
-    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.id'), nullable=False)
+class ShipperUser(db.Model, UserMixin):
+    __tablename__ = 'shipper_user'
+    shipper_id = db.Column(db.Integer, db.ForeignKey('shipper.id'), nullable=False)
     id = db.Column(db.Integer, primary_key=True)
     last_name = db.Column(db.String(30), nullable=False)
     first_name = db.Column(db.String(30), nullable=False)
@@ -26,7 +26,7 @@ class SupplierUser(db.Model, UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return SupplierUser.query.get(user_id)
+    return ShipperUser.query.get(user_id)
     
 
 class Product(db.Model):

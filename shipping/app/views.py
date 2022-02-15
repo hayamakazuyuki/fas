@@ -40,9 +40,9 @@ def index():
         filename = 'dl-' + str_now + '.csv'
 
         # email attachment to sf
-        # attachment = file.getvalue().encode('sjis', 'replace')
-        # send_email('ライプロンのDLデータ', recipients=['hayama@sfinter.com'], body='ライプロンのダウンロードデータです。',
-        #            filename=filename, attachment=attachment)
+        attachment = file.getvalue().encode('sjis', 'replace')
+        send_email('ライプロンのDLデータ', recipients=['hayama@sfinter.com'], body='ライプロンのダウンロードデータです。',
+                   filename=filename, attachment=attachment)
 
         # prepare DL data for ripe lawn
         response = make_response()

@@ -98,20 +98,20 @@ class DeliveryRequest(db.Model):
     checked = db.Column(db.Integer, nullable=True)
 
 
-class Supplier(db.Model):
+class Shipper(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     is_inactive = db.Column(db.Boolean, nullable=True)
-    users = db.relationship('SupplierUser', backref=db.backref('supplier', lazy=True))
+    users = db.relationship('ShipperUser', backref=db.backref('shipper', lazy=True))
 
-class SupplierAdminView(ModelView):
+class ShipperAdminView(ModelView):
     form_columns = ['id', 'name', 'is_inactive']
     column_list = ['id', 'name', 'is_inactive']
 
 
-class SupplierUser(db.Model):
-    __tablename__ = 'supplier_user'
-    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.id'), nullable=False)
+class ShipperUser(db.Model):
+    __tablename__ = 'shipper_user'
+    shipper_id = db.Column(db.Integer, db.ForeignKey('shipper.id'), nullable=False)
     id = db.Column(db.Integer, primary_key=True)
     last_name = db.Column(db.String(30), nullable=False)
     first_name = db.Column(db.String(30), nullable=False)
@@ -123,7 +123,7 @@ class SupplierUser(db.Model):
         return check_password_hash(self.password, password)
 
 
-@event.listens_for(SupplierUser.password, 'set', retval=True)
+@event.listens_for(ShipperUser.password, 'set', retval=True)
 def hash_staff_password(target, value, oldvalue, initiator):
     if value != oldvalue:
         return generate_password_hash(value)
@@ -138,6 +138,6 @@ class ProductAdminView(ModelView):
 admin.add_view(ModelView(Staff, db.session, endpoint="staffview"))
 admin.add_view(ProductAdminView(Product, db.session))
 
-admin.add_view(SupplierAdminView(Supplier,db.session))
-admin.add_view(ModelView(SupplierUser, db.session))
+admin.add_view(ShipperAdminView(Shipper,db.session))
+admin.add_view(ModelView(ShipperUser, db.session))
 

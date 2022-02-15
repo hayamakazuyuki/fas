@@ -1,7 +1,7 @@
 from flask import Blueprint, request, redirect, url_for, flash, render_template
 from flask_login import login_user, login_required, logout_user, current_user
 
-from ..models import SupplierUser
+from ..models import ShipperUser
 from .forms import LoginForm
 
 user = Blueprint('user', __name__)
@@ -9,8 +9,7 @@ user = Blueprint('user', __name__)
 @user.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return 'ログインしてます'
-        # return redirect(url_for('shipping.index'))
+        return redirect(url_for('shipping.index'))
 
     form = LoginForm()
 
@@ -18,7 +17,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        user = SupplierUser.query.filter_by(email=email).first()
+        user = ShipperUser.query.filter_by(email=email).first()
 
         if user is None or not user.check_password(password):
             flash('メールアドレス/パスワードを確認してください。')
