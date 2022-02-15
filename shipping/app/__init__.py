@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_mail import Message
 
 from .extentions import db, mail, login_manager
 from .views import shipping
@@ -10,13 +9,13 @@ def create_app():
     app = Flask(__name__)
 
     if app.config['ENV'] == 'production':
-        app.config.from_object('config.ProductionConfig')
+        app.config.from_object('app.config.ProductionConfig')
     
     elif app.config['ENV'] == 'testing':
-        app.config.from_object('config.TestingConfig')
+        app.config.from_object('app.config.TestingConfig')
 
     else:
-        app.config.from_object('config.DevelopmentConfig')
+        app.config.from_object('app.config.DevelopmentConfig')
 
     db.init_app(app)
     login_manager.init_app(app)
