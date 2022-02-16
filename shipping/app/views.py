@@ -22,10 +22,13 @@ def index():
 
     # get orders
     if shipper == 5388:
-        orders = Order.query.filter(Order.item != 901).filter(Order.item != 680).filter(Order.delivery_check.is_(None)).all()
+        orders = Order.query.filter(Order.item != 901)\
+            .filter(Order.item != 602).filter(Order.item != 603).filter(Order.item != 604)\
+            .filter(Order.item != 622).filter(Order.item != 642).filter(Order.item != 680)\
+            .filter(Order.delivery_check.is_(None)).all()
 
     elif shipper == 9999:
-        orders = Order.query.filter(Order.item != 901).filter(Order.item == 680).filter(Order.delivery_check.is_(None)).all()
+        orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check.is_(None)).all()
 
     else:
         orders = ''
@@ -63,10 +66,10 @@ def index():
         response.headers['Content-Type'] = 'text/csv'
         response.headers['Content-Disposition'] = 'attachment; filename=' + filename
 
-        if orders:
-            for order in orders:
-                order.delivery_check = 2
-            db.session.commit()
+        # if orders:
+        #     for order in orders:
+        #         order.delivery_check = 2
+        #     db.session.commit()
 
         return response
 
@@ -86,7 +89,7 @@ def requests():
         db.session.commit()
 
         flash('1件非表示にしました。')
-        return redirect(url_for('requests'))
+        return redirect(url_for('shipping.requests'))
 
     return render_template('requests.html', requests=requests)
 

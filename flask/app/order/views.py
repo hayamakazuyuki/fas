@@ -119,8 +119,12 @@ def order_detail(id):
         form = OrderEditForm()
 
         if form.validate_on_submit():
+            order.item = request.form['item']
+            order.price = request.form['price']
+            order.qty = request.form['qty']
+            db.session.commit()
 
-            flash('受注情報を変更しました。')
+            flash('受注情報を変更しました。', 'success')
             return redirect(url_for('order.order_detail', id=id))
 
         return render_template('order/order-edit.html', order=order, form=form)
@@ -136,7 +140,7 @@ def register_request(id):
     deliveryreq.requested_by = current_user.id
     if request.form['delivery_date']:
         deliveryreq.delivery_date = request.form['delivery_date']
-    deliveryreq.memo = request.form.get('memo')
+    deliveryreq.memo = request.form.get('time_range')
 
     db.session.add(deliveryreq)
     db.session.commit()

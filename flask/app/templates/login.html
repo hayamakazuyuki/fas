@@ -8,19 +8,18 @@
     <title>fas log-in</title>
 </head>
 
-<!-- ボディ -->
+<!-- body starts -->
 <body class="bg-white min-h-screen pt-10 pb-6 px-2 md:px-0" style="font-family:'Lato',sans-serif;">
 {% from "_macros.html" import render_login_field_label, render_login_field, render_login_form_error %}
 
-<!-- ヘッダー -->
+<!-- header -->
 <header class="max-w-sm mx-auto">
-    <a href="#">
         <h1 class="object-center">
             <img class="object-contain h-16 w-full" src="../static/img/logo_FUROSHIKI.png" alt="furoshiki">
         </h1>
-    </a>
 </header>
-<!-- エラーアラート表示場所 -->
+
+<!-- errors go here -->
 <div class="max-w-sm mx-auto my-5">
     {{ render_login_form_error(form.email, form.password, form.csrf_token) }}
 </div>
@@ -36,14 +35,13 @@
     {% endif %}
 {% endwith %}
 
-<!-- メイン -->
+<!-- main contents start here -->
 <main class="bg-white max-w-sm mx-auto p-8 md:p-12 my-5 rounded-lg shadow-lg">
-    <section>
-        <h2 class="font-bold text-2xl text-gray-700">fas</h2>
-        <p class="text-gray-600 pt-2">ログイン</p>
+    <section class="">
+        <h2 class="font-bold text-3xl text-gray-700 text-center">fas</h2>
+        <p class="text-gray-600 pt-2 text-center">ログイン</p>
     </section>
     
-
     <section class="mt-5">
         <form class="flex flex-col" action="/login" method="POST" name="login_form">
             {{ form.csrf_token }}
@@ -68,7 +66,7 @@
 
 <!-- footer -->
 <footer class="max-w-lg mx-auto flex justify-center text-gray-600 text-xs">
-    <span class="mx-3">fas 3.0</span>
+    <span class="mx-3">fas-K.K Satisfactory</span>
 </footer>
 
 </body>

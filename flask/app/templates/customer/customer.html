@@ -1,8 +1,8 @@
 {% extends "layout.html" -%}
 {% block content -%}
 {% include "navbar.html" -%}
-<div class="container max-w-3xl mx-auto">
-    <div class="max-w-lg mx-auto my-8 p-7 border rounded-lg shadow-lg" x-data="{open: 1}">
+<div class="container max-w-4xl mx-auto">
+    <div class="md:max-w-md md:mx-auto mx-3 my-8 p-7 border rounded-lg shadow-lg" x-data="{open: 1}">
 
         <ul class="flex cursor-pointer text-center text-gray-500">
             <li class="w-1/2 py-3" @click="open = 1" :class="{'text-blue-700 border-b-2 border-blue-600': open === 1}">取引先</li>
@@ -59,7 +59,7 @@
 <!-- test -->
 
     {% if customers %}
-    <div class="max-w-md mx-auto">
+    <div class="px-3 max-w-md mx-auto">
 
     <p class="">{{ count }} 件の取引先が見つかりました。</p>
     <p class="my-3 text-blue-600">

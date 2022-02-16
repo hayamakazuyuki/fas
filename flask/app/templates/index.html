@@ -2,30 +2,18 @@
 {% block content -%}
 {% include "navbar.html" -%}
 {% include "_flashing.html" -%}
-<div class="container max-w-3xl mx-auto px-3">
-    <div class="my-5 flex">
-
-        <div class="w-1/3 mx-auto py-4 px-8 bg-white shadow-lg rounded-lg">
+<div class="container max-w-4xl mx-auto px-3 md:px-0">
+    <div class="my-5">
+        <div class="w-full md:w-1/3 py-4 px-8 bg-white shadow-lg rounded-lg">
             <h1 class="text-lg font-bold">{{ today }}</h1>
-            <table class="my-3 w-full">
-                <thead>
-                <tr class="border-b border-black">
-                    <th class="text-center">箱数合計</th>
-                    <th class="text-center">売上合計</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="text-center">{{ sum_qty_today or 0 }}</td>
-                    <td class="text-center">{{ "{:,}".format(sum_amount_today) if sum_amount_today else 0 }}</td>
-                </tr>
-                </tbody>
-            </table>
+            <p class="text-gray-500 text-sm">今日の受注</p>
+            <p class="text-lg font-bold mt-3">{{ sum_qty_today or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
+            <p class="text-lg font-bold mt-1">{{ "{:,}".format(sum_amount_today) if sum_amount_today else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
         </div>
     </div>
     
     <div class="mt-5">
-        <p class="text-xl">{{ current_user.last_name }}さん<span class="text-sm">の受注</span></p>
+        <p class="text-xl">{{ current_user.last_name }}<span class="text-sm">さんの受注</span></p>
         <p class="my-3">
             {% for page_num in orders.iter_pages(left_edge=3, right_edge=2) %}
             {% if page_num %}
@@ -39,7 +27,7 @@
             {% endif %}
             {% endfor %}
         </p>
-        <table class="table-auto w-full">
+        <table class="table-auto w-full text-sm">
             <thead>
             <tr class="border-black border-b">
                 <th>受注ID</th>
@@ -53,14 +41,14 @@
             </thead>
             {% for order in orders.items %}
             <tr class="border-b">
-                <td><a href="/order/{{ order.id }}" class="text-blue-500 hover:text-blue-800 hover:underline">
+                <td class="p-1"><a href="/order/{{ order.id }}" class="text-blue-500 hover:text-blue-800 hover:underline">
                     {{ '{:06d}'.format(order.id) }}</a></td>
-                <td>{{ order.date.strftime('%Y-%m-%d') }}</td>
-                <td>{{ order.customer_id }}-{{ order.shop_id }} {{ order.shop.name }}</td>
-                <td>{{ order.product.name }}</td>
-                <td class="text-right">{{ '{:,d}'.format(order.price) }}</td>
-                <td class="text-right">{{ order.qty }}</td>
-                <td class="text-center">
+                <td class="p-1">{{ order.date.strftime('%Y-%m-%d') }}</td>
+                <td class="p-1">{{ order.customer_id }}-{{ order.shop_id }} {{ order.shop.name }}</td>
+                <td class="p-1">{{ order.product.name }}</td>
+                <td class="p-1 text-right">{{ '{:,d}'.format(order.price) }}</td>
+                <td class="p-1 text-right">{{ order.qty }}</td>
+                <td class="p-1 text-center">
                 {% if order.delivery_check == 1 %}
                     <span class="text-orange-700 text-sm font-bold">なし</span>
                 {% endif %}
