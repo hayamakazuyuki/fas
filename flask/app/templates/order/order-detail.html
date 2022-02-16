@@ -5,7 +5,7 @@
 {% include "_flashing.html" -%}
 
 <div class="container max-w-4xl mx-auto md:w-1/3" x-data="{ open: false }">
-    <div class="flex justify-center mx-3 my-10">
+    <div class="mx-3 my-10">
         <!-- order details go here-->
             <div class="w-full border p-6 rounded-lg shadow-lg">
                 <h1 class="font-bold text-lg border-b">受注情報</h1>
@@ -46,7 +46,7 @@
 
             <!-- order requests go here-->
             {% if order.item != 901 %}
-            <div class="flex justify-center my-5 mx-3">
+            <div class="w-full my-5 mx-3">
                 <div class="border p-6 rounded-lg shadow-lg">
                     <h2 class="text-base font-bold border-b mb-3">日時指定</h2>
 
