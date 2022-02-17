@@ -4,7 +4,9 @@ from flask import Blueprint, render_template, request, redirect, url_for, make_r
 from flask_login import current_user, login_required
 from sqlalchemy import func
 from io import StringIO
+from threading import Thread
 import csv
+
 
 from ..extentions import db
 
@@ -222,3 +224,40 @@ def date_range():
         return render_template('order/range.html', date_from=date_from, date_to=date_to, orders=orders)
 
     return render_template('order/range.html')
+
+
+
+@order.route('/invoice_data')
+@order.route('/invoice_data/<dl>')
+@login_required
+def invoice_data(dl=None):
+
+    orders = ProductOrder.query.filter(ProductOrder.exported.is_(None)).all()
+    orders_count = len(orders)
+
+    if dl == 'csv':
+
+        today = datetime.now(JST)
+        file_date = today.strftime('%Y-%m-%d')
+
+        file = StringIO()
+        writer = csv.writer(file, lineterminator="\n")
+
+        writer.writerow(['顧客ID', '事業所ID', '受注日', '商品番号', 'KBN', '単価', '数量', '手数料', '商品名'])
+        for order in orders:
+            writer.writerow(
+                [order.customer_id, order.shop_id, order.date, order.item, 1, order.price, order.qty, 0,
+                 order.product.name])
+    
+        response = make_response()
+        response.data = file.getvalue().encode('sjis', 'replace')
+        response.headers['Content-Type'] = 'text/csv'
+        response.headers['Content-Disposition'] = 'attachment; filename=brycenData-' + file_date + '.csv'
+
+        # for order in orders:
+        #     order.exported = 1
+        # db.session.commit()
+
+        return response
+
+    return render_template('order/invoice_data.html', orders_count=orders_count)

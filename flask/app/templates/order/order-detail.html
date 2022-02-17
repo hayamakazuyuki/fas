@@ -46,8 +46,7 @@
 
             <!-- order requests go here-->
             {% if order.item != 901 %}
-            <div class="w-full my-5 mx-3">
-                <div class="border p-6 rounded-lg shadow-lg">
+                <div class="mt-3 w-full border p-6 rounded-lg shadow-lg">
                     <h2 class="text-base font-bold border-b mb-3">日時指定</h2>
 
                     {% if order.date > before2h and not order.request.id %}
@@ -73,7 +72,6 @@
                     <p>なし</p>
                     {% endif %}
 
-                </div>
             </div>
             {% endif %}
     </div>

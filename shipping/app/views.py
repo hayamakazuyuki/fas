@@ -28,7 +28,8 @@ def index():
             .filter(Order.delivery_check.is_(None)).all()
 
     elif shipper == 9999:
-        orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check.is_(None)).all()
+        orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check == 1).all()
+        # orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check.is_(None)).all()
 
     else:
         orders = ''
@@ -56,9 +57,9 @@ def index():
         filename = 'dl-' + str_now + '.csv'
 
         # email attachment to sf
-        # attachment = file.getvalue().encode('sjis', 'replace')
-        # send_email('test ライプロンDLデータ', recipients=['hayama@sfinter.com'], body='ライプロンのダウンロードデータです。',
-        #            filename=filename, attachment=attachment)
+        attachment = file.getvalue().encode('sjis', 'replace')
+        send_email('test ライプロンDLデータ', recipients=['hayama@sfinter.com'], body='ライプロンのダウンロードデータです。',
+                   filename=filename, attachment=attachment)
 
         # prepare DL data 
         response = make_response()

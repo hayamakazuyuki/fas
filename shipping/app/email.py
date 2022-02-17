@@ -1,18 +1,19 @@
 from flask_mail import Message
-from threading import Thread
-from .extentions import mail
+from app import mail
+
 # from flask import current_app
+# from threading import Thread
+
 
 # not working
-# def send_async_email(app, msg):
-#     with app.app_context():
+# def send_async_email(msg):
+#     with current_app.app_contex():
 #         mail.send(msg)
 
 # def send_email(subject, recipients, body, filename, attachment):
 #     msg = Message(subject, recipients=recipients, body=body)
 #     msg.attach(filename, 'text/csv', attachment)
-#     app = current_app
-#     Thread(target=send_async_email, args=(app, msg)).start()
+#     Thread(target=send_async_email, args=msg).start()
 
 
 # this is working

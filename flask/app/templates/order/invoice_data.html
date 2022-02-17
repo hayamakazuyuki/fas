@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="container max-w-4xl mx-auto md:w-1/3" x-data="{ open: false }">
+    <div class="mt-10">
+        <h1 class="text-gray-500 text-xl">インポートデータのダウンロード</h1>
+        <p class="mt-5 text-3xl text-gray-800">{{ orders_count }}
+            <span class="text-gray-500 text-sm">件のデータがあります。</span>
+        </p>
+        <button  @click="open = true" type="button" class="mt-10 px-3 py-1 text-sm text-white bg-blue-500 hover:bg-blue-800 rounded-full shadow-lg">
+            ダウンロード
+        </button>
+    </div>
+
+    <div x-show="open" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center">
+        <div class="bg-white mx-3 md:mx-0 border p-6 shadow-md">
+            <h2 class="font-bold text-sm">インポートデータ</h2>
+            <p class="text-gray-500 text-sm mt-5">ローカルにダウンロードするとサーバから削除されます。</p>
+            <p class="text-gray-500 text-sm mt-2">ダウンロードしますか？</p>
+            <p class="font-bold mt-5 text-right">
+                <span @click="open = false" class="px-3 py-1 rounded-md text-gray-500 cursor-pointer hover:bg-gray-100">中止</span>
+                <span class="ml-8 px-3 py-1 rounded-md text-blue-500 cursor-pointer hover:bg-blue-100">
+                    <a href="/order/invoice_data/csv">ダウンロード</a></span>
+            </p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
