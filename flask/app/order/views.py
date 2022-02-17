@@ -1,12 +1,9 @@
-from crypt import methods
 from datetime import datetime, timezone, timedelta
 from flask import Blueprint, render_template, request, redirect, url_for, make_response, flash
 from flask_login import current_user, login_required
 from sqlalchemy import func
 from io import StringIO
-from threading import Thread
 import csv
-
 
 from ..extentions import db
 
@@ -254,9 +251,9 @@ def invoice_data(dl=None):
         response.headers['Content-Type'] = 'text/csv'
         response.headers['Content-Disposition'] = 'attachment; filename=brycenData-' + file_date + '.csv'
 
-        # for order in orders:
-        #     order.exported = 1
-        # db.session.commit()
+        for order in orders:
+            order.exported = 1
+        db.session.commit()
 
         return response
 
