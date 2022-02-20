@@ -135,6 +135,17 @@ def request_detail(id):
 
     return render_template('request-detail.html', delivery_request=delivery_request)
 
+
+@shipping.route('/change')
+@login_required
+def change ():
+    orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check == 2).all()
+
+    count = len(orders)
+    return str(count)
+
+    
+
 # @shipping.route('/now')
 # def now():
 
