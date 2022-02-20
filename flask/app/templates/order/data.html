@@ -1,57 +1,76 @@
 {% extends "layout.html" %}
 {% block content %}
 {% include "navbar.html" %}
-<div class="container max-w-4xl mx-auto mt-5">
-    <div class="mt-3 mx-auto">
-        <p class="font-bold text-lg">受注データ</p>
+{% if request.path == '/order/range' %}
+<div class="container max-w-4xl mx-auto" x-data="{open: 2}">
+{% else %}
+<div class="container max-w-4xl mx-auto" x-data="{open: 1}">
+{% endif %}
 
-        <div class="my-5">
-            <a href="/order/range" class="text-blue-500 hover:underline">日付範囲へ</a>
+    <p class="md:max-w-md md:mx-auto mx-2 mt-8 text-xl font-bold text-gray-500">受注データ</p>
+
+    <!-- date/dates range select and display summary -->
+    <div class="md:max-w-md md:mx-auto mx-2 mt-5 p-5 border rounded-lg shadow-lg">
+        <ul class="flex cursor-pointer text-center text-gray-500">
+            <li class="w-1/2 py-3" x-on:click="open = 1" :class="{'text-blue-700 border-b-2 border-blue-600': open === 1}">日付</li>
+            <li class="w-1/2 py-3" x-on:click="open = 2" :class="{'text-blue-700 border-b-2 border-blue-600': open === 2}">範囲</li>
+        </ul>
+
+        <!-- date target == 1 -->
+        <div class="mt-8" x-show="open === 1">
+            <div class="mt-7">
+                <form action="/order/data" method="GET">
+                    <input class="block border-b w-1/2" type="date" min="2020-09-01" name="target" required>
+                    <button type="submit" class="block w-full bg-blue-500 text-sm hover:bg-blue-800 text-white mt-8 py-1 px-5 rounded-full shadow-xl">
+                        検索
+                    </button>
+                </form>
+            </div>
+            <div class="mt-10">
+                <p class="text-2xl">{{ target }}</p>
+                <p class="mt-3 ml-5 text-sm tetx-gray-500">箱数　　　<span class="text-gray-800 text-2xl">{{ sum_qty or 0 }}</span></p>
+                <p class="ml-5 text-sm tetx-gray-500">商品売上　<span class="text-gray-800 text-2xl">{{ '{:,}'.format(sum_price) if sum_price else 0 }}</span></p>
+                <p class="ml-5 text-sm tetx-gray-500">送料売上　<span class="text-gray-800 text-2xl">{{ '{:,}'.format(sum_delivery_price) if sum_delivery_price else 0 }}</span></p>
+                <p class="ml-5 text-sm tetx-gray-500">売上合計　<span class="text-gray-800 text-2xl">{{ '{:,}'.format(total_price) if total_price else 0 }}</span></p>
+            </div>  
         </div>
 
-        <div class="flex items-center mt-7">
-            <form action="/order/data" method="GET">
-                <input class="border" type="date" min="2020-09-01" name="target" id="date_selected" required>
-                <button type="submit" class="bg-blue-500 hover:bg-blue-800 text-sm text-white mx-7 py-1 px-7 rounded-full shadow-xl">
-                    検索</button>
-            </form>
+        <!-- date range == 2-->
+        <div class="mt-8" x-show="open === 2">
+            <div class="mt-7">
+                <form action="/order/range" method="GET">
+                    <label for="date_from" class="hidden">から</label>
+                    <input class="border-b" type="date" min="2020-09-01" name="date_from" id="date_from" required>
+                    <label for="date_to" class="px-3">〜</label>
+                    <input class="border-b" type="date" min="2020-09-01" name="date_to" id="date_to" required>
+                    <button type="submit" class="block w-full bg-blue-500 hover:bg-blue-800 text-sm text-white mt-8 py-1 px-5 rounded-full shadow-xl">検索</button>
+                </form>
+            </div>
+            <div class="mt-10">
+                <div class="px-3 text-2xl text-center">{{ date_from or '' }} <span class="text-gray-300">〜</span> {{ date_to or '' }}</div>
+                <p class="mt-3 ml-5 text-sm tetx-gray-500">箱数　　　<span class="text-gray-800 text-2xl">{{ r_sum_qty or 0 }}</span></p>
+                <p class="ml-5 text-sm tetx-gray-500">商品売上　<span class="text-gray-800 text-2xl">{{ '{:,}'.format(r_sum_price) if r_sum_price else 0 }}</span></p>
+                <p class="ml-5 text-sm tetx-gray-500">送料売上　<span class="text-gray-800 text-2xl">{{ '{:,}'.format(r_sum_delivery_price) if r_sum_delivery_price else 0 }}</span></p>
+                <p class="ml-5 text-sm tetx-gray-500">売上合計　<span class="text-gray-800 text-2xl">{{ '{:,}'.format(r_total_price) if r_total_price else 0 }}</span></p>
+            </div>  
         </div>
-        
-        <div class="my-5">
-            <p class="text-xl">{{ target }}</p>
-            <table class="table-auto w-full mt-3">
-                <thead>
-                <tr class="border-black border-b">
-                    <th class="py-2 text-center">箱数</th>
-                    <th class="py-2 text-center">商品売上</th>
-                    <th class="py-2 text-center">送料売上</th>
-                    <th class="py-2 text-center">売上合計</th>
-                </tr>
-                </thead>
-                
-                <tbody>
-                <tr>
-                    <td class="text-center">{{ sum_qty or 0 }}</td>
-                    <td class="text-center">{{ '{:,}'.format(sum_price) if sum_price else 0 }}</td>
-                    <td class="text-center">{{ '{:,}'.format(sum_delivery_price) if sum_delivery_price else 0 }}</td>
-                    <td class="text-center">{{ '{:,}'.format(total_price) if total_price else 0 }}</td>
-                </tr>
-                </tbody>
+    </div>
 
-            </table>
-            <div class="flex mt-7 mb-3 text-blue-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                    <a href="/order/data?dl=csv&target={{ target }}" class="hover:underline">
-                    <p class="ml-3">csvダウンロード</p>
-                    </a>
-                </div>
-
-            <table class="table-auto w-full text-sm">
-                <thead>
+    <!-- date result == 1 table -->
+    <div class="my-5" x-show="open === 1">
+        <div class="flex mt-7 mb-3 text-blue-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <a href="/order/data?dl=csv&target={{ target }}" class="hover:underline mx-3 ">
+                csvダウンロード
+            </a>
+        </div>
+    
+        <table class="table-auto w-full text-sm">
+            <thead>
                 <tr class="border-b border-black">
-                    <th class="py-2">番号</th>
+                    <th clss="py-2">番号</th>
                     <th class="py-2">受注日</th>
                     <th class="py-2">担当</th>
                     <th class="py-2">事業所</th>
@@ -60,8 +79,9 @@
                     <th class="py-2">単価</th>
                     <th class="py-2">数量</th>
                 </tr>
-                </thead>
-                {% for order in orders %}
+            </thead>
+            {% for order in orders %}
+            <tbody>
                 <tr class="border-b">
                     <td>{{ '{:06d}'.format(order.id) }}</td>
                     <td>{{ order.date.strftime('%m-%d %H:%M') }}</td>
@@ -72,9 +92,59 @@
                     <td class="text-right">{{ '{:,d}'.format(order.price) }}</td>
                     <td class="text-right">{{ order.qty }}</td>
                 </tr>
-                {% endfor %}
-            </table>
-        </div>
+            </tbody> 
+            {% endfor %}
+        </table>
+    </div>
+
+        
+    <!-- range result == 2 table -->
+    <div class="my-5" x-show="open === 2">
+        {% if range_orders %}
+
+        <p class="text-blue-500">
+        {% for page_num in range_orders.iter_pages(left_edge=3, right_edge=2) %}
+            {% if page_num %}
+                {% if range_orders.page == page_num %}
+                <a class="underline" href="{{ url_for('order.range', date_from=date_from, date_to=date_to,
+                page=page_num) }}">{{ page_num }}</a>
+                {% else %}
+                <a class="hover:text-blue-800" href="{{ url_for('order.range', date_from=date_from,
+                date_to=date_to, page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        </p>
+
+        <table class="table-auto w-full text-sm">
+            <thead>
+                <tr class="border-b border-black">
+                    <th class="py-2">番号</th>
+                    <th class="py-2">受注日</th>
+                    <th class="py-2">担当</th>
+                    <th class="py-2">事業所</th>
+                    <th class="py-2">住所</th>
+                    <th class="py-2">商品</th>
+                    <th class="py-2">単価</th>
+                    <th class="py-2">数量</th>
+                </tr>
+            </thead>
+            {% for range_order in range_orders.items %}
+            <tbody>
+                <tr class="border-b">
+                    <td>{{ '{:06d}'.format(range_order.id) }}</td>
+                    <td>{{ range_order.date.strftime('%m-%d %H:%M') }}</td>
+                    <td>{{ range_order.staff.last_name }}</td>
+                    <td>{{ range_order.customer_id }}-{{ range_order.shop_id }} {{ range_order.shop.name }}</td>
+                    <td>{{ range_order.shop.prefecture }}</td>
+                    <td>{{ range_order.product.name }}</td>
+                    <td class="text-right">{{ '{:,d}'.format(range_order.price) }}</td>
+                    <td class="text-right">{{ range_order.qty }}</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

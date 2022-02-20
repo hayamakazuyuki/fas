@@ -83,8 +83,10 @@ def index():
             db.session.add(orderd)
 
         db.session.commit()
+        
+        flash('受注を登録しました。', 'success')
 
-        return redirect(url_for('customer.index'))
+        return redirect(url_for('main.index'))
 
     return render_template('order/register.html', shop=shop)
 
@@ -139,7 +141,7 @@ def register_request(id):
     deliveryreq.requested_by = current_user.id
     if request.form['delivery_date']:
         deliveryreq.delivery_date = request.form['delivery_date']
-    deliveryreq.memo = request.form.get('time_range')
+    deliveryreq.time_range = request.form.get('time_range')
 
     db.session.add(deliveryreq)
     db.session.commit()
@@ -208,20 +210,28 @@ def data():
 
 @order.route('/range')
 @login_required
-def date_range():
+def range():
 
     page = request.args.get('page', 1, type=int)
     date_from = request.args.get('date_from')
     date_to = request.args.get('date_to')
 
-    if date_from and date_to:
-        orders = ProductOrder.query.filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
-            .paginate(page=page, per_page=100)
+    range_orders = ProductOrder.query.filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
+        .paginate(page=page, per_page=100)
 
-        return render_template('order/range.html', date_from=date_from, date_to=date_to, orders=orders)
+    r_sum_qty = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.item != 901)\
+        .filter(func.date(ProductOrder.date) >= date_from).filter(func.date(ProductOrder.date) <= date_to)\
+        .scalar()
+    r_sum_price = db.session.query(func.sum(ProductOrder.price * ProductOrder.qty)).filter(ProductOrder.item != 901)\
+        .filter(func.date(ProductOrder.date) >= date_from).filter(func.date(ProductOrder.date) <= date_to).scalar()
+    r_sum_delivery_price = db.session.query(func.sum(ProductOrder.price * ProductOrder.qty)).filter(ProductOrder.item == 901)\
+        .filter(func.date(ProductOrder.date) >= date_from).filter(func.date(ProductOrder.date) <= date_to).scalar()
+    r_total_price = db.session.query(func.sum(ProductOrder.price * ProductOrder.qty))\
+        .filter(func.date(ProductOrder.date) >= date_from).filter(func.date(ProductOrder.date) <= date_to)\
+        .scalar()
 
-    return render_template('order/range.html')
-
+    return render_template('order/data.html', date_from=date_from, date_to=date_to, range_orders=range_orders,
+    r_sum_qty=r_sum_qty, r_sum_price=r_sum_price, r_sum_delivery_price=r_sum_delivery_price, r_total_price=r_total_price)
 
 
 @order.route('/invoice_data')
