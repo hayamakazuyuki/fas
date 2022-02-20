@@ -2,7 +2,7 @@
 {% block content %}
 {% include "navbar.html" %}
 <div class="container mx-auto">
-    <div class="max-w-3xl mx-auto mt-5">
+    <div class="max-w-4xl mx-auto mt-5">
 
     <p class="font-bold text-lg mb-5">依頼事項の詳細</p>
     <a href="/requests" class="text-blue-600 hover:underline">
@@ -47,6 +47,8 @@
             <p class="w-1/6 mx-3">時間帯</p>
             <p>{{ delivery_request.time_range }}</p>
     </div>
+
+    {# --- hide ---
     <div class="flex mt-3">
         <p class="w-1/6 mx-3">依頼事項</p>
         <p>{{ delivery_request.memo }}</p>
@@ -63,10 +65,10 @@
         <button type="button" class="ml-5 bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded" onclick="submit()">
             登録</button>
         </form>
-
         {% endif %}
         </div>
     </div>
+    --- hide --- #}
 </div>
 
 </div>
