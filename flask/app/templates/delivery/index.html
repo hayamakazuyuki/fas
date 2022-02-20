@@ -21,21 +21,22 @@
         </thead>
 
         {% for request in requests %}
-        <tr class="border-b">
+        <tr class="border-b text-center">
             <td class="px-1">{{ request.created_at.strftime('%m-%d') }}</td>
             <td class="px-1">{{ request.product_order.shop.name }}</td>
-            <td class="px-1">{{ request.product_order.product.name[10:] }}</td>
+            <td class="px-1">{{ request.product_order.product.name }}</td>
             <td class="px-1">{{ request.product_order.qty }}</td>
             <td class="px-1">
                 {% if request.delivery_date %}
                 {{ request.delivery_date.strftime('%m-%d') }}
                 {% endif %}
             </td>
-            <td class="border-b px-1">{{ request.time_range or '' }}</td>
-            <td class="border-b px-1">
+            <td class="px-1">{{ request.time_range or '' }}</td>
+            <td class="px-1">
                 {% if request.checked == 1 %}
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
                 {% endif %}
             </td>
          </tr>
