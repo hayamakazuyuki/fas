@@ -136,15 +136,28 @@ def request_detail(id):
     return render_template('request-detail.html', delivery_request=delivery_request)
 
 
-@shipping.route('/change')
+@shipping.route('/count')
 @login_required
-def change ():
+def count():
     orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check == 2).all()
 
     count = len(orders)
     return str(count)
 
+
+@shipping.route('/change')
+@login_required
+def change():
     
+    orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check == 2).all()
+
+    for order in orders:
+        order.delivery_check = 1
+    db.session.commit()
+
+    return redirect(url_for('shipping.count'))
+
+
 
 # @shipping.route('/now')
 # def now():
