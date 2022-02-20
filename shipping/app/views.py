@@ -145,17 +145,17 @@ def count():
     return str(count)
 
 
-@shipping.route('/change')
-@login_required
-def change():
+# @shipping.route('/change')
+# @login_required
+# def change():
     
-    orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check == 2).all()
+#     orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check == 2).all()
 
-    for order in orders:
-        order.delivery_check = 1
-    db.session.commit()
+#     for order in orders:
+#         order.delivery_check = 1
+#     db.session.commit()
 
-    return redirect(url_for('shipping.count'))
+#     return redirect(url_for('shipping.count'))
 
 
 
