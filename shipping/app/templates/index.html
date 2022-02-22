@@ -3,22 +3,14 @@
 {% include "navbar.html" %}
 <div class="container mx-auto py-5">
     <div class="max-w-4xl mx-auto">
-        <p class="font-bold text-lg">出荷依頼一覧</p>
-        <p class="mt-3 font-bold">{{ now }}
-            <a href="/" class="ml-9 text-blue-600 hover:text-blue-700 hover:underline items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg><span class="ml-1">表示を更新</span></a>
-            <a href="/csv"
-           class="ml-9 text-blue-600 hover:text-blue-700 hover:underline items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-            </svg>
-            CSVダウンロード</a>
-            <span class="mx-5 text-gray-500">最終ダウンロード：</span>
-        </p>
+        <h1 class="font-bold text-xl text-gray-500">出荷依頼一覧</h1>
+
+        <div class="my-5 flex" x-data="getToday">
+            <p class="text-lg mr-20" x-text="today"></p>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white text-sm py-1 px-5 rounded-full" type="submit">ダウンロード</button>
+        </div>
     
-            <table class="w-full table-auto my-5 text-sm">
+        <table class="w-full table-auto my-5 text-sm">
             <thead>
                 <tr>
                 <th class="border-black border-b px-4 py-2">受注日</th>
@@ -50,5 +42,13 @@
         </table>
     </div>
 </div>
-
+<!-- alpine.js -->
+<script>
+    const getToday = () => {
+        let now = new Date();
+        return {
+            today: now
+        }
+    }
+</script>
 {% endblock %}

@@ -20,7 +20,7 @@ def login():
         user = ShipperUser.query.filter_by(email=email).first()
 
         if user is None or not user.check_password(password):
-            flash('メールアドレス/パスワードを確認してください。')
+            flash('ログイン情報をご確認ください。')
             return redirect(url_for('user.login'))
 
         login_user(user, remember=True)

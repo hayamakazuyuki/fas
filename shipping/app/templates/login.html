@@ -29,8 +29,11 @@
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
-        <div class="max-w-sm mx-auto bg-red-100 border border-red-400 text-red-700 my-5 px-3 py-3 rounded relative" role="alert">
-            <p class="text-center text-sm">{{ message }}</p>
+        <div class="max-w-sm mx-auto bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded" role="alert">
+            <div class="flex justify-center close-alert">
+              <p class="text-sm">{{ message }}</p>
+              <svg class="fill-current h-5 w-5" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+            </div>
         </div>
         {% endfor %}
     {% endif %}
@@ -70,6 +73,9 @@
 <footer class="max-w-lg mx-auto flex justify-center text-gray-600 text-xs">
     <span class="mx-3">fas 3.0</span>
 </footer>
+
+<!-- close alert JS -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/close-alert.js') }}"></script>
 
 </body>
 </html>

@@ -99,7 +99,7 @@ def index(dl=None):
         # send_email('test ライプロンDLデータ', recipients=['hayama@sfinter.com'], body='ライプロンのダウンロードデータです。',
         #            filename=filename, attachment=attachment)
 
-    return render_template('index.html', orders=orders, now=now)
+    return render_template('index.html', orders=orders)
 
 
 @shipping.route('/requests', methods=['GET', 'POST'])
