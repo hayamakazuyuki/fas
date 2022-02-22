@@ -135,6 +135,7 @@ class ProductAdminView(ModelView):
     column_list = ['id', 'name', 'thickness', 'qty', 'size', 'box_size']
 
 
+admin.add_view(ModelView(Customer, db.session, endpoint="customerview"))
 admin.add_view(ModelView(Staff, db.session, endpoint="staffview"))
 admin.add_view(ProductAdminView(Product, db.session))
 

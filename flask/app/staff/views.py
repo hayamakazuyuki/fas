@@ -22,7 +22,7 @@ def login():
         staff = Staff.query.filter_by(email=email).first()
 
         if staff is None or not staff.check_password(password):
-            flash('メールアドレス/パスワードをご確認下さい。')
+            flash('ログイン情報をご確認下さい。')
             return redirect(url_for('staff.login'))
 
         login_user(staff, remember=True)
