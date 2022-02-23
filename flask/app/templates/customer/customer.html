@@ -1,10 +1,15 @@
 {% extends "layout.html" -%}
 {% block content -%}
 {% include "navbar.html" -%}
+
+{% if request.path == '/customer/shop/' %}
+<div class="container max-w-4xl mx-auto" x-data="{open: 2}">
+{% else %}
 <div class="container max-w-4xl mx-auto" x-data="{open: 1}">
+{% endif %}
     <p class="md:max-w-md md:mx-auto mx-2 mt-8 text-xl font-bold text-gray-500">顧客</p>
     
-    <div class="md:max-w-md md:mx-auto mx-2 mt-5 p-5 border rounded-lg shadow-lg">
+    <div class="md:max-w-md md:mx-auto mx-2 my-5 p-5 border rounded-lg shadow-lg">
         
         <!-- tab items -->
         <ul class="flex cursor-pointer text-center text-gray-500">
@@ -13,7 +18,7 @@
         </ul>
 
         <!-- target customer == 1 -->
-        <div class="mt-8" x-show="open === 1">
+        <div class="my-8" x-show="open === 1">
             <form action="/customer" method="GET">
                 <div class="relative flex">
                     <input class="w-full border-b bg-white h-10 px-5 pr-16 focus:outline-none focus:shadow" type="search" name="q" placeholder="取引先名キーワード or ID">
@@ -40,7 +45,7 @@
         </div>
 
         <!-- target shop == 2 -->
-        <div class="my-10" x-show="open === 2">
+        <div class="my-8" x-show="open === 2">
             <form action="/customer/shop" method="GET">
                 <div class="flex relative">
                     <input class="w-full border-b bg-white h-10 px-5 pr-16 focus:outline-none focus:shadow" type="search" name="q" placeholder="事業所名キーワード">
@@ -58,11 +63,9 @@
         </div>
     </div>
 
-<!-- ここから上はオッケー 次はここから下 -->
-
+    <!-- customer == 1 -->
+    <div class="max-w-md mx-auto px-3" x-show="open === 1">
     {% if customers %}
-    <div class="py-5 px-3 max-w-md mx-auto">
-
     <p class="text-2xl font-bold">{{ count }} <span class="text-gray-500 text-sm">件の取引先</span></p>
     <p class="my-3 text-blue-600">
     {% for page_num in customers.iter_pages(left_edge=3, right_edge=3) %}
@@ -95,8 +98,49 @@
         </tr>
         {% endfor %}
     </table>
-</div>
+
     {% endif %}
+    </div>
+
+    <!-- shop == 2 -->
+    <div class="mx-auto max-w-md px-3"  x-show="open === 2">
+    {% if shops %}
+    <p class="text-2xl font-bold">{{ count }} <span class="text-gray-500 text-sm">件の事業所が見つかりました。</span></p>
+
+    <p class="my-3 text-blue-600">
+        {% for page_num in shops.iter_pages(left_edge=3, right_edge=3) %}
+            {% if page_num %}
+            {% if shops.page == page_num %}
+            <a class="underline" href="{{ url_for('customer.shop', q=q, page=page_num) }}">{{ page_num }}</a>
+            {% else %}
+            <a class="" href="{{ url_for('customer.shop', q=q, page=page_num) }}">
+                {{ page_num }}</a>
+            {% endif %}
+    
+            {% else %}
+            ...
+            {% endif %}
+        {% endfor %}
+    </p>
+    <table class="table-auto w-full my-5">
+        <thead>
+        <tr class="border-black border-b">
+            <th>顧客ID</th>
+            <th>事業所ID</th>
+            <th>事業所名</th>
+        </tr>
+        </thead>
+        {% for shop in shops.items %}
+        <tr class="border-b">
+            <td>{{ shop.customer_id }}</td>
+            <td>{{ shop.id }}</td>
+            <td><a href="/customer/shop/{{ shop.customer_id }}/{{ shop.id }}" class="text-blue-500 hover:text-blue-800">
+                {{ shop.name }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    </div>
 
 </div>
 {% endblock %}

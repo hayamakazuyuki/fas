@@ -87,7 +87,6 @@ def profile(id):
         return render_template('customer/profile.html', customer=customer, shops=shops)
 
 
-@customer.route('/shop')
 @customer.route('/shop/')
 @login_required
 def shop():
@@ -95,14 +94,14 @@ def shop():
     q = request.args.get('q')
 
     if not q:
-        return render_template('customer/shop.html')
+        return render_template('customer/customer.html')
 
     search = "%{}%".format(q)
     page = request.args.get('page', default=1, type=int)
     shops = Shop.query.filter(Shop.name.like(search)).paginate(page=page, per_page=20)
     count = len(Shop.query.filter(Shop.name.like(search)).all())
 
-    return render_template('customer/shop.html', shops=shops, count=count, q=q)
+    return render_template('customer/customer.html', shops=shops, count=count, q=q)
 
 
 # register shop
