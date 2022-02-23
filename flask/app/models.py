@@ -54,6 +54,7 @@ class Customer(db.Model):
 class Shop(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
+    shop_number = db.Column(db.String(20), nullable=True)
     name = db.Column(db.String(100), nullable=False)
     department = db.Column(db.String(100))
     zip = db.Column(db.String(7), nullable=False)
