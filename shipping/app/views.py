@@ -9,10 +9,34 @@ import csv
 
 from .models import Order, DeliveryRequest
 from .extentions import db
-from .email import send_email
+
 
 shipping = Blueprint('shipping', __name__)
 JST = timezone(timedelta(hours=+9), 'JST')
+
+
+def prepare_csv(orders, now):
+    file = StringIO()
+    writer = csv.writer(file, lineterminator="\n")
+
+    writer.writerow(['荷受人コード', '電話番号', 'FAX番号', '住所1', '住所2', '住所3', '名前1', '名前2', '予約', '郵便番号',
+                         'カナ略称', '一斉出荷区分', '特殊計', '着店コード', '商品（色）', '商品数'])
+    for order in orders:
+        writer.writerow(['', order.shop_orders.telephone, '', order.shop_orders.prefecture + order.shop_orders.city,
+                    order.shop_orders.town + order.shop_orders.address, order.shop_orders.building,
+                    order.shop_orders.name, order.shop_orders.department, '',
+                    f"{order.shop_orders.zip[:3]}-{order.shop_orders.zip[3:]}",
+                    '', '', '', '', order.product_orders.name, order.qty])
+
+    # prepare the file name
+    filename = 'dl-' + now + '.csv'
+
+    response = make_response()
+    response.data = file.getvalue().encode('sjis', 'replace')
+    response.headers['Content-Type'] = 'text/csv'
+    response.headers['Content-Disposition'] = 'attachment; filename=' + filename
+
+    return response
 
 
 @shipping.route('/')
@@ -31,73 +55,32 @@ def index(dl=None):
             .filter(Order.delivery_check.is_(None)).all()
         
         if dl == 'csv':
-            file = StringIO()
-            writer = csv.writer(file, lineterminator="\n")
 
-            writer.writerow(['荷受人コード', '電話番号', 'FAX番号', '住所1', '住所2', '住所3', '名前1', '名前2', '予約', '郵便番号',
-                         'カナ略称', '一斉出荷区分', '特殊計', '着店コード', '商品（色）', '商品数'])
-            for order in orders:
-                writer.writerow(['', order.shop_orders.telephone, '', order.shop_orders.prefecture + order.shop_orders.city,
-                        order.shop_orders.town + order.shop_orders.address, order.shop_orders.building,
-                        order.shop_orders.name, order.shop_orders.department, '',
-                        f"{order.shop_orders.zip[:3]}-{order.shop_orders.zip[3:]}",
-                        '', '', '', '', order.product_orders.name, order.qty])
-
-            # prepare the file name
-            filename = 'dl-' + now + '.csv'
-
-            # prepare DL data
-            response = make_response()
-            response.data = file.getvalue().encode('sjis', 'replace')
-            response.headers['Content-Type'] = 'text/csv'
-            response.headers['Content-Disposition'] = 'attachment; filename=' + filename
+            csv_file = prepare_csv(orders, now)
 
             if orders:
                 for order in orders:
                     order.delivery_check = 2
                 db.session.commit()
 
-            return response
+            return csv_file
 
     elif shipper == 9999:
         orders = Order.query.filter(Order.item != 901).filter(or_(Order.delivery_check != 1, Order.delivery_check.is_(None))).all()
 
         if dl == 'csv':
-            file = StringIO()
-            writer = csv.writer(file, lineterminator="\n")
 
-            writer.writerow(['荷受人コード', '電話番号', 'FAX番号', '住所1', '住所2', '住所3', '名前1', '名前2', '予約', '郵便番号',
-                         'カナ略称', '一斉出荷区分', '特殊計', '着店コード', '商品（色）', '商品数'])
-            for order in orders:
-                writer.writerow(['', order.shop_orders.telephone, '', order.shop_orders.prefecture + order.shop_orders.city,
-                        order.shop_orders.town + order.shop_orders.address, order.shop_orders.building,
-                        order.shop_orders.name, order.shop_orders.department, '',
-                        f"{order.shop_orders.zip[:3]}-{order.shop_orders.zip[3:]}",
-                        '', '', '', '', order.product_orders.name, order.qty])
-
-            # prepare the file name
-            filename = 'dl-' + now + '.csv'
-
-            # prepare DL data
-            response = make_response()
-            response.data = file.getvalue().encode('sjis', 'replace')
-            response.headers['Content-Type'] = 'text/csv'
-            response.headers['Content-Disposition'] = 'attachment; filename=' + filename
+            csv_file = prepare_csv(orders, now)
 
             if orders:
                 for order in orders:
                     order.delivery_check = 1
                 db.session.commit()
 
-            return response
+            return csv_file
 
     else:
         orders = ''
-
-        # email attachment to sf
-        # attachment = file.getvalue().encode('sjis', 'replace')
-        # send_email('test ライプロンDLデータ', recipients=['hayama@sfinter.com'], body='ライプロンのダウンロードデータです。',
-        #            filename=filename, attachment=attachment)
 
     return render_template('index.html', orders=orders)
 

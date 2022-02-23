@@ -23,7 +23,6 @@
                 <th class="px-4 py-2">数量</th>
                 <th class="px-4 py-2">指定日</th>
                 <th class="px-4 py-2">時間帯</th>
-                <th class="px-4 py-2">依頼事項</th>
                 <th class="px-4 py-2">回答</th>
                 </tr>
             </thead>
@@ -39,13 +38,12 @@
                     <a href="/request_detail/{{ request.id }}" class="text-blue-600 hover:underline">
                     {{ '{:06d}'.format(request.order_id) }}</a></td>
                 <td class="px-4 py-1">{{ request.product_order.shop_orders.name |truncate(10) }}</td>
-                <td class="px-4 py-1">{{ request.product_order.product_orders.name[10:] }}</td>
+                <td class="px-4 py-1">{{ request.product_order.product_orders.name }}</td>
                 <td class="px-4 py-1">{{ request.product_order.qty }}</td>
                 <td class="px-4 py-1">
                     {{ request.delivery_date.strftime('%m-%d') if request.delivery_date else '' }}
                 </td>
                 <td class="px-4 py-1">{{ request.time_range or '' }}</td>
-                <td class="px-4 py-1">{{ request.memo or '' }}</td>
                 <td class="px-4 py-1">{{ request.reply or '' }}</td>
              </tr>
     
