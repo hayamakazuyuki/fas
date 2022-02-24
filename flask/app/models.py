@@ -137,6 +137,7 @@ class ProductAdminView(ModelView):
 
 
 admin.add_view(ModelView(Customer, db.session, endpoint="customerview"))
+admin.add_view(ModelView(Shop, db.session))
 admin.add_view(ModelView(Staff, db.session, endpoint="staffview"))
 admin.add_view(ProductAdminView(Product, db.session))
 

@@ -42,6 +42,19 @@ services:
     
     command: flask run --host=0.0.0.0
 
+  customer:
+    build: ./customer
+    container_name: customer_c
+    ports:
+      - 50000:5000
+    tty: true
+    environment:
+      FLASK_APP: "${FLASK_APP}"
+      FLASK_ENV: "${FLASK_ENV}"
+    volumes:
+      - ./customer:/app
+    command: flask run --host=0.0.0.0
+
   shipping:
     build: ./shipping
     container_name: shipping
