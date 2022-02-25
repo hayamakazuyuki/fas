@@ -22,7 +22,8 @@
             {{ shop.town }} {{ shop.address }} {{ shop.building }}</p>
         <p class="mt-2 text-gray-600">{{ shop.email }}</p>
         <p class="mt-2 text-gray-600">{{ shop.telephone }}</p>
-        </div>
+        <p class="mt-2 text-gray-500 text-sm text-right">{{ shop.registered_at.strftime('%Y-%m-%d %H:%M') if shop.registered_at else ''  }}</p>
+    </div>
     </div>
 
     <div class="flex my-5 justify-center">

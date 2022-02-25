@@ -5,6 +5,6 @@ from wtforms.validators import InputRequired, Email
 
 class LoginForm(FlaskForm):
     email = StringField('メールアドレス', validators=[InputRequired('メールアドレスは必須です。'), 
-        Email('正しいメールアドレスを入力してください。')])
+        Email('ログイン情報をご確認ください。')])
     password = PasswordField('パスワード', validators=[InputRequired('パスワードを入力してください。')])
     

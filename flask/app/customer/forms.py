@@ -12,6 +12,7 @@ class ShopForm(FlaskForm):
     customer_id = StringField('取引先ID', validators=[InputRequired('顧客IDを入力して下さい。')])
     id = IntegerField('事業所ID', validators=[InputRequired('事業所IDを入力して下さい。'),
                                            NumberRange(min=1, max=99999, message='IDは最大5桁です')])
+    shop_number = StringField('顧客の事業所番号')
     name = StringField('事業所名', validators=[InputRequired()])
     department = StringField('部署/担当')
     zip = StringField('郵便番号', validators=[InputRequired('郵便番号を入力して下さい。'),

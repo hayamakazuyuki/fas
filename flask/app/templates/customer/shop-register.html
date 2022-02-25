@@ -19,6 +19,9 @@
         </div>
         <div id="error_id" style="color: red;"></div>
         <div class="text-sm my-3">
+            {{ render_field_with_errors(form.shop_number, class_="w-full border-b px-3 text-lg")}}
+        </div>
+        <div class="text-sm my-3">
             {{ render_field_with_errors(form.name, class_="w-full border-b px-3 text-lg")}}
         </div>
         <div class="text-sm my-3">

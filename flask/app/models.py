@@ -48,6 +48,7 @@ class Product(db.Model):
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    registered_at = db.Column(db.DateTime, default=func.now())
     shops = db.relationship('Shop', backref=db.backref('customer', lazy=True))
 
 
@@ -65,6 +66,8 @@ class Shop(db.Model):
     building = db.Column(db.String(50))
     email = db.Column(db.String(100))
     telephone = db.Column(db.String(15), nullable=False)
+    is_inactive = db.Column(db.Boolean, nullable=True)
+    registered_at = db.Column(db.DateTime, default=func.now())
     orders = db.relationship('ProductOrder', backref=db.backref('shop', lazy=True))
 
 
