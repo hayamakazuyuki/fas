@@ -1,0 +1,23 @@
+{##### log-in form ######}
+
+{% macro render_login_field_label(field, label_text) %}
+  {{ field.label(class_="block text-gray-700 text-sm mb-2 ml-3", text=label_text) }}
+{% endmacro %}
+
+{% macro render_login_field(field) %}
+  {{ field(**kwargs)|safe }}
+{% endmacro %}
+
+{% macro render_login_form_error() %}
+{% for field in varargs %}
+{% if field.errors %}
+{% for error in field.errors %}
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
+  <p class="text-center"><span class="block sm:inline">{{ error }}</span></p>
+</div>
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endmacro %}
+
+{##### log-in form ######}
