@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from .extentions import db, login_manager
-from sqlalchemy import event
+from sqlalchemy import event, func
 
 from flask_login import UserMixin
 
@@ -20,6 +20,7 @@ class CustomerUser(db.Model, UserMixin):
     password = db.Column(db.String(255), nullable=False)
     is_hq = db.Column(db.Boolean, nullable=True)
     is_inactive = db.Column(db.Boolean, nullable=True)
+    registered_at = db.Column(db.DateTime, default=func.now())
 
     def check_password(self, password):
         return check_password_hash(self.password, password)

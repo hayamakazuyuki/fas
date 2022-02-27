@@ -137,7 +137,7 @@ def hash_staff_password(target, value, oldvalue, initiator):
 class CustomerUser(db.Model):
     __tablename__ = 'customer_user'
     id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
+    customer_id = db.Column(db.Integer, nullable=False)
     shop_id = db.Column(db.Integer, nullable=True)
     last_name = db.Column(db.String(30), nullable=False)
     first_name = db.Column(db.String(30), nullable=False)
@@ -169,4 +169,7 @@ admin.add_view(ProductAdminView(Product, db.session))
 
 admin.add_view(ShipperAdminView(Shipper,db.session))
 admin.add_view(ModelView(ShipperUser, db.session))
+
+admin.add_view(ModelView(CustomerUser, db.session))
+
 
