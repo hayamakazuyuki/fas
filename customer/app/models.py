@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from .extentions import db, login_manager
-from sqlalchemy import event, func
+from sqlalchemy import event, func, ForeignKeyConstraint
 
 from flask_login import UserMixin
 
@@ -35,3 +35,53 @@ def hash_staff_password(target, value, oldvalue, initiator):
 @login_manager.user_loader
 def load_user(user_id):
     return CustomerUser.query.get(int(user_id))
+
+
+class Customer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    shops = db.relationship('Shop', backref=db.backref('customer', lazy=True))
+
+
+class Shop(db.Model):
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    shop_number = db.Column(db.String(20), nullable=True)
+    name = db.Column(db.String(100), nullable=False)
+    department = db.Column(db.String(100))
+    zip = db.Column(db.String(7), nullable=False)
+    prefecture = db.Column(db.String(4), nullable=False)
+    city = db.Column(db.String(30), nullable=False)
+    town = db.Column(db.String(30), nullable=False)
+    address = db.Column(db.String(50), nullable=False)
+    building = db.Column(db.String(50))
+    email = db.Column(db.String(100))
+    telephone = db.Column(db.String(15), nullable=False)
+    is_inactive = db.Column(db.Boolean, nullable=True)
+    registered_at = db.Column(db.DateTime, default=func.now())
+    orders = db.relationship('ProductOrder', backref=db.backref('shop', lazy=True))
+
+
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    thickness = db.Column(db.Float)
+    qty = db.Column(db.Integer)
+    size = db.Column(db.String(100))
+    box_size = db.Column(db.String(100))
+    orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
+
+
+class ProductOrder(db.Model):
+    __tablename__ = 'product_order'
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, default=func.now())
+    sales_by = db.Column(db.Integer)
+    customer_id = db.Column(db.Integer)
+    shop_id = db.Column(db.Integer)
+    item = db.Column(db.Integer, db.ForeignKey('product.id'))
+    price = db.Column(db.Integer)
+    qty = db.Column(db.Integer)
+    exported = db.Column(db.Integer, nullable=True)
+
+    __table_args__ = (ForeignKeyConstraint(['customer_id', 'shop_id'], ['shop.customer_id', 'shop.id']),)

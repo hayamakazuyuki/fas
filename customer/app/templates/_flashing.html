@@ -1,0 +1,11 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="bg-green-500 text-white px-4 py-3 shadow-md" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
+  <div class="max-w-md mx-auto flex justify-between">
+    <p class="">{{ message }}</p>
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
