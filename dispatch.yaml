@@ -2,7 +2,7 @@ dispatch:
   - url: "fas.furoshiki.in/*"
     service: default
   - url: "cs.furoshiki.in/*"
-    service: fas-customer
+    service: customer
   - url: "bc.furoshiki.in/*"
     service: bc
   - url: "shipping.furoshiki.in/*"

@@ -1,0 +1,10 @@
+runtime: python39
+service: customer
+
+includes:
+  - env_variables.yaml
+
+handlers:
+-  url: /.*
+   secure: always
+   script: auto
