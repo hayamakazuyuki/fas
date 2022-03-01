@@ -63,25 +63,25 @@
         <h1 class="font-bold text-xl text-gray-500">購入履歴</h1>
     </div>
 
-    <table class="w-full table-auto my-5 text-sm">
+    <table class="table-auto my-5 mx-2 text-sm">
         <thead>
-            <tr>
-                <th class="border-black border-b px-4 py-2">受注日</th>
-                <th class="border-black border-b px-4 py-2">番号</th>
-                <th class="border-black border-b px-4 py-2">商品</th>
-                <th class="border-black border-b px-4 py-2">単価</th>
-                <th class="border-black border-b px-4 py-2">数量</th>
+            <tr class="border-black border-b">
+                <th class="px-4 py-2">日付</th>
+                <th class="px-4 py-2">番号</th>
+                <th class="px-4 py-2">商品</th>
+                <th class="px-4 py-2">単価</th>
+                <th class="px-4 py-2">数量</th>
             </tr>
         </thead>
     
             {% if orders %}
             {% for order in orders %}
-            <tr>
-                <td class="border-b px-4 py-1">{{ order.date.strftime('%m-%d') }}</td>
-                <td class="border-b px-4 py-1">{{ '{:06d}'.format(order.id) }}</td>
-                <td class="border-b px-4 py-1">{{ order.product.name }}</td>
-                <td class="border-b px-4 py-1">{{ order.price }}</td>
-                <td class="border-b px-4 py-1">{{ order.qty }}</td>
+            <tr class="border-b">
+                <td class="px-4 py-1">{{ order.date.strftime('%m-%d') }}</td>
+                <td class="px-4 py-1">{{ '{:06d}'.format(order.id) }}</td>
+                <td class="px-4 py-1">{{ order.product.name }}</td>
+                <td class="px-4 py-1">{{ order.price }}</td>
+                <td class="px-4 py-1">{{ order.qty }}</td>
             </tr>
             {% endfor %}
             {% endif %}
