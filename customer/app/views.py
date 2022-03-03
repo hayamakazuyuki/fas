@@ -3,6 +3,7 @@ from flask_login import current_user, login_required
 
 from .extentions import db
 from .models import CustomerUser, Shop, ProductOrder
+from .forms import CustomerOrderForm
 
 cs = Blueprint('cs', __name__)
 
@@ -13,10 +14,12 @@ def index():
     customer_id = current_user.customer_id
     shop_id = current_user.shop_id
 
+    form = CustomerOrderForm()
+
     shop = Shop.query.get_or_404((customer_id, shop_id))
     orders = ProductOrder.query.filter_by(customer_id=customer_id).filter_by(shop_id=shop_id).order_by(ProductOrder.id.desc()).all()
 
-    return render_template('index.html', shop=shop, orders=orders)
+    return render_template('index.html', shop=shop, orders=orders, form=form)
 
 
 @cs.route('/order', methods=['POST'])

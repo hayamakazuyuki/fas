@@ -72,6 +72,11 @@ class Product(db.Model):
     orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
 
 
+class DisplayProduct(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+
+
 class ProductOrder(db.Model):
     __tablename__ = 'product_order'
     id = db.Column(db.Integer, primary_key=True)

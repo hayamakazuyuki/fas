@@ -157,6 +157,11 @@ def hash_staff_password(target, value, oldvalue, initiator):
     return value
 
 
+class DisplayProduct(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+
+
 class StaffAdminView(ModelView):
     form_excluded_columns = ['orders']
 
@@ -164,11 +169,16 @@ class ProductAdminView(ModelView):
     form_columns = ['id', 'name', 'thickness', 'qty', 'size', 'box_size']
     column_list = ['id', 'name', 'thickness', 'qty', 'size', 'box_size']
 
+class DisplayProductView(ModelView):
+    form_columns = ['id', 'name']
+    column_list = ['id', 'name']
+
 
 admin.add_view(ModelView(Customer, db.session, endpoint="customerview"))
 admin.add_view(ModelView(Shop, db.session))
 admin.add_view(StaffAdminView(Staff, db.session, endpoint="staffview"))
 admin.add_view(ProductAdminView(Product, db.session))
+admin.add_view(DisplayProductView(DisplayProduct, db.session))
 
 admin.add_view(ShipperAdminView(Shipper,db.session))
 admin.add_view(ModelView(ShipperUser, db.session))
