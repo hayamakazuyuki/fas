@@ -87,6 +87,7 @@ class ProductOrder(db.Model):
     item = db.Column(db.Integer, db.ForeignKey('product.id'))
     price = db.Column(db.Integer)
     qty = db.Column(db.Integer)
+    delivery_check = db.Column(db.Integer, nullable=True)
     exported = db.Column(db.Integer, nullable=True)
 
     __table_args__ = (ForeignKeyConstraint(['customer_id', 'shop_id'], ['shop.customer_id', 'shop.id']),)

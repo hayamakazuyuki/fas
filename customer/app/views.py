@@ -48,6 +48,19 @@ def order():
     db.session.add(order)
     db.session.commit()
         
-    flash('受注を登録しました。', 'success')
+    flash('商品を発注しました。', 'success')
+
+    return redirect(url_for('cs.index'))
+
+
+# delete order
+@cs.route('/delete/<int:id>')
+@login_required
+def order_delete(id):
+    order = ProductOrder.query.get(id)
+    db.session.delete(order)
+    db.session.commit()
+
+    flash('注文を削除しました。', 'warning')
 
     return redirect(url_for('cs.index'))
