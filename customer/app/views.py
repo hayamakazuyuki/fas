@@ -30,7 +30,7 @@ def order():
     shop_id = current_user.shop_id
 
     order = ProductOrder()
-    order.sales_by = 9999
+    order.sales_by = 10
     order.customer_id = customer_id
     order.shop_id = shop_id
     order.item = request.form['item']
