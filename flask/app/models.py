@@ -39,10 +39,11 @@ def load_user(user_id):
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
+    abbre = db.Column(db.String(50), nullable=False)
     thickness = db.Column(db.Float)
     qty = db.Column(db.Integer)
     size = db.Column(db.String(100))
-    box_size = db.Column(db.String(100))
+    # box_size = db.Column(db.String(100))
     orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
 
 class Customer(db.Model):
@@ -166,8 +167,8 @@ class StaffAdminView(ModelView):
     form_excluded_columns = ['orders']
 
 class ProductAdminView(ModelView):
-    form_columns = ['id', 'name', 'thickness', 'qty', 'size', 'box_size']
-    column_list = ['id', 'name', 'thickness', 'qty', 'size', 'box_size']
+    form_columns = ['id', 'name', 'abbre', 'thickness', 'qty', 'size']
+    column_list = ['id', 'name', 'abbre', 'thickness', 'qty', 'size']
 
 class DisplayProductView(ModelView):
     form_columns = ['id', 'name']

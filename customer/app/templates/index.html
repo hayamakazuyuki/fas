@@ -26,19 +26,20 @@
 
     <form action="/order" method="POST" x-data="{ item: '', qty: '', open: false }">
 
-    <div class="my-3 pt-5 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
+    <div class="my-3 pt-5 px-8 bg-white shadow-lg rounded-lg">
+
         <div class="mt-3">
-            <label for="item" class="mr-3">商品</label>
-            <select x-model="item" name="item" class="border-b text-gray-800 text-lg" onchange="selectToModal(mItem, this.options[selectedIndex].text);" required>
+            <label for="item" class="mr-3 text-gray-500 text-sm">商品</label>
+            <select x-model="item" name="item" class="border-b text-gray-800 text-lg"  required>
                 <option value="" disabled selected>-- 商品 --</option>
-                <option value="602">45L（透明）</option>
-                <option value="603">70L（透明）</option>
-                <option value="604">90L（透明）</option>
+                {% for item in items %}
+                <option value="602">{{ item }}</option>
+                {% endfor %}
             </select>
         </div>
 
         <div class="mt-5">
-            <label for="qty" class="mr-3">数量</label>
+            <label for="qty" class="mr-3 text-gray-500 text-sm">数量</label>
             <select x-bind:disabled="!item.length" x-model="qty" name="qty" class="border-b text-gray-800 text-lg" required>
                 <option value="" disabled>-- 箱数 --</option>
                 <option value="1">1 箱</option>
@@ -146,100 +147,3 @@
 </script>
 
 {% endblock %}
-
-<!-- 
-<div class="container md:max-w-md mx-auto" x-data="{ open: false }">
-    
-    <div class="mx-auto my-8">
-        <div class="flex justify-between px-3" x-data="getToday">
-            <h1 class="font-bold text-xl text-gray-500">事業所情報</h1>
-            <p class="text-sm text-gray-500 self-end" x-text="today"></p>    
-        </div>
-    
-    <div class="mx-auto p-6 bg-white shadow-lg rounded-lg mt-3 mb-5">
-        <p class="text-gray-500 text-right">{{ shop.customer_id }} - {{ shop.id }}</p>
-        <p class="mt-2 text-gray-600">{{ shop.customer.name }}</p>
-        <h2 class="mt-2 text-gray-800 text-2xl">{{ shop.name }}</h2>
-        <p class="mt-2 text-gray-600">{{ shop.department }}</p>
-        <p class="mt-2 text-gray-600">{{ '〒{}-{}'.format(shop.zip[:3], shop.zip[3:]) }} {{ shop.prefecture }} {{ shop.city }}
-            {{ shop.town }} {{ shop.address }} {{ shop.building }}</p>
-        <p class="mt-2 text-gray-600">{{ shop.telephone }}</p>
-    </div>
-
-    <form action="/order" method="POST">
-
-    
-    <div id="blockItem1" class="my-3 pt-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
-        <h2 class="text-base font-bold text-gray-800">商品 発注</h2>
-
-
-        <div>
-            <label for="item" class="mr-3">商品</label>
-            <select name="item" id="item" class="border-b text-gray-800 text-lg" onchange="selectToModal(mItem, value, this.options[selectedIndex].text);" required>
-                <option value="" disabled selected>-- 選択 --</option>
-                <option value="602">45L（透明） 3,400円/箱</option>
-                <option value="603">70L（透明） 3,300円/箱</option>
-                <option value="604">90L（透明） 3,000円/箱</option>
-            </select>
-        </div>
-
-        <div class="mt-3">
-            <label for="qty" class="mr-3">数量</label>
-            <select name="qty" id="qty" class="border-b text-gray-800 text-lg" onchange="selectToModal(mQty, value, this.options[selectedIndex].text);" required>
-                <option value="" disabled selected>-- 箱数 --</option>
-                <option value="1">1 箱</option>
-                <option value="2">2 箱</option>
-                <option value="3">3 箱</option>
-                <option value="4">4 箱</option>
-                <option value="5">5 箱</option>
-            </select>
-        </div>
-
-        <div class="flex justify-center">
-            <button x-on:click="open = true" type="button" class="my-5 mx-7 bg-blue-500 shadow-xl hover:bg-blue-800 text-sm text-white py-1 px-10 rounded-full">内容確認</button>
-        </div>
-    </div>
-
-
-    <div class="flex justify-between mt-8 px-3">
-        <h1 class="font-bold text-xl text-gray-500">購入履歴</h1>
-    </div>
-
-    <table class="table-auto my-5 mx-2 text-sm">
-        <thead>
-            <tr class="border-black border-b">
-                <th class="px-4 py-2">日付</th>
-                <th class="px-4 py-2">番号</th>
-                <th class="px-4 py-2">商品</th>
-                <th class="px-4 py-2">単価</th>
-                <th class="px-4 py-2">数量</th>
-            </tr>
-        </thead>
-    
-            {% if orders %}
-            {% for order in orders %}
-            <tr class="border-b">
-                <td class="px-4 py-1">{{ order.date.strftime('%m-%d') }}</td>
-                <td class="px-4 py-1">{{ '{:06d}'.format(order.id) }}</td>
-                <td class="px-4 py-1">{{ order.product.name }}</td>
-                <td class="px-4 py-1">{{ order.price }}</td>
-                <td class="px-4 py-1">{{ order.qty }}</td>
-            </tr>
-            {% endfor %}
-            {% endif %}
-        </table>
-    </div>
-
-    <div x-show="open" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center">
-        <div class="bg-white mx-3 md:mx-0 border p-6 shadow-md">
-            <h2 class="font-bold text-sm">発注内容の確認</h2>
-            <p class="text-gray-500 text-sm mt-5">以下の商品と数量でよろしいですか？</p>
-            <p class="my-3 text-gray-800 text-sm"><span id="mItem"></span> を <span id="mQty"></span></p>
-            <p class="font-bold mt-5 text-right">
-                <span @click="open = false" class="px-3 py-1 rounded-md text-gray-500 cursor-pointer hover:bg-gray-100">中止</span>
-                <button type="submit" class="font-bold px-3 rounded-md cursor-pointer text-blue-500 hover:bg-blue-100">登録</button>
-            </p>
-        </div>    
-    </div>
-</form>
-</div>
