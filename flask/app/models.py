@@ -164,6 +164,8 @@ def hash_staff_password(target, value, oldvalue, initiator):
         return generate_password_hash(value)
     return value
 
+class CustomerAdminView(ModelView):
+    form_excluded_columns = ['shops']
 
 class StaffAdminView(ModelView):
     form_excluded_columns = ['orders']
@@ -177,7 +179,7 @@ class DisplayProductView(ModelView):
     column_list = ['id', 'name']
 
 
-admin.add_view(ModelView(Customer, db.session, endpoint="customerview"))
+admin.add_view(CustomerAdminView(Customer, db.session, endpoint="customerview"))
 admin.add_view(ModelView(Shop, db.session))
 admin.add_view(ModelView(CustomerPrice, db.session))
 admin.add_view(StaffAdminView(Staff, db.session, endpoint="staffview"))
