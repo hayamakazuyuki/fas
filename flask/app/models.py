@@ -45,10 +45,12 @@ class Product(db.Model):
     size = db.Column(db.String(100))
     orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
 
+
 class Parent(db.Model):
     id = db.Column(db.Integer, primary_key=True, auto_increment=True)
     name = db.Column(db.String(100), nullable=False)
     customers = db.relationship('Customer', backref=db.backref('parent', lazy=True))
+
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
