@@ -45,8 +45,14 @@ class Product(db.Model):
     size = db.Column(db.String(100))
     orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
 
+class Parent(db.Model):
+    id = db.Column(db.Integer, primary_key=True, auto_increment=True)
+    name = db.Column(db.String(100), nullable=False)
+    customers = db.relationship('Customer', backref=db.backref('parent', lazy=True))
+
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey('parent.id'), nullable=True)
     name = db.Column(db.String(100), nullable=False)
     staff = db.Column(db.Integer, nullable=True)
     registered_at = db.Column(db.DateTime, default=func.now())
@@ -184,6 +190,7 @@ admin.add_view(ModelView(Shop, db.session))
 admin.add_view(ModelView(CustomerPrice, db.session))
 admin.add_view(StaffAdminView(Staff, db.session, endpoint="staffview"))
 admin.add_view(ProductAdminView(Product, db.session))
+admin.add_view(ModelView(Parent, db.session))
 
 admin.add_view(ShipperAdminView(Shipper,db.session))
 admin.add_view(ModelView(ShipperUser, db.session))

@@ -1,8 +1,10 @@
+from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
+from sqlalchemy import func
 
 from .extentions import db
-from .models import Customer, Shop, ProductOrder, CustomerPrice
+from .models import JST, Customer, Shop, ProductOrder, CustomerPrice
 
 
 cs = Blueprint('cs', __name__)
@@ -70,4 +72,13 @@ def order_delete(id):
 @cs.route('/stats')
 @login_required
 def stats():
-    return render_template('stats.html')
+    target = request.args.get("target")
+    customer_id = current_user.customer_id
+
+    if target is None:
+        today = datetime.now(JST)
+        target = today.strftime('%Y-%m-%d')
+
+    orders = ProductOrder.query.filter(ProductOrder.customer_id == customer_id).filter(func.DATE(ProductOrder.date) == target).all()
+
+    return render_template('stats.html', target=target, orders=orders)
