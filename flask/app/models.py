@@ -165,7 +165,7 @@ def hash_staff_password(target, value, oldvalue, initiator):
     return value
 
 class CustomerAdminView(ModelView):
-    form_excluded_columns = ['shops']
+    form_excluded_columns = ['shops', 'registered_at']
 
 class StaffAdminView(ModelView):
     form_excluded_columns = ['orders']
