@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
 
 from .extentions import db
-from .models import CustomerUser, Shop, ProductOrder
+from .models import Customer, Shop, ProductOrder, CustomerPrice
 
 
 cs = Blueprint('cs', __name__)
@@ -17,7 +17,8 @@ def index():
     shop = Shop.query.get_or_404((customer_id, shop_id))
     orders = ProductOrder.query.filter_by(customer_id=customer_id).filter_by(shop_id=shop_id).order_by(ProductOrder.id.desc()).all()
 
-    items = [1,2,3,4,5]
+    items = CustomerPrice.query.filter_by(customer_id=customer_id).all()
+
     return render_template('index.html', shop=shop, orders=orders, items=items)
 
 
@@ -27,9 +28,10 @@ def order():
 
     customer_id = current_user.customer_id
     shop_id = current_user.shop_id
+    customer = Customer.query.get(customer_id)
 
     order = ProductOrder()
-    order.sales_by = 10
+    order.sales_by = customer.staff
     order.customer_id = customer_id
     order.shop_id = shop_id
     order.item = request.form['item']
@@ -63,3 +65,9 @@ def order_delete(id):
     flash('注文を削除しました。', 'warning')
 
     return redirect(url_for('cs.index'))
+
+
+@cs.route('/stats')
+@login_required
+def stats():
+    return render_template('stats.html')

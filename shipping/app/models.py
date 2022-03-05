@@ -32,10 +32,10 @@ def load_user(user_id):
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
+    abbre = db.Column(db.String(50), nullable=False)
     thickness = db.Column(db.Float)
     qty = db.Column(db.Integer)
     size = db.Column(db.String(100))
-    # box_size = db.Column(db.String(100))
     product_orders = db.relationship('Order', backref=db.backref('product_orders', lazy=True))
 
 

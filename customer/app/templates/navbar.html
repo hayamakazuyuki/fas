@@ -14,7 +14,7 @@
                 <div class="hidden md:flex items-center space-x-1">
                     <a href="/" class="py-3 px-3 text-gray-700 hover:text-gray-900 hover:underline">ホーム</a>
                     {% if current_user.is_hq %}
-                    <a href="/data" class="py-3 px-3 text-gray-700 hover:text-gray-900 hover:underline">管理データ</a>
+                    <a href="/stats" class="py-3 px-3 text-gray-700 hover:text-gray-900 hover:underline">管理データ</a>
                     {% endif %}
                 </div>
             </div>
@@ -39,7 +39,7 @@
     <div x-bind:class="open ? '' : 'hidden'" class="md:hidden">
     <a href="/" class="block py-2 px-3 text-gray-700 hover:bg-gray-200">ホーム</a>
     {% if current_user.is_hq %}
-    <a href="/data" class="py-3 px-3 text-gray-700 hover:text-gray-900 hover:underline">管理データ</a>
+    <a href="/stats" class="py-3 px-3 text-gray-700 hover:text-gray-900 hover:underline">管理データ</a>
     {% endif %}
 
     <div class="block py-2 px-3">

@@ -40,6 +40,7 @@ def load_user(user_id):
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    staff = db.Column(db.Integer, nullable=True)
     shops = db.relationship('Shop', backref=db.backref('customer', lazy=True))
 
 
@@ -65,16 +66,12 @@ class Shop(db.Model):
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
+    abbre = db.Column(db.String(50), nullable=False)
     thickness = db.Column(db.Float)
     qty = db.Column(db.Integer)
     size = db.Column(db.String(100))
-    # box_size = db.Column(db.String(100))
     orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
-
-
-class DisplayProduct(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
+    prices = db.relationship('CustomerPrice', backref=db.backref('product', lazy=True))
 
 
 class ProductOrder(db.Model):
@@ -91,3 +88,10 @@ class ProductOrder(db.Model):
     exported = db.Column(db.Integer, nullable=True)
 
     __table_args__ = (ForeignKeyConstraint(['customer_id', 'shop_id'], ['shop.customer_id', 'shop.id']),)
+
+
+class CustomerPrice(db.Model):
+    id = db.Column(db.Integer, primary_key=True, auto_increment=True)
+    customer_id = db.Column(db.Integer, nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    price = db.Column(db.Integer, nullable=False)

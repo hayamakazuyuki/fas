@@ -43,12 +43,12 @@ class Product(db.Model):
     thickness = db.Column(db.Float)
     qty = db.Column(db.Integer)
     size = db.Column(db.String(100))
-    # box_size = db.Column(db.String(100))
     orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    staff = db.Column(db.Integer, nullable=True)
     registered_at = db.Column(db.DateTime, default=func.now())
     shops = db.relationship('Shop', backref=db.backref('customer', lazy=True))
 
@@ -88,6 +88,13 @@ class ProductOrder(db.Model):
                               cascade="save-update, merge, delete")
 
     __table_args__ = (ForeignKeyConstraint(['customer_id', 'shop_id'], ['shop.customer_id', 'shop.id']),)
+
+
+class CustomerPrice(db.Model):
+    id = db.Column(db.Integer, primary_key=True, auto_increment=True)
+    customer_id = db.Column(db.Integer, nullable=False)
+    product_id = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Integer, nullable=False)
 
 
 class DeliveryRequest(db.Model):
@@ -158,11 +165,6 @@ def hash_staff_password(target, value, oldvalue, initiator):
     return value
 
 
-class DisplayProduct(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
-
-
 class StaffAdminView(ModelView):
     form_excluded_columns = ['orders']
 
@@ -177,9 +179,9 @@ class DisplayProductView(ModelView):
 
 admin.add_view(ModelView(Customer, db.session, endpoint="customerview"))
 admin.add_view(ModelView(Shop, db.session))
+admin.add_view(ModelView(CustomerPrice, db.session))
 admin.add_view(StaffAdminView(Staff, db.session, endpoint="staffview"))
 admin.add_view(ProductAdminView(Product, db.session))
-admin.add_view(DisplayProductView(DisplayProduct, db.session))
 
 admin.add_view(ShipperAdminView(Shipper,db.session))
 admin.add_view(ModelView(ShipperUser, db.session))
