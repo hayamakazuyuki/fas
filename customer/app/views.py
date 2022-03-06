@@ -1,4 +1,5 @@
 from datetime import datetime
+from itertools import product
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
 from sqlalchemy import func
@@ -36,14 +37,13 @@ def order():
     order.sales_by = customer.staff
     order.customer_id = customer_id
     order.shop_id = shop_id
-    order.item = request.form['item']
+    product = request.form['item']
 
-    if request.form['item'] == '602':
-        price = 3400
-    elif request.form['item'] == '603':
-        price = 3300
-    else:
-        price = 3000
+    order.item = product
+
+    # get the contract price for the item of the customer
+    item_price = CustomerPrice.query.filter(CustomerPrice.customer_id == customer_id, CustomerPrice.product_id == product).first()
+    price = item_price.price
 
     order.price = price
     order.qty = request.form['qty']
