@@ -2,17 +2,14 @@
 const item = document.getElementById('item');
 const price = document.getElementById('price')
 const qty = document.getElementById('qty');
-// const noDelivery = document.getElementById('noDelivery');
 
 const item2 = document.querySelector('item2');
 const price2 = document.getElementById('price2');
 const qty2 = document.getElementById('qty2');
-// const noDelivery2 = document.getElementById('noDelivery2');
 
 const item3 = document.querySelector('item3');
 const price3 = document.getElementById('price3');
 const qty3 = document.getElementById('qty3');
-// const noDelivery3 = document.getElementById('noDelivery3');
 
 const delivery = document.getElementById('delivery');
 const deliveryPrice = document.getElementById('deliveryPrice')
@@ -22,17 +19,14 @@ const deliveryQty = document.getElementById('deliveryQty');
 const mItem = document.getElementById('mItem');
 const mPrice = document.getElementById('mPrice')
 const mQty = document.getElementById('mQty');
-// const mNoDelivery = document.getElementById('mNoDelivery');
 
 const mItem2 = document.getElementById('mItem2');
 const mPrice2 = document.getElementById('mPrice2')
 const mQty2 = document.getElementById('mQty2');
-// const mNoDelivery2 = document.getElementById('mNoDelivery2');
 
 const mItem3 = document.getElementById('mItem3');
 const mPrice3 = document.getElementById('mPrice3')
 const mQty3 = document.getElementById('mQty3');
-// const mNoDelivery3 = document.getElementById('mNoDelivery3');
 
 const mItemD = document.getElementById('mItemD');
 const mPriceD = document.getElementById('mPriceD')
@@ -79,7 +73,6 @@ hideItem2.addEventListener('click', () => {
     mItem2.textContent = '';
     mPrice2.textContent = '';
     mQty2.textContent = '';
-    // mNoDelivery2.textContent = '';
 
     hideItem2.classList.toggle('hidden');
     showItem2.classList.toggle('hidden');
@@ -112,7 +105,6 @@ hideItem3.addEventListener('click', () => {
     mItem3.textContent = '';
     mPrice3.textContent = '';
     mQty3.textContent = '';
-    // mNoDelivery3.textContent = '';
     
     hideItem3.classList.toggle('hidden');
     showItem3.classList.toggle('hidden');
