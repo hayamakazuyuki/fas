@@ -20,7 +20,6 @@
         <p class="mt-2 text-gray-600">{{ shop.department }}</p>
         <p class="mt-2 text-gray-600">{{ '〒{}-{}'.format(shop.zip[:3], shop.zip[3:]) }} {{ shop.prefecture }} {{ shop.city }}
             {{ shop.town }} {{ shop.address }} {{ shop.building }}</p>
-        <p class="mt-2 text-gray-600">{{ shop.email }}</p>
         <p class="mt-2 text-gray-600">{{ shop.telephone }}</p>
         <p class="mt-2 text-gray-500 text-sm text-right">{{ shop.registered_at.strftime('%Y-%m-%d %H:%M') if shop.registered_at else ''  }}</p>
     </div>

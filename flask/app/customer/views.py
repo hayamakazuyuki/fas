@@ -133,7 +133,6 @@ def shop_register():
         new_shop.town = request.form['town']
         new_shop.address = request.form['address']
         new_shop.building = request.form['building']
-        new_shop.email = request.form['email']
         new_shop.telephone = request.form['telephone']
 
         db.session.add(new_shop)
@@ -168,7 +167,6 @@ def shop_profile(customer_id, id):
             shop.town = request.form['town']
             shop.address = request.form['address']
             shop.building = request.form['building']
-            shop.email = request.form['email']
             shop.telephone = request.form['telephone']
 
             db.session.commit()

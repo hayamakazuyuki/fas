@@ -23,6 +23,5 @@ class ShopForm(FlaskForm):
     town = StringField('町域', validators=[InputRequired('町域を入力して下さい。')])
     address = StringField('番地', validators=[InputRequired('番地以下を入力して下さい。')])
     building = StringField('建物名他')
-    email = StringField('email', validators=[Optional(), Email('メールアドレスのみ入力してください（空欄可）。')])
     telephone = StringField('電話番号', validators=[InputRequired('電話番号を入力して下さい。'),
                                                 Regexp('[0-9]+-[0-9]+-[0-9]+', message='数字-数字-数字です。')])
