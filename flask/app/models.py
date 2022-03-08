@@ -4,7 +4,7 @@ from flask_admin import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 
 from flask_login import UserMixin
-from sqlalchemy import ForeignKeyConstraint, func, event, true
+from sqlalchemy import ForeignKeyConstraint, func, event, true, UniqueConstraint
 
 from datetime import datetime, timedelta, timezone
 
@@ -19,6 +19,7 @@ class Staff(db.Model, UserMixin):
     password = db.Column(db.String(255), nullable=False)
     is_inactive = db.Column(db.Boolean, nullable=True)
     orders = db.relationship('ProductOrder', backref=db.backref('staff', lazy=True))
+    customers = db.relationship('Customer', backref=db.backref('sales', lazy=True))
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
@@ -56,7 +57,7 @@ class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     parent_id = db.Column(db.Integer, db.ForeignKey('parent.id'), nullable=True)
     name = db.Column(db.String(100), nullable=False)
-    staff = db.Column(db.Integer, nullable=True)
+    staff = db.Column(db.Integer, db.ForeignKey('staff.id'), nullable=True)
     registered_at = db.Column(db.DateTime, default=func.now())
     shops = db.relationship('Shop', backref=db.backref('customer', lazy=True))
 
@@ -155,8 +156,8 @@ class CustomerUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, nullable=False)
     shop_id = db.Column(db.Integer, nullable=True)
-    last_name = db.Column(db.String(30), nullable=False)
-    first_name = db.Column(db.String(30), nullable=False)
+    last_name = db.Column(db.String(30), nullable=True)
+    first_name = db.Column(db.String(30), nullable=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     is_hq = db.Column(db.Boolean, nullable=True)
@@ -175,6 +176,9 @@ def hash_staff_password(target, value, oldvalue, initiator):
 class CustomerAdminView(ModelView):
     form_excluded_columns = ['shops', 'registered_at']
 
+class ShopAdminView(ModelView):
+    form_excluded_columns = ['orders', 'registered_at']
+
 class StaffAdminView(ModelView):
     form_excluded_columns = ['orders']
 
@@ -182,17 +186,19 @@ class ProductAdminView(ModelView):
     form_columns = ['id', 'name', 'abbre', 'thickness', 'qty', 'size']
     column_list = ['id', 'name', 'abbre', 'thickness', 'qty', 'size']
 
+
 class DisplayProductView(ModelView):
     form_columns = ['id', 'name']
     column_list = ['id', 'name']
 
 
 admin.add_view(CustomerAdminView(Customer, db.session, endpoint="customerview"))
-admin.add_view(ModelView(Shop, db.session))
+admin.add_view(ShopAdminView(Shop, db.session))
 admin.add_view(ModelView(CustomerPrice, db.session))
 admin.add_view(StaffAdminView(Staff, db.session, endpoint="staffview"))
 admin.add_view(ProductAdminView(Product, db.session))
 admin.add_view(ModelView(Parent, db.session))
+admin.add_view(ModelView(ProductOrder, db.session))
 
 admin.add_view(ShipperAdminView(Shipper,db.session))
 admin.add_view(ModelView(ShipperUser, db.session))

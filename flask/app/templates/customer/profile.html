@@ -14,7 +14,7 @@
             </p>
         </div>
         <p class="text-2xl">{{ customer.name }}</p>
-        <p class="text-gray-500 mt-5">{{ customer.staff or '' }}</p>
+        <p class="text-gray-500 mt-5">{{ customer.sales.last_name or '' }}{{ customer.sales.first_name or '' }}</p>
         <p class="mt-3 text-gray-500 text-sm text-right">{{ customer.registered_at.strftime('%Y-%m-%d %H:%M') if customer.registered_at else ''  }}</p>
     </div>
 </div>
