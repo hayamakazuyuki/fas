@@ -7,7 +7,7 @@ from sqlalchemy import or_
 
 import csv
 
-from .models import Order, DeliveryRequest
+from .models import ProductOrder, DeliveryRequest
 from .extentions import db
 
 
@@ -22,11 +22,11 @@ def prepare_csv(orders, now):
     writer.writerow(['荷受人コード', '電話番号', 'FAX番号', '住所1', '住所2', '住所3', '名前1', '名前2', '予約', '郵便番号',
                          'カナ略称', '一斉出荷区分', '特殊計', '着店コード', '商品（色）', '商品数'])
     for order in orders:
-        writer.writerow(['', order.shop_orders.telephone, '', order.shop_orders.prefecture + order.shop_orders.city,
-                    order.shop_orders.town + order.shop_orders.address, order.shop_orders.building,
-                    order.shop_orders.name, order.shop_orders.department, '',
-                    f"{order.shop_orders.zip[:3]}-{order.shop_orders.zip[3:]}",
-                    '', '', '', '', order.product_orders.name, order.qty])
+        writer.writerow(['', order.shop.telephone, '', order.shop.prefecture + order.shop.city,
+                    order.shop.town + order.shop.address, order.shop.building,
+                    order.shop.name, order.shop.department, '',
+                    f"{order.shop.zip[:3]}-{order.shop.zip[3:]}",
+                    '', '', '', '', order.product.name, order.qty])
 
     # prepare the file name
     filename = 'dl-' + now + '.csv'
@@ -49,10 +49,10 @@ def index(dl=None):
 
     # get orders
     if shipper == 5388:
-        orders = Order.query.filter(Order.item != 901)\
-            .filter(Order.item != 602).filter(Order.item != 603).filter(Order.item != 604)\
-            .filter(Order.item != 622).filter(Order.item != 642).filter(Order.item != 680)\
-            .filter(Order.delivery_check.is_(None)).all()
+        orders = ProductOrder.query.filter(ProductOrder.item != 901)\
+            .filter(ProductOrder.item != 602).filter(ProductOrder.item != 603).filter(ProductOrder.item != 604)\
+            .filter(ProductOrder.item != 622).filter(ProductOrder.item != 642).filter(ProductOrder.item != 680)\
+            .filter(ProductOrder.delivery_check.is_(None)).all()
         
         if dl == 'csv':
 
@@ -66,7 +66,7 @@ def index(dl=None):
             return csv_file
 
     elif shipper == 9999:
-        orders = Order.query.filter(Order.item != 901).filter(or_(Order.delivery_check != 1, Order.delivery_check.is_(None))).all()
+        orders = ProductOrder.query.filter(ProductOrder.item != 901).filter(or_(ProductOrder.delivery_check != 1, ProductOrder.delivery_check.is_(None))).all()
 
         if dl == 'csv':
 
@@ -122,7 +122,7 @@ def request_detail(id):
 @shipping.route('/count')
 @login_required
 def count():
-    orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check == 2).all()
+    orders = ProductOrder.query.filter(ProductOrder.item != 901).filter(ProductOrder.delivery_check == 2).all()
 
     count = len(orders)
     return str(count)

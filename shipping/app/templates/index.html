@@ -29,11 +29,11 @@
             <tr>
                 <td class="border-b px-4 py-1">{{ order.date.strftime('%m-%d') }}</td>
                 <td class="border-b px-4 py-1">{{ '{:06d}'.format(order.id) }}</td>
-                <td class="border-b px-4 py-1">{{ order.shop_orders.name }}</td>
-                <td class="border-b px-4 py-1">{{ order.shop_orders.prefecture }}{{ order.shop_orders.city }}
-                    {{ order.shop_orders.town }}</td>
-                <td class="border-b px-4 py-1">{{ order.shop_orders.telephone }}</td>
-                <td class="border-b px-4 py-1">{{ order.product_orders.name }}</td>
+                <td class="border-b px-4 py-1">{{ order.shop.name }}</td>
+                <td class="border-b px-4 py-1">{{ order.shop.prefecture }}{{ order.shop.city }}
+                    {{ order.shop.town }}</td>
+                <td class="border-b px-4 py-1">{{ order.shop.telephone }}</td>
+                <td class="border-b px-4 py-1">{{ order.product.name }}</td>
                 <td class="border-b px-4 py-1">{{ order.qty }}</td>
     
              </tr>
@@ -65,8 +65,8 @@
         let year = now.getFullYear();
         let month = now.getMonth() + 1;
         let date = now.getDate();
-        let hours = now.getHours();
-        let minutes = now.getMinutes();
+        let hours = now.getHours().toString().padStart(2, '0');
+        let minutes = now.getMinutes().toString().padStart(2, '0');
         return {
             today: year + "年" + month + "月" + date + "日" + "　" + hours + ":" + minutes
         }

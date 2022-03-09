@@ -36,7 +36,7 @@ class Product(db.Model):
     thickness = db.Column(db.Float)
     qty = db.Column(db.Integer)
     size = db.Column(db.String(100))
-    product_orders = db.relationship('Order', backref=db.backref('product_orders', lazy=True))
+    orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
 
 
 class Customer(db.Model):
@@ -58,10 +58,10 @@ class Shop(db.Model):
     building = db.Column(db.String(50))
     email = db.Column(db.String(100))
     telephone = db.Column(db.String(15), nullable=False)
-    shop_orders = db.relationship('Order', backref=db.backref('shop_orders', lazy=True))
+    orders = db.relationship('ProductOrder', backref=db.backref('shop', lazy=True))
 
 
-class Order(db.Model):
+class ProductOrder(db.Model):
     __tablename__ = 'product_order'
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime)

@@ -37,8 +37,8 @@
                 <td class="px-4 py-1">
                     <a href="/request_detail/{{ request.id }}" class="text-blue-600 hover:underline">
                     {{ '{:06d}'.format(request.order_id) }}</a></td>
-                <td class="px-4 py-1">{{ request.product_order.shop_orders.name |truncate(10) }}</td>
-                <td class="px-4 py-1">{{ request.product_order.product_orders.name }}</td>
+                <td class="px-4 py-1">{{ request.product_order.shop.name |truncate(10) }}</td>
+                <td class="px-4 py-1">{{ request.product_order.product.name }}</td>
                 <td class="px-4 py-1">{{ request.product_order.qty }}</td>
                 <td class="px-4 py-1">
                     {{ request.delivery_date.strftime('%m-%d') if request.delivery_date else '' }}
