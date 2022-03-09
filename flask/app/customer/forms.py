@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField
-from wtforms.validators import InputRequired, NumberRange, Length, Regexp, Optional, Email
+from wtforms.validators import InputRequired, NumberRange, Length, Regexp
 
 class CustomerForm(FlaskForm):
     id = IntegerField('取引先ID', validators=[InputRequired('IDは必須です。'),

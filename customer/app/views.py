@@ -72,13 +72,19 @@ def order_delete(id):
 @cs.route('/stats')
 @login_required
 def stats():
-    target = request.args.get("target")
     customer_id = current_user.customer_id
 
-    if target is None:
-        today = datetime.now(JST)
-        target = today.strftime('%Y-%m-%d')
+    page = request.args.get('page', 1, type=int)
 
-    orders = ProductOrder.query.filter(ProductOrder.customer_id == customer_id).filter(func.DATE(ProductOrder.date) == target).all()
+    date_from = request.args.get('date_from')
+    date_to = request.args.get('date_to')
 
-    return render_template('stats.html', target=target, orders=orders)
+    if date_from and date_to:
+        orders = ProductOrder.query.filter(ProductOrder.customer_id == customer_id)\
+            .filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
+                .order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
+
+    else:
+        orders = ProductOrder.query.filter(ProductOrder.customer_id == customer_id).order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
+
+    return render_template('stats.html', orders=orders, date_from=date_from, date_to=date_to)
