@@ -44,6 +44,7 @@ class Product(db.Model):
     thickness = db.Column(db.Float)
     qty = db.Column(db.Integer)
     size = db.Column(db.String(100))
+    shipper = db.Column(db.Boolean, nullable=True)
     orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
 
 
@@ -183,9 +184,7 @@ class StaffAdminView(ModelView):
     form_excluded_columns = ['orders']
 
 class ProductAdminView(ModelView):
-    form_columns = ['id', 'name', 'abbre', 'thickness', 'qty', 'size']
-    column_list = ['id', 'name', 'abbre', 'thickness', 'qty', 'size']
-
+    form_excluded_columns = ['orders']
 
 class DisplayProductView(ModelView):
     form_columns = ['id', 'name']

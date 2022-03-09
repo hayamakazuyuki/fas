@@ -13,6 +13,7 @@
                 <th>厚み（mm）</th>
                 <th>入数（枚）</th>
                 <th>サイズ（WxH,mm）</th>
+                <th>出荷</th>
             </tr>
             </thead>
             <tbody>
@@ -23,6 +24,12 @@
                 <td class="px-1">{{ product.thickness or '' }}</td>
                 <td class="px-1">{{ product.qty or '' }}</td>
                 <td class="px-1">{{ product.size or '' }}</td>
+                <td class="px-1 text-center">
+                    {% if product.shipper %}
+                    <span class="bg-blue-500 rounded-full text-xs px-2 py-1 text-white">sf</span>
+                    {% else %}
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
             </tbody>
