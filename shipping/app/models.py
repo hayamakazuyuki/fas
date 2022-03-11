@@ -36,6 +36,7 @@ class Product(db.Model):
     thickness = db.Column(db.Float)
     qty = db.Column(db.Integer)
     size = db.Column(db.String(100))
+    shipper = db.Column(db.Boolean, nullable=True)
     orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
 
 

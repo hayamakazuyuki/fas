@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from flask_login import login_required, current_user
 from datetime import datetime, timezone, timedelta
 from io import StringIO
-from sqlalchemy import or_
+from sqlalchemy import or_, not_
 
 import csv
 
@@ -50,9 +50,7 @@ def index(dl=None):
     # get orders
     if shipper == 5388:
         orders = ProductOrder.query.filter(ProductOrder.item != 901)\
-            .filter(ProductOrder.item != 602).filter(ProductOrder.item != 603).filter(ProductOrder.item != 604)\
-            .filter(ProductOrder.item != 622).filter(ProductOrder.item != 642).filter(ProductOrder.item != 680)\
-            .filter(ProductOrder.delivery_check.is_(None)).all()
+            .filter(ProductOrder.product.has(shipper=True)).filter(ProductOrder.delivery_check.is_(None)).all()
         
         if dl == 'csv':
 
