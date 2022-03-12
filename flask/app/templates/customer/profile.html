@@ -14,7 +14,7 @@
             </p>
         </div>
         <p class="text-2xl">{{ customer.name }}</p>
-        <hr class="mt-6 mb-3">
+        <hr class="mt-8 mb-3">
         <div class="flex justify-between">
             <p class="text-gray-500">{{ customer.sales.last_name or '' }}{{ customer.sales.first_name or '' }}</p>
             <p class="text-gray-500 text-sm text-right self-end">{{ customer.registered_at.strftime('%Y-%m-%d %H:%M') if customer.registered_at else ''  }}</p>    

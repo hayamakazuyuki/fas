@@ -101,6 +101,9 @@ class ProductOrder(db.Model):
 
 
 class CustomerPrice(db.Model):
+    __table_args__ = (
+        db.UniqueConstraint('customer_id', 'product_id'),
+    )
     id = db.Column(db.Integer, primary_key=True, auto_increment=True)
     customer_id = db.Column(db.Integer, nullable=False)
     product_id = db.Column(db.Integer, nullable=False)
