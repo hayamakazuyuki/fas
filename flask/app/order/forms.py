@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, DateField, StringField, SelectField
+from wtforms import IntegerField, DateField, SelectField
 from wtforms.validators import InputRequired, NumberRange, Optional
 
 from wtforms_sqlalchemy.fields import QuerySelectField

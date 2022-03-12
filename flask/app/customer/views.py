@@ -43,6 +43,7 @@ def register():
     if form.validate_on_submit():
         id = request.form['id']
         name = request.form['name']
+        staff = request.form['staff']
 
         # check if requested id already exists in the db
         exists = Customer.query.get(id)
@@ -50,7 +51,7 @@ def register():
         if exists:
             return redirect(url_for('customer.profile', id=id))
         else:
-            new_customer = Customer(id=id, name=name)
+            new_customer = Customer(id=id, name=name, staff=staff)
             db.session.add(new_customer)
             db.session.commit()
 
@@ -73,8 +74,9 @@ def profile(id):
     form = CustomerForm()
 
     if mode == 'edit':
-        if request.method == 'POST':
+        if form.validate_on_submit():
             customer.name = request.form['name']
+            customer.staff = request.form['staff']
             db.session.commit()
             
             flash('取引先情報を更新しました。', 'success')

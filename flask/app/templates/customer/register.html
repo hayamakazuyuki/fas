@@ -3,7 +3,7 @@
 {% include "navbar.html" %}
 {% from "_macros.html" import render_field_with_errors %}
 
-<div class="container max-w-lg mx-auto mt-7">
+<div class="container max-w-md mx-auto mt-7 px-3">
 
 <p class="font-bold text-lg my-5">取引先の登録</p>
     <form name="customer" action="/customer/register" method="POST">
@@ -17,11 +17,17 @@
     <div class="my-5">
         {{ render_field_with_errors(form.name, class_="w-full text-gray-700 focus:outline-none
            focus:bg-gray-100 border-b border-gray-300 focus:border-blue-500 transition duration-500 px-3 pb-1")}}
-        <div id="error_id" style="color: red;"></div>{# jsでバリエーション＆エラー表示をさせる場所 #}
     </div>
 
-        <p class=""><a href="/customer" class="text-decoration-none">キャンセル</a>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white mx-7 py-1 px-7 rounded-full" type="submit">登録</button></p>
+    <div class="my-5">
+        {{ render_field_with_errors(form.staff, class_="w-full text-gray-700 focus:outline-none
+           focus:bg-gray-100 border-b border-gray-300 focus:border-blue-500 transition duration-500 px-3 pb-1")}}
+    </div>
+    <div>
+        <a href="/customer" class="text-blue-500 hover:underline hover:text-blue-800">キャンセル</a>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white mx-7 py-1 px-7 rounded-full" type="submit">登録</button>
+    </div>
+    
     </form>
 </div>
 </div>
