@@ -1,3 +1,4 @@
+from email.policy import default
 from werkzeug.security import generate_password_hash, check_password_hash
 from .extentions import db, admin, login_manager
 from flask_admin import AdminIndexView
@@ -44,7 +45,7 @@ class Product(db.Model):
     thickness = db.Column(db.Float)
     qty = db.Column(db.Integer)
     size = db.Column(db.String(100))
-    shipper = db.Column(db.Boolean, nullable=True)
+    shipper = db.Column(db.Boolean, nullable=True, default=0)
     orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
 
 
@@ -101,14 +102,13 @@ class ProductOrder(db.Model):
 
 
 class CustomerPrice(db.Model):
-    __table_args__ = (
-        db.UniqueConstraint('customer_id', 'product_id'),
-    )
     id = db.Column(db.Integer, primary_key=True, auto_increment=True)
     customer_id = db.Column(db.Integer, nullable=False)
     product_id = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
-
+    __table_args__ = (
+        db.UniqueConstraint('customer_id', 'product_id'),
+    )
 
 class DeliveryRequest(db.Model):
     __tablename__ = 'delivery_request'
@@ -187,6 +187,7 @@ class StaffAdminView(ModelView):
     form_excluded_columns = ['orders']
 
 class ProductAdminView(ModelView):
+    form_columns = ['id', 'name', 'abbre', 'thickness', 'qty', 'size', 'shipper']
     form_excluded_columns = ['orders']
 
 class DisplayProductView(ModelView):
