@@ -37,10 +37,17 @@ def load_user(user_id):
     return CustomerUser.query.get(int(user_id))
 
 
+class Parent(db.Model):
+    id = db.Column(db.Integer, primary_key=True, auto_increment=True)
+    name = db.Column(db.String(100), nullable=False)
+    customers = db.relationship('Customer', backref=db.backref('parent', lazy=True))
+
+
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey('parent.id'), nullable=True)
     name = db.Column(db.String(100), nullable=False)
-    staff = db.Column(db.Integer, nullable=True)
+    staff = db.Column(db.Integer, db.ForeignKey('staff.id'), nullable=True)
     shops = db.relationship('Shop', backref=db.backref('customer', lazy=True))
 
 

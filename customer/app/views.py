@@ -74,6 +74,9 @@ def order_delete(id):
 def stats():
     customer_id = current_user.customer_id
 
+    customer = Customer.query.get(customer_id)
+    hq = customer.parent_id.name
+
     page = request.args.get('page', 1, type=int)
 
     date_from = request.args.get('date_from')
@@ -87,4 +90,4 @@ def stats():
     else:
         orders = ProductOrder.query.filter(ProductOrder.customer_id == customer_id).order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
 
-    return render_template('stats.html', orders=orders, date_from=date_from, date_to=date_to)
+    return render_template('stats.html', orders=orders, date_from=date_from, date_to=date_to, hq=hq)
