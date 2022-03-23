@@ -3,42 +3,41 @@
 {% include "navbar.html" -%}
 {% include "_flashing.html" -%}
 
-<div class="container max-w-2xl mx-auto mt-7">
+<div class="container max-w-2xl mx-auto mt-7 px-2">
     <div class="max-w-md mx-auto">
-    <p class="font-bold text-lg my-5">取引先情報</p>
-    <div class="max-w-xl rounded shadow-lg my-5 p-6">
-        <div class="flex justify-between items-center">
-            <p class="my-3 text-lg font-bold">{{ '%05d' % customer.id }}</p>
-            <p class="my-3 px-3 text-blue-500 rounded-full hover:bg-blue-100">
-                <a href="/customer/{{ customer.id }}?mode=edit">編集</a>
+        <p class="font-bold text-lg my-5">取引先情報</p>
+        <div class="max-w-xl rounded shadow-lg my-5 p-5">
+            <p class="text-right">
+                <a href="/customer/{{ customer.id }}?mode=edit" class="px-1 py-1 text-blue-500 rounded-full hover:bg-blue-100">編集</a>
             </p>
-        </div>
-        <p class="text-2xl">{{ customer.name }}</p>
-        <hr class="mt-8 mb-3">
-        <div class="flex justify-between">
-            <p class="text-gray-500">{{ customer.sales.last_name or '' }}{{ customer.sales.first_name or '' }}</p>
-            <p class="text-gray-500 text-sm text-right self-end">{{ customer.registered_at.strftime('%Y-%m-%d %H:%M') if customer.registered_at else ''  }}</p>    
+            <p class="text-gray-500 text-sm text-right">
+                {{ customer.registered_at.strftime('%Y-%m-%d %H:%M') if customer.registered_at else ''  }}
+            </p>
+            <p class="text-gray-500">{{ customer.parent.name or '' }}</p>
+            <p class="mt-3 mb-1 text-lg font-bold">{{ '%05d' % customer.id }}</p>
+            <p class="text-2xl">{{ customer.name }}</p>
+            <hr class="mt-8 mb-3">
+            <div class="flex justify-between">
+                <p class="text-gray-500 text-sm">
+                    <span class="text-xs">{{ customer.sales.id or '' }}</span> {{ customer.sales.last_name ~ customer.sales.first_name or '営業担当 未登録' }}
+                </p>
+            </div>
         </div>
     </div>
-</div>
 
-{% if shops %}
-
-<div class="flex mt-10 mb-3">
-    <p class="font-bold text-lg">事業所一覧</p>
-    <p class="ml-12">
-        <a href="/customer/shop/register?customer_id={{ customer.id }}" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg>
-          <span class="align-middle text-base">事業所を登録</span></a>
-    </p>
-
-</div>
-
-    <p>
+    {% if shops %}
+    <div class="flex mt-10 mb-3">
+        <p class="font-bold text-lg">事業所一覧</p>
+        <p class="ml-12">
+            <a href="/customer/shop/register?customer_id={{ customer.id }}" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                <span class="align-middle text-base">事業所を登録</span></a>
+            </p>
+        </div>
+        <p>
         {% for page_num in shops.iter_pages(left_edge=3, right_edge=2) %}
-
         {% if page_num %}
             {% if shops.page == page_num %}
             <a href="{{ url_for('customer.profile', id=customer.id, page=page_num) }}" class="text-blue-500 underline">
@@ -48,8 +47,8 @@
              page=page_num) }}">{{ page_num }}</a>
             {% endif %}
         {% endif %}
-
         {% endfor %}
+    
     </p>
 
     <table class="table-auto w-full my-5">
