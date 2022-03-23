@@ -1,11 +1,9 @@
-from datetime import datetime
-from itertools import product
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
 from sqlalchemy import func
 
 from .extentions import db
-from .models import JST, Customer, Shop, ProductOrder, CustomerPrice
+from .models import Customer, Shop, ProductOrder, CustomerPrice
 
 
 cs = Blueprint('cs', __name__)
@@ -75,19 +73,30 @@ def stats():
     customer_id = current_user.customer_id
 
     customer = Customer.query.get(customer_id)
-    hq = customer.parent_id.name
+
+    parent_id = customer.parent_id
+
+    customers = Customer.query.filter(Customer.parent_id == parent_id).all()
 
     page = request.args.get('page', 1, type=int)
 
     date_from = request.args.get('date_from')
     date_to = request.args.get('date_to')
 
-    if date_from and date_to:
-        orders = ProductOrder.query.filter(ProductOrder.customer_id == customer_id)\
-            .filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
-                .order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
+    if parent_id:
+        if date_from and date_to:
+            orders = ProductOrder.query.filter(ProductOrder.customer_id.in_([c.id for c in customers]))\
+                .filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
+                    .order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
+        else:
+            orders = ProductOrder.query.filter(ProductOrder.customer_id.in_([c.id for c in customers])).order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
 
     else:
-        orders = ProductOrder.query.filter(ProductOrder.customer_id == customer_id).order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
+        if date_from and date_to:
+            orders = ProductOrder.query.filter(ProductOrder.customer_id == customer_id)\
+                .filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
+                    .order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
+        else:
+            orders = ProductOrder.query.filter(ProductOrder.customer_id == customer_id).order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
 
-    return render_template('stats.html', orders=orders, date_from=date_from, date_to=date_to, hq=hq)
+    return render_template('stats.html', orders=orders, date_from=date_from, date_to=date_to, parent_id=parent_id)
