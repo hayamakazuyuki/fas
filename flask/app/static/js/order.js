@@ -99,12 +99,11 @@ const sumQty = () => {
     const qtys = document.getElementsByClassName('qty');
     let sum = 0;
 
-    for (var i=0; i<qtys.length; i++) {
+    for (var i=0; i<qtys.length - 1; i++) {
         sum =  sum + parseInt(qtys[i].value);
     };
 
     deliveryQty.value = sum;
-    mQtyD.textContent = sum;
 };
 
 // ------ order form validation -------------- //
@@ -148,9 +147,37 @@ confirmButton.addEventListener('click', () => {
         };
     };
 
+    prepareModal(selects, priceInputs, qtyInputs);
+
     showModal();
 
 }, false);
+
+const prepareModal = (selects, priceInputs, qtyInputs) => {
+    const modalTbody = document.getElementById('modalTbody');
+
+    if (modalTbody.childNodes) {
+        while (modalTbody.firstChild) {
+            modalTbody.removeChild(modalTbody.firstChild);
+        };
+    };
+
+    for (var j=0; j<selects.length; j++) {
+        let row = [];
+        row.push(selects[j].options[selects[j].selectedIndex].text);
+        row.push(priceInputs[j].value);
+        row.push(qtyInputs[j].value);
+        let tr = document.createElement('tr');
+
+        for (var k=0; k<3; k++) {
+            let td = document.createElement('td');
+            td.textContent = row[k];
+            tr.appendChild(td);
+        };
+
+        modalTbody.appendChild(tr);
+    };
+};
 
 const showModal = () => {
     modal = document.getElementById('modal');
