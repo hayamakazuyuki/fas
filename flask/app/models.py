@@ -46,7 +46,7 @@ class Product(db.Model):
     qty = db.Column(db.Integer)
     size = db.Column(db.String(100))
     co2 = db.Column(db.Integer)
-    pcr = db.Column(db.Integer)
+    pcr = db.Column(db.Numeric(5,2))
     shipper = db.Column(db.Boolean, nullable=True, default=0)
     orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
 
