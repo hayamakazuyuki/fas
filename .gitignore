@@ -6,3 +6,5 @@ mysql/
 .DS_Store
 
 env_variables.yaml
+
+tailwindcss

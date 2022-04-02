@@ -39,10 +39,17 @@
         <div class="mt-8" x-show="open === 2">
             <div class="mt-7">
                 <form action="/order/range" method="GET">
-                    <label for="date_from" class="hidden">から</label>
-                    <input class="border-b" type="date" min="2020-09-01" name="date_from" id="date_from" required>
-                    <label for="date_to" class="px-3">〜</label>
-                    <input class="border-b" type="date" min="2020-09-01" name="date_to" id="date_to" required>
+                    <div class="text-sm text-center">
+                        <label for="date_from" class="hidden">から</label>
+                        <input class="border-b" type="date" min="2020-09-01" name="date_from" id="date_from" required>
+                        <label for="date_to" class="px-3">〜</label>
+                        <input class="border-b" type="date" min="2020-09-01" name="date_to" id="date_to" required>    
+                    </div>
+                    <!--
+                    <div class="my-5">
+                        <label for="sales" class="text-sm text-gray-500">担当者</label>
+                    </div>
+                    -->
                     <button type="submit" class="block w-full bg-blue-500 hover:bg-blue-800 text-sm text-white mt-8 py-1 px-5 rounded-full shadow-xl">検索</button>
                 </form>
             </div>
