@@ -5,6 +5,10 @@
 .idea
 .DS_Store
 
+Dockerfile
+tailwindcss
+tailwind.config.js
+
 venv
 
 __pycache__/
