@@ -1,5 +1,6 @@
+from random import choices
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField
+from wtforms import IntegerField, StringField, SelectField
 from wtforms.validators import InputRequired, NumberRange, Length, Regexp, ValidationError
 from wtforms_sqlalchemy.fields import QuerySelectField
 
@@ -19,6 +20,17 @@ class CustomerForm(FlaskForm):
     def validate_staff(form, field):
         if field.data is None:
             raise ValidationError('営業担当者を選択して下さい。')
+
+
+def customer_edit_form(current_staff):
+    class CustomerEditForm(FlaskForm):
+        id = IntegerField('取引先ID', validators=[InputRequired('IDは必須です。'),
+                                           NumberRange(min=1, max=99999, message='IDは最大5桁です。')])
+        name = StringField('取引先名', validators=[InputRequired('取引先名を入力して下さい。')])
+        staff = QuerySelectField('営業担当', query_factory=staff_query, get_label='last_name',
+            default=lambda: Staff.query.filter(Staff.id==current_staff).one_or_none())
+
+    return CustomerEditForm
 
 
 class ShopForm(FlaskForm):

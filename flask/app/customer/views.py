@@ -1,9 +1,9 @@
 from email.policy import default
 from flask import Blueprint, request, render_template, redirect, url_for, flash
-from flask_login import login_required
+from flask_login import current_user, login_required
 from ..extentions import db
 from ..models import Customer, Shop, ProductOrder
-from .forms import CustomerForm, ShopForm
+from .forms import CustomerForm, ShopForm, customer_edit_form
 
 
 customer = Blueprint('customer', __name__, url_prefix='/customer')
@@ -38,6 +38,7 @@ def index():
 @customer.route('/register', methods=['GET', 'POST'])
 @login_required
 def register():
+
     form = CustomerForm()
 
     if form.validate_on_submit():
@@ -68,11 +69,12 @@ def profile(id):
     page = request.args.get('page', 1, type=int)
     mode = request.args.get('mode')
     customer = Customer.query.get_or_404(id)
-    
+
     shops = Shop.query.filter_by(customer_id=id).paginate(page=page, per_page=20)
 
     if mode == 'edit':
-        form = CustomerForm()
+        CustomerEditForm = customer_edit_form(customer.staff or current_user.id)
+        form = CustomerEditForm()
 
         if form.validate_on_submit():
             customer.name = request.form['name']
