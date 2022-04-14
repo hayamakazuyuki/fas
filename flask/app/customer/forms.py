@@ -9,6 +9,7 @@ from ..models import Staff
 def staff_query():
     return Staff.query.filter(Staff.is_inactive==False)
 
+
 class CustomerForm(FlaskForm):
     id = IntegerField('取引先ID', validators=[InputRequired('IDは必須です。'),
                                            NumberRange(min=1, max=99999, message='IDは最大5桁です。')])

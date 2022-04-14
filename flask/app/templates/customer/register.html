@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 {% include "navbar.html" %}
-{% from "_macros.html" import render_field_with_errors %}
+{% from "_macros.html" import render_field_with_errors, render_select_field %}
 
 <div class="container max-w-md mx-auto mt-7 px-3">
 
@@ -20,7 +20,7 @@
     </div>
 
     <div class="my-5">
-        {{ render_field_with_errors(form.staff, class_="w-full text-gray-700 focus:outline-none
+        {{ render_select_field(form.staff, class_="w-full text-gray-700 focus:outline-none
            focus:bg-gray-100 border-b border-gray-300 focus:border-blue-500 transition duration-500 px-3 pb-1")}}
     </div>
     <div>

@@ -15,6 +15,13 @@
 
 {% macro render_select_field(field) %}
     {{ field.label }} {{ field(**kwargs)|safe }}
+    {% if field.errors %}
+    <ul>
+    {% for error in field.errors %}
+      <li style="color:red;">{{ error }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
 {% endmacro %}
 
 {##### log-in form ######}

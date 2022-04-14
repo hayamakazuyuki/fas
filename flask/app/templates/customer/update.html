@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-{% from "_macros.html" import render_field_with_errors %}
+{% from "_macros.html" import render_field_with_errors, render_select_field %}
 {% include "navbar.html" %}
 
 <div class="max-w-6xl mx-auto">
@@ -19,11 +19,10 @@
             value=customer.name)}}
         </div>
         <div class="my-5">
-            {{ render_field_with_errors(form.staff, class_="w-full text-gray-800 border-b px-5 py-1
-             focus:outline-none focus:bg-gray-100 focus:border-blue-500",
-            value=customer.name)}}
-        </div>    
-
+            {{ render_select_field(form.staff, class_="w-full text-gray-800 px-3 pb-1 border-b border-gray-300 focus:outline-none
+               focus:bg-gray-100 focus:border-blue-500 transition duration-500")}}
+        </div>
+    
         <p class=""><a href="/customer/{{ customer.id }}" class="text-blue-500 hover:underline hover:text-blue-800">キャンセル</a>
             <button class="bg-blue-500 hover:bg-blue-800 text-white mx-7 py-1 px-7 rounded-full" type="submit">登録</button></p>
         </form>

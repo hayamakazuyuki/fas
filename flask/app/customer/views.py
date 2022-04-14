@@ -71,9 +71,9 @@ def profile(id):
     
     shops = Shop.query.filter_by(customer_id=id).paginate(page=page, per_page=20)
 
-    form = CustomerForm()
-
     if mode == 'edit':
+        form = CustomerForm()
+
         if form.validate_on_submit():
             customer.name = request.form['name']
             customer.staff = request.form['staff']
