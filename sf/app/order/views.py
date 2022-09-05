@@ -104,7 +104,7 @@ def order_detail(id):
     before2h = before2hours.replace(tzinfo=None)
 
     # generate min and max dates for delivery date request.
-    min_date = datetime.now(JST) + timedelta(days=5)
+    min_date = datetime.now(JST) + timedelta(days=4)
     max_date = datetime.now(JST) + timedelta(days=29)
 
     form = DeliveryRequestForm()
