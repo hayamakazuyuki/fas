@@ -27,9 +27,9 @@ services:
 
     command: uvicorn main:app --reload --host=0.0.0.0
 
-  flask:
-    build: ./flask
-    container_name: flask
+  sf:
+    build: ./sf
+    container_name: sf_c
     ports:
       - 5000:5000
     tty: true
@@ -38,7 +38,7 @@ services:
       FLASK_ENV: "${FLASK_ENV}"
 
     volumes:
-      - ./flask:/app
+      - ./sf:/app
     
     command: flask run --host=0.0.0.0
 
