@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import func
 
 from .extentions import db
-from .models import Customer, Shop, ProductOrder, CustomerPrice
+from .models import Customer, Shop, ProductOrder, CustomerPrice, Product
 
 
 cs = Blueprint('cs', __name__)
@@ -83,20 +83,60 @@ def stats():
     date_from = request.args.get('date_from')
     date_to = request.args.get('date_to')
 
+    # sum_qty_month = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.sales_by ==current_user.id)\
+    #     .filter(extract('year', ProductOrder.date) == this_year).filter(extract('month', ProductOrder.date) == this_month)\
+    #     .filter(ProductOrder.item != 901).scalar()
+
     if parent_id:
         if date_from and date_to:
             orders = ProductOrder.query.filter(ProductOrder.customer_id.in_([c.id for c in customers]))\
                 .filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
                     .order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
+
+            co2 = db.session.query(func.sum(Product.co2 * ProductOrder.qty /1000))\
+                .filter(ProductOrder.customer_id.in_([c.id for c in customers]))\
+                    .filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
+                        .scalar()
+            pcr = db.session.query(func.sum(Product.pcr * ProductOrder.qty /1000))\
+                .filter(ProductOrder.customer_id.in_([c.id for c in customers]))\
+                    .filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
+                        .scalar()
+    
+            return render_template('stats.html', orders=orders, date_from=date_from, date_to=date_to, parent_id=parent_id, co2=co2, pcr=pcr)
+
         else:
             orders = ProductOrder.query.filter(ProductOrder.customer_id.in_([c.id for c in customers])).order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
 
-    else:
-        if date_from and date_to:
-            orders = ProductOrder.query.filter(ProductOrder.customer_id == customer_id)\
-                .filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
-                    .order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
-        else:
-            orders = ProductOrder.query.filter(ProductOrder.customer_id == customer_id).order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
+            return render_template('stats.html', orders=orders, date_from=date_from, date_to=date_to, parent_id=parent_id)
 
-    return render_template('stats.html', orders=orders, date_from=date_from, date_to=date_to, parent_id=parent_id)
+
+    else:
+        customer_filter = ProductOrder.query.filter(ProductOrder.customer_id == customer_id)
+
+        if date_from and date_to:
+            dates_filter = customer_filter.filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)
+
+            orders = dates_filter.order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
+
+            co2 = db.session.query(func.sum(ProductOrder.price * ProductOrder.qty /1000))\
+                .filter(ProductOrder.customer_id == customer_id)\
+                    .filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
+                        .scalar()
+
+            # pcr = ProductOrder.query.filter(ProductOrder.customer_id == customer_id)\
+            #     .filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
+            #         .func.sum(ProductOrder.price * ProductOrder.qty).scalar()
+
+
+            pcr = db.session.query(func.sum(ProductOrder.qty * Product.co2))\
+                .filter(ProductOrder.customer_id == customer_id)\
+                    .filter(func.DATE(ProductOrder.date) <= date_to).filter(func.DATE(ProductOrder.date) >= date_from)\
+                        .scalar()
+
+            return render_template('stats.html', orders=orders, date_from=date_from, date_to=date_to, parent_id=parent_id, co2=co2, pcr=pcr)
+
+        else:
+            orders = customer_filter.order_by(ProductOrder.id.desc()).paginate(page=page, per_page=30)
+
+            return render_template('stats.html', orders=orders, date_from=date_from, date_to=date_to, parent_id=parent_id)
+

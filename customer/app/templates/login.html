@@ -46,7 +46,6 @@
         <p class="text-gray-600 pt-2">ログイン</p>
     </section>
     
-
     <section class="mt-5">
         <form class="flex flex-col" action="/login" method="POST" name="login_form">
             {{ form.csrf_token }}
@@ -60,7 +59,7 @@
             <div class="mb-6 pt-3 rounded">
                 {{ render_login_field_label(form.password, 'パスワード') }}
                 {{ render_login_field(form.password, class_="w-full text-gray-700 focus:outline-none
-                focus:bg-gray-100 border-b border-gray-300 focus:border-blue-600 transition duration-500 px-3 pb-1") }}
+                focus:bg-gray-100 border-b border-gray-300 focus:border-blue-600 transition duration-500 px-3 pb-1", autocomplete="on") }}
             </div>
 
             <button class="my-5 bg-blue-600 hover:bg-blue-800 text-white text-sm py-2 rounded shadow-lg

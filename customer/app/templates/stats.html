@@ -5,29 +5,49 @@
 
 <div class="container md:max-w-md mx-auto">
 
-    <div class="mt-8 flex justify-between px-3" x-data="getToday">
+    <div class="mt-6 flex justify-between px-3" x-data="getToday">
         <h1 class="mx-2 mt-8 text-xl font-bold text-gray-500">受注データ</h1>
         <p class="text-sm text-gray-500 self-end" x-text="today"></p>
     </div>
 
-    <!-- date or dates range select and display summary -->
-    <div class="md:max-w-md md:mx-auto mx-2 mt-3 p-5 border rounded-lg shadow-lg">
-        <h2 class="mt-5 text-lg text-gray-500">範囲選択</h2>
-        <form class="mt-5 mx-auto text-center" action="/stats" method="GET">
-            <label for="date_from" class="hidden">から</label>
-            <input class="border-b" type="date" min="2020-09-01" name="date_from" id="date_from" required>
-            <label for="date_to" class="px-3">〜</label>
-            <input class="border-b" type="date" min="2020-09-01" name="date_to" id="date_to" required>
-            <button type="submit" class="block w-full bg-blue-500 hover:bg-blue-800 text-sm text-white mt-8 py-1 px-5 rounded-full shadow-xl">
+    <!-- date range select -->
+    <div class="md:max-w-md md:mx-auto mx-2 mt-3 py-7 px-5 border rounded-lg shadow-lg">
+        <h2 class="text-gray-500">範囲選択</h2>
+        <form class="mt-7 mx-auto text-center" action="/stats" method="GET">
+            <div class="text-sm">
+                <label for="date_from" class="hidden">から</label>
+                <input class="border-b" type="date" min="2020-09-01" name="date_from" id="date_from" required>
+                <label for="date_to" class="px-3">〜</label>
+                <input class="border-b" type="date" min="2020-09-01" name="date_to" id="date_to" required>    
+            </div>
+            <button type="submit" class="block w-full bg-blue-500 hover:bg-blue-800 text-sm text-white mt-7 py-1 px-5 rounded-full shadow-xl">
                 検索
             </button>
         </form>
-
-        <div class="mt-5">
-            <div class="px-3 text-2xl text-center">{{ date_from or '' }} <span class="text-gray-300">〜</span> {{ date_to or '' }}</div>
-        </div>
     </div>
 
+    <!-- search results -->
+    {% if date_from and date_to %}
+    <div class="md:max-w-md md:mx-auto mx-2 mt-6 py-7 px-5 border rounded-lg shadow-lg">
+        <div class="text-lg">
+            <span class="text-sm text-gray-500 mr-5">対象期間</span>
+            <span class="border-b">{{ date_from or '' }}</span>
+            <span class="text-gray-500 text-sm">〜</span>
+            <span class="border-b">{{ date_to or '' }}</span>
+        </div>
+        <div class="mt-3 text-sm text-gray-500">
+            <span class="mr-5">CO<sub>2</sub> 削減量</span>
+            <span class="text-3xl text-gray-800 border-b mr-1">{{ co2 | round(1,'floor') }}</span>
+            t<span class="text-xs border-b">CO<sub>2</sub></span>
+        </div>
+        <div class="mt-3 text-sm text-gray-500">
+            <span class="mr-5">再生材使用量</span>
+            <span class="text-3xl text-gray-800 border-b mr-1">{{ pcr | round(1,'floor') }}</span>
+            <span class="text-xs border-b">トン</span>
+        </div>
+
+    </div>
+    {% endif %}
     <!--  -->
     <div class="md:max-w-md md:mx-auto my-5 mx-2">
 
