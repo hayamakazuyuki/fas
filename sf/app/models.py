@@ -162,8 +162,6 @@ class CustomerUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, nullable=False)
     shop_id = db.Column(db.Integer, nullable=True)
-    last_name = db.Column(db.String(30), nullable=True)
-    first_name = db.Column(db.String(30), nullable=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     is_hq = db.Column(db.Boolean, nullable=True)
