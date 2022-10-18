@@ -16,16 +16,16 @@ services:
     volumes:
       - ./mysql/data:/var/lib/mysql
 
-  fastapi:
-    build: ./fastapi
-    container_name: fastapi
-    ports:
-      - 8000:8000
-    tty: true
-    volumes:
-      - ./fastapi:/fastapi
+  # fastapi:
+  #   build: ./fastapi
+  #   container_name: fastapi
+  #   ports:
+  #     - 8000:8000
+  #   tty: true
+  #   volumes:
+  #     - ./fastapi:/fastapi
 
-    command: uvicorn main:app --reload --host=0.0.0.0
+  #   command: uvicorn main:app --reload --host=0.0.0.0
 
   sf:
     build: ./sf
