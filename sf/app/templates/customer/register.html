@@ -6,7 +6,7 @@
 <div class="container max-w-md mx-auto mt-7 px-3">
 
 <p class="font-bold text-lg my-5">取引先の登録</p>
-    <form name="customer" action="/customer/register" method="POST">
+    <form name="customer" method="POST">
     {{ form.csrf_token }}
     <div class="my-5">
         {{ render_field_with_errors(form.id, class_="w-full text-gray-700 focus:outline-none

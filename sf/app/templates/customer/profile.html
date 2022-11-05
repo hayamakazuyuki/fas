@@ -8,7 +8,7 @@
         <p class="font-bold text-lg my-5">取引先情報</p>
         <div class="max-w-xl rounded shadow-lg my-5 p-5">
             <p class="text-right">
-                <a href="/customer/{{ customer.id }}?mode=edit" class="px-1 py-1 text-blue-500 rounded-full hover:bg-blue-100">編集</a>
+                <a href="/customer/{{ customer.id }}/edit" class="px-1 py-1 text-blue-500 rounded-full hover:bg-blue-100">編集</a>
             </p>
             <p class="text-gray-500 text-sm text-right">
                 {{ customer.registered_at.strftime('%Y-%m-%d %H:%M') if customer.registered_at else ''  }}
@@ -29,7 +29,7 @@
     <div class="flex mt-10 mb-3">
         <p class="font-bold text-lg">事業所一覧</p>
         <p class="ml-12">
-            <a href="/customer/shop/register?customer_id={{ customer.id }}" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">
+            <a href="/customer/{{ customer.id }}/register" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -64,7 +64,7 @@
     {% for shop in shops.items %}
         <tr class="border-b">
            <td>{{ shop.id }}</td>
-           <td><a href="/customer/shop/{{ shop.customer_id }}/{{ shop.id }}" class="text-blue-500 hover:underline hover:text-blue-800">
+           <td><a href="/customer/{{ shop.customer_id }}/{{ shop.id }}" class="text-blue-500 hover:underline hover:text-blue-800">
                {{ shop.name }}</a></td>
            <td>{{ shop.prefecture }}{{ shop.city }}{{ shop.town }}{{ shop.address }}</td>
            <td>{{ shop.telephone }}</td>

@@ -1,9 +1,8 @@
-from email.policy import default
 from flask import Blueprint, request, render_template, redirect, url_for, flash
-from flask_login import current_user, login_required
+from flask_login import login_required
 from ..extentions import db
 from ..models import Customer, Shop, ProductOrder
-from .forms import CustomerForm, ShopForm, customer_edit_form
+from .forms import ShopForm, CustomerRegisterForm
 
 
 customer = Blueprint('customer', __name__, url_prefix='/customer')
@@ -39,7 +38,7 @@ def index():
 @login_required
 def register():
 
-    form = CustomerForm()
+    form = CustomerRegisterForm()
 
     if form.validate_on_submit():
         id = request.form['id']
@@ -63,18 +62,19 @@ def register():
 
 
 # show and update customer profile
-@customer.route('/<int:id>', methods=['GET', 'POST'])
+@customer.route('/<int:id>')
+@customer.route('/<int:id>/<mode>', methods=['GET', 'POST'])
 @login_required
-def profile(id):
+def profile(id, mode=None):
+
     page = request.args.get('page', 1, type=int)
-    mode = request.args.get('mode')
     customer = Customer.query.get_or_404(id)
 
     shops = Shop.query.filter_by(customer_id=id).paginate(page=page, per_page=20)
 
     if mode == 'edit':
-        CustomerEditForm = customer_edit_form(customer.staff or current_user.id)
-        form = CustomerEditForm()
+
+        form = CustomerRegisterForm(obj=customer)
 
         if form.validate_on_submit():
             customer.name = request.form['name']
@@ -87,8 +87,7 @@ def profile(id):
 
         return render_template('customer/update.html', customer=customer, form=form)
 
-    else:
-        return render_template('customer/profile.html', customer=customer, shops=shops)
+    return render_template('customer/profile.html', customer=customer, shops=shops)
 
 
 @customer.route('/shop/')
@@ -109,34 +108,35 @@ def shop():
 
 
 # register shop
-@customer.route('/shop/register', methods=['GET', 'POST'])
+@customer.route('/<int:customer_id>/register', methods=['GET', 'POST'])
 @login_required
-def shop_register():
+def shop_register(customer_id):
 
     form = ShopForm()
-    customer_id = request.args.get('customer_id')
+    customer = Customer.query.get(customer_id)
 
     if form.validate_on_submit():
-        customer_id = request.form['customer_id']
+
         id = request.form['id']
 
-        # check if shop already exists in the db
+        # check if the shop already exists in the db
         exists = Shop.query.get((customer_id, id))
 
         if exists:
             return redirect(url_for('customer.shop_profile', customer_id=customer_id, id=id))
 
         new_shop = Shop()
-        new_shop.customer_id = request.form['customer_id']
+        new_shop.customer_id = customer_id
         new_shop.id = request.form['id']
+        new_shop.shop_number = request.form.get('shop_number')
         new_shop.name = request.form['name']
-        new_shop.department = request.form['department']
+        new_shop.department = request.form.get('department')
         new_shop.zip = request.form['zip']
         new_shop.prefecture = request.form['prefecture']
         new_shop.city = request.form['city']
         new_shop.town = request.form['town']
         new_shop.address = request.form['address']
-        new_shop.building = request.form['building']
+        new_shop.building = request.form.get('building')
         new_shop.telephone = request.form['telephone']
 
         db.session.add(new_shop)
@@ -146,31 +146,31 @@ def shop_register():
 
         return redirect(url_for('customer.profile', id=customer_id))
     
-    return render_template('customer/shop-register.html', form=form, customer_id=customer_id)
+    return render_template('customer/shop-register.html', form=form, customer=customer)
 
 
-# show shop information
-@customer.route('/shop/<int:customer_id>/<int:id>', methods=['GET', 'POST'])
+# show and update shop information
+@customer.route('<int:customer_id>/<int:id>')
+@customer.route('<int:customer_id>/<int:id>/<mode>', methods=['GET', 'POST'])
 @login_required
-def shop_profile(customer_id, id):
+def shop_profile(customer_id, id, mode=None):
 
     shop = Shop.query.get_or_404((customer_id, id))
     orders = ProductOrder.query.filter_by(customer_id=customer_id).filter_by(shop_id=id).order_by(ProductOrder.id.desc()).all()
-    
-    mode = request.args.get('mode')
 
     if mode == 'edit':
-        form = ShopForm()
+        form = ShopForm(obj=shop)
 
         if request.method == 'POST':
             shop.name = request.form['name']
-            shop.department = request.form['department']
+            shop.shop_number = request.form.get('shop_number')
+            shop.department = request.form.get('department')
             shop.zip = request.form['zip']
             shop.prefecture = request.form['prefecture']
             shop.city = request.form['city']
             shop.town = request.form['town']
-            shop.address = request.form['address']
-            shop.building = request.form['building']
+            shop.address = request.form.get('address')
+            shop.building = request.form.get('building')
             shop.telephone = request.form['telephone']
 
             db.session.commit()

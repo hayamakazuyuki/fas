@@ -8,11 +8,11 @@
     <h1 class="text-2xl">新規事業所登録</h1>
 
     <div class="my-5">
-    <form action="/customer/shop/register?customer_id={{ customer_id }}" method="POST">
+    <form method="POST">
         {{ form.csrf_token }}
 
-        <div class="text-sm my-3">
-            {{ render_field_with_errors(form.customer_id, class_="w-full border-b px-3 text-lg", value=customer_id, readonly=True)}}
+        <div class="text-lg my-3 text-gray-800 font-bold">
+            {{ customer.id }} {{ customer.name }}
         </div>
         <div class="text-sm my-3">
             {{ render_field_with_errors(form.id, class_="w-full border-b px-3 text-lg", placeholder="半角数字 最大５桁")}}

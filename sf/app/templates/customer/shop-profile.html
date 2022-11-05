@@ -12,11 +12,11 @@
         <div class="flex justify-between items-center">
             <p class="text-gray-600">{{ shop.customer_id }} - {{ shop.id }}</p>
             <p class="text-blue-500 px-3 rounded-full hover:bg-blue-100">
-                <a href="/customer/shop/{{ shop.customer_id }}/{{ shop.id }}?mode=edit">編集</a>
+                <a href="/customer/{{ shop.customer_id }}/{{ shop.id }}/edit">編集</a>
             </p>
         </div>
         <p class="mt-2 text-gray-600">{{ shop.customer.name }}</p>
-        <h2 class="mt-2 text-gray-800 text-2xl">{{ shop.name }}</h2>
+        <h2 class="mt-2 text-gray-800 text-2xl">{{ shop.name }} {{ shop.shop_number or '' }} </h2>
         <p class="mt-2 text-gray-600">{{ shop.department }}</p>
         <p class="mt-2 text-gray-600">{{ '〒{}-{}'.format(shop.zip[:3], shop.zip[3:]) }} {{ shop.prefecture }} {{ shop.city }}
             {{ shop.town }} {{ shop.address }} {{ shop.building }}</p>

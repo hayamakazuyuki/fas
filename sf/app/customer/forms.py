@@ -1,40 +1,55 @@
 from random import choices
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, SelectField
-from wtforms.validators import InputRequired, NumberRange, Length, Regexp, ValidationError
-from wtforms_sqlalchemy.fields import QuerySelectField
+from wtforms.validators import InputRequired, NumberRange, Length, Regexp
+# from wtforms_sqlalchemy.fields import QuerySelectField
 
 from ..models import Staff
 
 
-def staff_query():
-    return Staff.query.filter(Staff.is_inactive==False)
+# def staff_query():
+#     return Staff.query.filter(Staff.is_inactive==False)
 
 
-class CustomerForm(FlaskForm):
+# class CustomerForm(FlaskForm):
+#     id = IntegerField('取引先ID', validators=[InputRequired('IDは必須です。'),
+#                                            NumberRange(min=1, max=99999, message='IDは最大5桁です。')])
+#     name = StringField('取引先名', validators=[InputRequired('取引先名を入力して下さい。')])
+#     staff = QuerySelectField('営業担当', query_factory=staff_query, allow_blank=True, get_label='last_name')
+
+#     def validate_staff(form, field):
+#         if field.data is None:
+#             raise ValidationError('営業担当者を選択して下さい。')
+
+
+class CustomerRegisterForm(FlaskForm):
     id = IntegerField('取引先ID', validators=[InputRequired('IDは必須です。'),
                                            NumberRange(min=1, max=99999, message='IDは最大5桁です。')])
     name = StringField('取引先名', validators=[InputRequired('取引先名を入力して下さい。')])
-    staff = QuerySelectField('営業担当', query_factory=staff_query, allow_blank=True, get_label='last_name')
+    staff = SelectField('営業担当', validators=[InputRequired('営業担当者を入力してください。')])
 
-    def validate_staff(form, field):
-        if field.data is None:
-            raise ValidationError('営業担当者を選択して下さい。')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._set_staffs()
+
+    def _set_staffs(self):
+        staffs = Staff.query.filter(Staff.is_inactive==False).all()
+        # set staffs from db as tuple(value, text)
+        self.staff.choices = [('', '')]+[(staff.id, staff.last_name + staff.first_name) for staff in staffs]
 
 
-def customer_edit_form(current_staff):
-    class CustomerEditForm(FlaskForm):
-        id = IntegerField('取引先ID', validators=[InputRequired('IDは必須です。'),
-                                           NumberRange(min=1, max=99999, message='IDは最大5桁です。')])
-        name = StringField('取引先名', validators=[InputRequired('取引先名を入力して下さい。')])
-        staff = QuerySelectField('営業担当', query_factory=staff_query, get_label='last_name',
-            default=lambda: Staff.query.filter(Staff.id==current_staff).one_or_none())
+# def customer_edit_form(current_staff):
+#     class CustomerEditForm(FlaskForm):
+#         id = IntegerField('取引先ID', validators=[InputRequired('IDは必須です。'),
+#                                            NumberRange(min=1, max=99999, message='IDは最大5桁です。')])
+#         name = StringField('取引先名', validators=[InputRequired('取引先名を入力して下さい。')])
+#         staff = QuerySelectField('営業担当', query_factory=staff_query, get_label='last_name',
+#             default=lambda: Staff.query.filter(Staff.id==current_staff).one_or_none())
 
-    return CustomerEditForm
+#     return CustomerEditForm
 
 
 class ShopForm(FlaskForm):
-    customer_id = StringField('取引先ID', validators=[InputRequired('顧客IDを入力して下さい。')])
     id = IntegerField('事業所ID', validators=[InputRequired('事業所IDを入力して下さい。'),
                                            NumberRange(min=1, max=99999, message='IDは最大5桁です')])
     shop_number = StringField('顧客の事業所番号')
