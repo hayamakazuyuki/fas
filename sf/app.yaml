@@ -1,5 +1,5 @@
 runtime: python39
-service: sf
+service: default
 
 includes:
   - env_variables.yaml
