@@ -7,5 +7,3 @@ dispatch:
     service: bc
   - url: "shipping.furoshiki.in/*"
     service: shipping
-  # - url: "sf.furoshiki.in/*"
-  #   service: sf

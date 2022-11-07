@@ -75,16 +75,3 @@ services:
       - ./shipping:/app
 
     command: flask run --host=0.0.0.0
-
-  default:
-    build: ./default
-    container_name: default_c
-    ports:
-      - 50001:5000
-    tty: true
-    environment:
-      FLASK_APP: "${FLASK_APP}"
-      FLASK_ENV: "${FLASK_ENV}"
-    volumes:
-      - ./default:/app
-    command: flask run --host=0.0.0.0
