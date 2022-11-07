@@ -16,7 +16,8 @@
             </p>
         </div>
         <p class="mt-2 text-gray-600">{{ shop.customer.name }}</p>
-        <h2 class="mt-2 text-gray-800 text-2xl">{{ shop.name }} {{ shop.shop_number or '' }} </h2>
+        <h2 class="mt-2 text-gray-800 text-2xl">{{ shop.name }}</h2>
+        <p class="mt-2 text-gray-600">{{ shop.shop_number or '' }}</p>
         <p class="mt-2 text-gray-600">{{ shop.department }}</p>
         <p class="mt-2 text-gray-600">{{ '〒{}-{}'.format(shop.zip[:3], shop.zip[3:]) }} {{ shop.prefecture }} {{ shop.city }}
             {{ shop.town }} {{ shop.address }} {{ shop.building }}</p>
@@ -26,10 +27,9 @@
     </div>
 
     <div class="flex my-5 justify-center">
-        <button type="submit" class="bg-blue-500 text-white text-sm mx-5 py-1 px-7 rounded-full shadow-lg
-                hover:bg-blue-800 transition duration-200"
-                onclick="location.href='/order?customer_id={{ shop.customer_id }}&id={{ shop.id }}'">
-            受注登録</button>
+        <a href="/order/{{ shop.customer_id }}/{{ shop.id }}/input"
+        class="bg-blue-500 text-white text-sm mx-5 py-2 px-7 rounded-full shadow-lg
+        hover:bg-blue-800 transition duration-200">受注の入力へ</a>
     </div>
 
     <p class="font-bold text-lg my-5">受注履歴</p>
