@@ -16,12 +16,9 @@ order = Blueprint('order', __name__, url_prefix='/order')
 
 JST = timezone(timedelta(hours=+9), 'JST')
 
-@order.route('/', methods=['GET', 'POST'])
+@order.route('/<int:customer_id>/<int:id>', methods=['GET', 'POST'])
 @login_required
-def index():
-
-    customer_id = request.args.get('customer_id')
-    id = request.args.get('id')
+def index(customer_id, id):
     
     shop = Shop.query.get((customer_id, id))
 

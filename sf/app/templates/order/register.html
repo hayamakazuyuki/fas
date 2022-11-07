@@ -5,7 +5,7 @@
     <div class="max-w-md mx-auto my-8">
         <p class="font-bold text-xl text-gray-800">受注登録</p>
 
-        <form method="POST" action="/order/">
+        <form method="POST">
             <input type="hidden" name="customer_id" value="{{ shop.customer_id }}">
             <input type="hidden" name="id" value="{{ shop.id }}">
     
@@ -31,16 +31,16 @@
                     <select name="item" id="item" class="border-b text-gray-800 text-lg" required>
                         <option value="" disabled selected>-- 選択 --</option>
                         <optgroup label="透明">
-                            <option value="602">（透明）45L</option>
-                            <option value="622">（透明）45L-200枚</option>
-                            <option value="629">（透明）45L-50枚x10箱</option>
-                            <option value="603">（透明）70L</option>
-                            <option value="651">（透明）70L（100枚x5）</option>
-                            <option value="627">（透明）70L（0.05mm）</option>
-                            <option value="604">（透明）90L</option>
-                            <option value="626">（透明）90L（0.05mm）</option>
-                            <option value="605">（透明）120L</option>
-                            <option value="623">（透明）150L</option>
+                            <option value="602">（半透明）45L</option>
+                            <option value="622">（半透明）45L-200枚</option>
+                            <option value="629">（半透明）45L-50枚x10箱</option>
+                            <option value="603">（半透明）70L</option>
+                            <option value="651">（半透明）70L（100枚x5）</option>
+                            <option value="627">（半透明）70L（0.05mm）</option>
+                            <option value="604">（半透明）90L</option>
+                            <option value="626">（半透明）90L（0.05mm）</option>
+                            <option value="605">（半透明）120L</option>
+                            <option value="623">（半透明）150L</option>
                             <option value="628">Pカバー（40枚入）</option>
                         </optgroup>
                         
@@ -65,7 +65,7 @@
                         <optgroup label="特注品">
                             <option value="641">（air）70L</option>
                             <option value="642">（air）90L</option>
-                            <option value="651">（透明）70L（100枚x5箱）</option>
+                            <option value="651">（半透明）70L（100枚x5箱）</option>
                             <option value="680">再生材ごみ袋（1500x2000）</option>
                         </optgroup>
                     
@@ -107,16 +107,16 @@
                 <select name="item2" id="item2" class="border-b text-gray-800 text-lg" required>
                     <option value="" disabled selected>-- 選択 --</option>
                     <optgroup label="透明">
-                        <option value="602">（透明）45L</option>
-                        <option value="622">（透明）45L-200枚</option>
-                        <option value="629">（透明）45L-50枚x10箱</option>
-                        <option value="603">（透明）70L</option>
-                        <option value="651">（透明）70L（100枚x5）</option>
-                        <option value="627">（透明）70L（0.05mm）</option>
-                        <option value="604">（透明）90L</option>
-                        <option value="626">（透明）90L（0.05mm）</option>
-                        <option value="605">（透明）120L</option>
-                        <option value="623">（透明）150L</option>
+                        <option value="602">（半透明）45L</option>
+                        <option value="622">（半透明）45L-200枚</option>
+                        <option value="629">（半透明）45L-50枚x10箱</option>
+                        <option value="603">（半透明）70L</option>
+                        <option value="651">（半透明）70L（100枚x5）</option>
+                        <option value="627">（半透明）70L（0.05mm）</option>
+                        <option value="604">（半透明）90L</option>
+                        <option value="626">（半透明）90L（0.05mm）</option>
+                        <option value="605">（半透明）120L</option>
+                        <option value="623">（半透明）150L</option>
                         <option value="628">Pカバー（40枚入）</option>
                     </optgroup>
                         
@@ -141,7 +141,7 @@
                     <optgroup label="特注品">
                         <option value="641">（air）70L</option>
                         <option value="642">（air）90L</option>
-                        <option value="651">（透明）70L（100枚x5箱）</option>
+                        <option value="651">（半透明）70L（100枚x5箱）</option>
                         <option value="680">再生材ごみ袋（1500x2000）</option>
                     </optgroup>
                     
@@ -183,16 +183,16 @@
                 <select name="item3" id="item3" class="border-b text-gray-800 text-lg" required>
                     <option value="" disabled selected>-- 選択 --</option>
                     <optgroup label="透明">
-                        <option value="602">（透明）45L</option>
-                        <option value="622">（透明）45L-200枚</option>
-                        <option value="629">（透明）45L-50枚x10箱</option>
-                        <option value="603">（透明）70L</option>
-                        <option value="651">（透明）70L（100枚x5）</option>
-                        <option value="627">（透明）70L（0.05mm）</option>
-                        <option value="604">（透明）90L</option>
-                        <option value="626">（透明）90L（0.05mm）</option>
-                        <option value="605">（透明）120L</option>
-                        <option value="623">（透明）150L</option>
+                        <option value="602">（半透明）45L</option>
+                        <option value="622">（半透明）45L-200枚</option>
+                        <option value="629">（半透明）45L-50枚x10箱</option>
+                        <option value="603">（半透明）70L</option>
+                        <option value="651">（半透明）70L（100枚x5）</option>
+                        <option value="627">（半透明）70L（0.05mm）</option>
+                        <option value="604">（半透明）90L</option>
+                        <option value="626">（半透明）90L（0.05mm）</option>
+                        <option value="605">（半透明）120L</option>
+                        <option value="623">（半透明）150L</option>
                         <option value="628">Pカバー（40枚入）</option>
                     </optgroup>
                         
@@ -217,7 +217,7 @@
                     <optgroup label="特注品">
                         <option value="641">（air）70L</option>
                         <option value="642">（air）90L</option>
-                        <option value="651">（透明）70L（100枚x5箱）</option>
+                        <option value="651">（半透明）70L（100枚x5箱）</option>
                         <option value="680">再生材ごみ袋（1500x2000）</option>
                     </optgroup>
                     
@@ -276,7 +276,7 @@
 
         <!-- 入力値をチェックして、問題なければ確認画面をモーダル表示 -->
         <div class="flex justify-center">
-            <button id="confirmButton" type="button" class="my-5 bg-blue-500 shadow-xl hover:bg-blue-800 text-sm text-white mx-7 py-1 px-10 rounded-full">内容確認</button>
+            <button id="confirmButton" type="button" class="my-5 bg-blue-500 shadow-xl hover:bg-blue-800 text-sm text-white mx-7 py-2 px-10 rounded-full">内容確認</button>
         </div>
 
         <!-- modal goes here -->
