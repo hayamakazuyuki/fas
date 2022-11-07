@@ -14,12 +14,12 @@
     <!-- alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.8.1/dist/cdn.min.js"></script>
 
-    <title>sf | fas | furoshiki</title>
+    <title>fas | furoshiki</title>
 </head>
 <body>
-  {% block content %}
-  {% endblock %}
-  <script type="text/javascript" src="{{ url_for('static', filename='js/close-alert.js') }}"></script>
+  {% block content %}{% endblock %}
   <script type="text/javascript" src="{{ url_for('static', filename='js/mobile-menu.js') }}"></script>
+
+  {% block script %}{% endblock %}
 </body>
 </html>
