@@ -1,0 +1,201 @@
+{% extends "layout.html" -%}
+{% block content -%}
+{% from "_macros.html" import render_field_with_errors %}
+
+{% include "navbar.html" -%}
+
+<div class="container max-w-5xl mx-auto">
+
+    <div x-data="{ item : '',
+                    price : '',
+                    qty : '',
+                    item2 : '',
+                    price2 : '',
+                    qty2 : '' }" 
+                    class="max-w-md mx-auto my-8">
+        <h1 class="font-bold text-xl text-gray-800">受注の入力</h1>
+    
+            <!-- delivery destination goes here-->
+            <div class="max-w-lg my-3 py-4 px-8 bg-white border rounded-lg">
+                <h2 class="mt-2 text-gray-800 text-2xl">{{ shop.name }}</h2>
+                <p class="mt-2 text-gray-600">{{ shop.shop_number or '' }}</p>
+                <p class="mt-2 text-gray-600">{{ shop.department }}</p>
+                <p class="mt-2 text-gray-600">{{ '〒{}-{}'.format(shop.zip[:3], shop.zip[3:]) }}</p>
+                <p class="mt-2 text-gray-600">{{ shop.prefecture }} {{ shop.city }}
+                    {{ shop.town }} {{ shop.address }} {{ shop.building }}</p>
+                <p class="mt-2 text-gray-600">{{ shop.telephone }}</p>
+            </div>
+
+        <form method="POST">
+            {{ form.csrf_token }}
+
+        <!-- div for item 1 -->
+            <div class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
+                <h2 class="text-base font-bold text-gray-800">商品 1</h2>
+
+                <div class="mt-3">
+                    {{ render_field_with_errors(form.item, class_="border-b px-3 text-base", **{'x-model': 'item'})}}
+                </div>
+    
+                <div class="mt-3">
+                    {{ render_field_with_errors(form.price, class_="border-b px-3 text-base", placeholder="¥ 商品単価", **{'x-model': 'price'})}}
+                </div>
+                <div class="mt-3">
+                    {{ render_field_with_errors(form.qty, class_="border-b px-3 text-base", placeholder="数量", **{'x-model': 'qty'})}}
+                </div>
+            </div>
+
+        <!-- items2 here-->
+        <div class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm" x-data="{ openItem2 : false }">
+            <div class="flex justify-between">
+                <h2 class="text-base font-bold text-gray-800">商品 2</h2>
+
+                <button type="button" class="rounded-full hover:bg-gray-200" x-on:click="item && price && qty ? openItem2 = ! openItem2 : alert('商品1の入力を完了してください。')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" x-show="!openItem2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" x-show="openItem2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+            </div>
+
+            <template x-if="openItem2">
+                <div class="mt-5">
+                    <div class="mt-3">
+                        {{ render_field_with_errors(form2.item2, class_="border-b px-3 text-base", **{'x-model': 'item2'})}}
+                    </div>
+        
+                    <div class="mt-3">
+                        {{ render_field_with_errors(form2.price2, class_="border-b px-3 text-base", placeholder="¥ 商品単価", **{'x-model': 'price2'})}}
+                    </div>
+                    <div class="mt-3">
+                        {{ render_field_with_errors(form2.qty2, class_="border-b px-3 text-base", placeholder="数量", **{'x-model': 'qty2'})}}
+                    </div>
+                </div>
+            </template>
+        </div>
+
+    <!-- items3 here-->
+        <div class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm" x-data="{ openItem3 : false }">
+            <div class="flex justify-between">
+                <h2 class="text-base font-bold text-gray-800">商品 3</h2>
+
+                <button type="button" class="rounded-full hover:bg-gray-200" x-on:click="item && price && qty && item2 && price2 && qty2 ? openItem3 = ! openItem3 : alert('商品１と商品２の入力を完了してください。');">
+                    <svg xmlns="http://www.w3.org/2000/svg" x-show="!openItem3" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" x-show="openItem3" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+            </div>
+
+        <!-- inputs for item3 goes here-->
+            <template x-if="openItem3">
+                <div class="mt-5">
+                    <label for="item3" class="mr-3">商品</label>
+                    <select name="item3" id="item3" class="border-b text-gray-800 text-lg" required>
+                        <option value="" disabled selected>-- 選択 --</option>
+                        <optgroup label="透明">
+                            <option value="602">（半透明）45L</option>
+                            <option value="622">（半透明）45L-200枚</option>
+                            <option value="629">（半透明）45L-50枚x10箱</option>
+                            <option value="603">（半透明）70L</option>
+                            <option value="651">（半透明）70L（100枚x5）</option>
+                            <option value="627">（半透明）70L（0.05mm）</option>
+                            <option value="604">（半透明）90L</option>
+                            <option value="626">（半透明）90L（0.05mm）</option>
+                            <option value="605">（半透明）120L</option>
+                            <option value="623">（半透明）150L</option>
+                            <option value="628">Pカバー（40枚入）</option>
+                        </optgroup>
+                            
+                        <optgroup label="青色">
+                            <option value="606" style="background-color: aqua;">（青色）45L</option>
+                            <option value="624" style="background-color: aqua;">（青色）45L-200枚</option>
+                            <option value="607" style="background-color: aqua;">（青色）70L</option>
+                            <option value="608" style="background-color: aqua;">（青色）90L</option>
+                        </optgroup>
+                            
+                        <optgroup label="黄色">
+                            <option value="609" style="background-color: yellow;">（黄色）45L</option>
+                            <option value="625" style="background-color: yellow;">（黄色）45L-200枚</option>
+                            <option value="610" style="background-color: yellow;">（黄色）70L</option>
+                            <option value="611" style="background-color: yellow;">（黄色）90L</option>
+                        </optgroup>
+                            
+                        <optgroup label="白色">
+                            <option value="614">（白色）90L</option>
+                        </optgroup>
+                        
+                        <optgroup label="特注品">
+                            <option value="641">（air）70L</option>
+                            <option value="642">（air）90L</option>
+                            <option value="651">（半透明）70L（100枚x5箱）</option>
+                            <option value="680">再生材ごみ袋（1500x2000）</option>
+                        </optgroup>
+                        
+                    </select>
+    
+                    <div class="mt-3">
+                        <label for="price3" class="mr-5">単価</label>
+                        <input type="number" class="price border-b text-gray-800 text-lg" id="price3" name="price3" placeholder="¥ 1箱あたり" required>
+                    </div>
+    
+                    <div class="mt-3">
+                        <label for="qty3" class="mr-5">数量</label>
+                        <input type="number" min="1" class="qty border-b text-gray-800 text-lg" id="qty3" name="qty3" placeholder="数量" required>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+    <!-- div for delivery fee -->
+        <div class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm" x-data="{ openDelivery : false }">
+            <div class="flex justify-between">
+                <h2 class="text-base font-bold text-gray-800">送料</h2>
+
+                <button type="button" class="rounded-full hover:bg-gray-200" x-on:click="openDelivery = !openDelivery">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" x-show="!openDelivery" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" x-show="openDelivery" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+            </div>
+
+            <template x-if="openDelivery">
+                <div class="mt-5">
+                        {{ formD.itemD }}
+                    <div class="mt-3">
+                        {{ render_field_with_errors(formD.priceD, class_="border-b px-3 text-base", placeholder="¥ 1箱あたり送料")}}
+                    </div>
+                    <div class="mt-3">
+                        {{ render_field_with_errors(formD.qtyD, class_="border-b px-3 text-base", placeholder="数量")}}
+                    </div>
+                </div>
+            </template>
+
+        </div>
+
+        <!-- confirm button -->
+        <div class="flex justify-center">
+            <button type="button" 
+            class="my-5 bg-blue-500 shadow-xl hover:bg-blue-800 text-sm text-white mx-7 py-1 px-10 rounded-full"
+            onclick="submit();">
+                内容確認</button>
+        </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
