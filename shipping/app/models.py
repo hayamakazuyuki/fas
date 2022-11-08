@@ -89,5 +89,5 @@ class DeliveryRequest(db.Model):
     delivery_date = db.Column(db.Date, nullable=True)
     time_range = db.Column(db.String(5), nullable=True)
     memo = db.Column(db.String(255), nullable=True)
-    reply = db.Column(db.String(255), nullable=True)
+    # reply = db.Column(db.String(255), nullable=True)
     checked = db.Column(db.Integer, nullable=True)
