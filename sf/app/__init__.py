@@ -1,5 +1,5 @@
 from flask import Flask
-from .extentions import db, admin, login_manager
+from .extentions import db, admin, login_manager, mail
 
 from .main.views import main
 from .customer.views import customer
@@ -11,11 +11,19 @@ from .staff.views import staff
 def create_app(config_file='settings.py'):
     app = Flask(__name__)
     
-    app.config.from_pyfile(config_file)
+    if app.config['ENV'] == 'production':
+        app.config.from_object('app.config.ProductionConfig')
+    
+    elif app.config['ENV'] == 'testing':
+        app.config.from_object('app.config.TestingConfig')
+
+    else:
+        app.config.from_object('app.config.DevelopmentConfig')
 
     db.init_app(app)
     admin.init_app(app)
     login_manager.init_app(app)
+    mail.init_app(app)
     
     login_manager.login_view = 'staff.login'
     login_manager.login_message = False

@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta, timezone, date
-from flask import Blueprint, render_template, request, make_response
+from flask import Blueprint, render_template, request, make_response, current_app
 from flask_login import current_user, login_required
 from sqlalchemy import extract, func, or_, and_
 from io import StringIO
 import csv
+
+from ..email import send_email
 
 from ..models import Product, ProductOrder
 
@@ -54,7 +56,7 @@ def product():
     return render_template('products.html', products=products)
 
 
-def prepare_csv(orders, now):
+def prepare_csv(orders, filename):
     file = StringIO()
     writer = csv.writer(file, lineterminator="\n")
 
@@ -104,9 +106,6 @@ def prepare_csv(orders, now):
             ,'','','','',order.product.name,order.shop.shop_number,memo,'',''
             ,delivery_req, is_request,'','',0])
 
-    # prepare the file name
-    filename = 'dl-' + now + '.csv'
-
     response = make_response()
     response.data = file.getvalue().encode('sjis', 'replace')
     response.headers['Content-Type'] = 'text/csv'
@@ -120,7 +119,12 @@ def test():
     orders = ProductOrder.query.filter(ProductOrder.item != 901)\
         .filter(or_(ProductOrder.delivery_check ==2, and_(ProductOrder.product.has(shipper=True), ProductOrder.delivery_check.is_(None)))).all()
 
-    csv_file = prepare_csv(orders, now)
+    # prepare the file name
+    filename = 'dl-' + now + '.csv'
+
+    csv_file = prepare_csv(orders, filename)
+
+    send_email(filename)
 
     # if orders:
     #     for order in orders:
@@ -128,3 +132,8 @@ def test():
     #     db.session.commit()
 
     return csv_file
+
+@main.route('/show')
+def show():
+    test = current_app.config['MAIL_PASSWORD']
+    return test
