@@ -23,4 +23,3 @@ class TestingConfig(BaseConfig):
     
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
-    

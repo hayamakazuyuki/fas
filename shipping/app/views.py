@@ -19,17 +19,81 @@ def prepare_csv(orders, now):
     file = StringIO()
     writer = csv.writer(file, lineterminator="\n")
 
-    writer.writerow(['荷受人コード', '電話番号', 'FAX番号', '住所1', '住所2', '住所3', '名前1', '名前2', '予約', '郵便番号',
-                         'カナ略称', '一斉出荷区分', '特殊計', '着店コード', '商品（色）', '商品数'])
+    writer.writerow(['荷送人コード','西濃発店コード','出荷予定日','お問合番号','管理番号','元着区分','原票区分'
+                    ,'個数','重量区分','重量K','重量才','荷送人名称','荷送人住所','荷送人住所2','荷送人電話番号'
+                    ,'部署コード','部署名','重量契約区分','お届先郵便番号','お届先名称','お届先名称2','お届先住所'
+                    ,'お届先住所2','お届先電話番号','お届先コード','お届先JIS市町村','着店コード付け区分','着地コード'
+                    ,'着店コード','保険金額','輸送指示','輸送指示2','記事1','記事2','記事3','記事4','記事5'
+                    ,'輸送指示','輸送指示コード','輸送指示コード2','輸送指示止め店','予備'])
+
     for order in orders:
-        writer.writerow(['', order.shop.telephone, '', order.shop.prefecture + order.shop.city,
-                    order.shop.town + order.shop.address, order.shop.building,
-                    order.shop.name, order.shop.department, '',
-                    f"{order.shop.zip[:3]}-{order.shop.zip[3:]}",
-                    '', '', '', '', order.product.name, order.qty])
+        writer.writerow(['','','','',order.id,1,0,order.qty,'','','','','','',''
+                    ,'','','',f"{order.shop.zip[:3]}-{order.shop.zip[3:]}",order.shop.name
+                    ,order.shop.department,order.shop.prefecture + order.shop.city + order.shop.town + order.shop.address
+                    ,order.shop.building,order.shop.telephone,'','','',''
+                    ,'','','','','','','','',''
+                    ,'輸送指示','輸送指示コード','','',0])
 
     # prepare the file name
     filename = 'dl-' + now + '.csv'
+
+    response = make_response()
+    response.data = file.getvalue().encode('sjis', 'replace')
+    response.headers['Content-Type'] = 'text/csv'
+    response.headers['Content-Disposition'] = 'attachment; filename=' + filename
+
+    return response
+
+
+def prepare_csv(orders, filename):
+    file = StringIO()
+    writer = csv.writer(file, lineterminator="\n")
+
+    writer.writerow(['荷送人コード','西濃発店コード','出荷予定日','お問合番号','管理番号','元着区分','原票区分'
+                    ,'個数','重量区分','重量K','重量才','荷送人名称','荷送人住所','荷送人住所2','荷送人電話番号'
+                    ,'部署コード','部署名','重量契約区分','お届先郵便番号','お届先名称','お届先名称2','お届先住所'
+                    ,'お届先住所2','お届先電話番号','お届先コード','お届先JIS市町村','着店コード付け区分','着地コード'
+                    ,'着店コード','保険金額','輸送指示1','輸送指示2','記事1','記事2','記事3','記事4','記事5'
+                    ,'輸送指示','輸送指示コード1','輸送指示コード2','輸送指示止め店','予備'])
+
+    for order in orders:
+        is_request = ''
+        memo = ''
+        delivery_req = ''
+
+        if order.request is None:
+            pass
+
+        else:
+            req_date = order.request.delivery_date
+            req_time = order.request.time_range
+
+            if req_date and req_time:
+                date = req_date.strftime('%m%d')
+                delivery_req = date + req_time
+
+            elif req_date and not req_time:
+                date = req_date.strftime('%m%d')
+                delivery_req = date + '0'
+
+            elif not req_date and req_time:
+                delivery_req = '0000' + req_time
+
+            if order.request.delivery_date or order.request.time_range:
+                is_request = '02'
+
+            if order.request.memo:
+                memo = order.request.memo
+
+            else:
+                pass
+
+        writer.writerow(['','','','',order.id,1,0,order.qty,'','','','','','',''
+            ,'','','',order.shop.zip.zfill(7),order.shop.name
+            ,order.shop.department,order.shop.prefecture + order.shop.city + order.shop.town + order.shop.address
+            ,order.shop.building,order.shop.telephone,'','','',''
+            ,'','','','',order.product.name,order.shop.shop_number,memo,'',''
+            ,delivery_req, is_request,'','',0])
 
     response = make_response()
     response.data = file.getvalue().encode('sjis', 'replace')
@@ -54,7 +118,10 @@ def index(dl=None):
         
         if dl == 'csv':
 
-            csv_file = prepare_csv(orders, now)
+            # prepare the file name
+            filename = 'dl-' + now + '.csv'
+
+            csv_file = prepare_csv(orders, filename)
 
             if orders:
                 for order in orders:
@@ -69,7 +136,10 @@ def index(dl=None):
 
         if dl == 'csv':
 
-            csv_file = prepare_csv(orders, now)
+            # prepare the file name
+            filename = 'dl-' + now + '.csv'
+
+            csv_file = prepare_csv(orders, filename)
 
             if orders:
                 for order in orders:
@@ -118,15 +188,6 @@ def request_detail(id):
     return render_template('request-detail.html', delivery_request=delivery_request)
 
 
-@shipping.route('/count')
-@login_required
-def count():
-    orders = ProductOrder.query.filter(ProductOrder.item != 901).filter(ProductOrder.delivery_check == 2).all()
-
-    count = len(orders)
-    return str(count)
-
-
 # @shipping.route('/change')
 # @login_required
 # def change():
@@ -138,17 +199,3 @@ def count():
 #     db.session.commit()
 
 #     return redirect(url_for('shipping.count'))
-
-
-
-# @shipping.route('/now')
-# def now():
-
-#     now = datetime.now(JST).strftime('%Y%m%d-%H%M')
-
-#     return now
-
-
-# @shipping.route('/conf')
-# def conf():
-#     return current_app.config['SECRET_KEY']
