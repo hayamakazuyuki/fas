@@ -122,18 +122,13 @@ def test():
     # prepare the file name
     filename = 'dl-' + now + '.csv'
 
-    csv_file = prepare_csv(orders, filename)
+    prepare_csv(orders, filename)
 
-    send_email(filename)
+    send_email('ライプロンDLデータ')
 
     # if orders:
     #     for order in orders:
     #         order.delivery_check = 1
     #     db.session.commit()
 
-    return csv_file
-
-@main.route('/show')
-def show():
-    test = current_app.config['MAIL_PASSWORD']
-    return test
+    return '完了'
