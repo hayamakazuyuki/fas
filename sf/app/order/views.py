@@ -133,12 +133,14 @@ def order_detail(id):
 
 # func register delivery request
 def register_request(id):
+
     deliveryreq = DeliveryRequest()
     deliveryreq.order_id = id
     deliveryreq.requested_by = current_user.id
-    if request.form['delivery_date']:
-        deliveryreq.delivery_date = request.form['delivery_date']
+    if request.form.get('delivery_date'):
+        deliveryreq.delivery_date = request.form.get('delivery_date')
     deliveryreq.time_range = request.form.get('time_range')
+    deliveryreq.memo = request.form.get('memo')
 
     db.session.add(deliveryreq)
     db.session.commit()

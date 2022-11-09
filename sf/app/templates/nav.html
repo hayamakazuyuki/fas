@@ -1,0 +1,76 @@
+<header class="sticky top-0 z-40 flex-none">
+    <nav class="border-b border-gray-200 bg-white" x-data="{ open: false }">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 justify-between">
+          <div class="flex">
+            <div class="flex flex-shrink-0 items-center">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='img/logo_FUROSHIKI.png') }}" width=36 height=40
+                    class="mr-3" alt="furoshiki logo">    
+                </a>
+
+              <!-- <img class="block h-8 w-auto lg:hidden" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company"> -->
+              <!-- <img class="hidden h-8 w-auto lg:block" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company"> -->
+            </div>
+            <div class="hidden sm:-my-px sm:ml-5 sm:flex sm:space-x-8" 
+              x-data="{ activeClass: 'border-blue-700 text-gray-900', 
+                        inactiveClass: 'text-gray-500 hover:border-gray-300 hover:text-gray-700'}">
+              <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
+              <a href="/customer" class="inline-flex border-transparent border-b-2 items-center px-1 pt-1 text-sm font-medium" x-bind:class="window.location.pathname.startsWith('/customer') ? activeClass : inactiveClass">顧客</a>
+  
+              <a href="/delivery" class="inline-flex border-transparent  border-b-2 items-center px-1 pt-1 text-sm font-medium" x-bind:class="window.location.pathname.startsWith('/delivery') ? activeClass : inactiveClass">配送</a>
+  
+              <a href="/order/data" class="inline-flex border-transparent border-b-2 items-center px-1 pt-1 text-sm font-medium" x-bind:class="window.location.pathname.startsWith('/order') ? activeClass : inactiveClass">受注</a>
+  
+              <a href="/product" class="inline-flex border-transparent border-b-2 items-center px-1 pt-1 text-sm font-medium" x-bind:class="window.location.pathname.startsWith('/product') ? activeClass : inactiveClass">商品</a>
+            </div>
+          </div>
+
+          <div class="hidden md:flex sm:items-center">
+              <div class="text-sm text-gray-500 mr-3">{{ current_user.email if current_user.is_authenticated }}</div>
+              <a href="/logout" class="block bg-blue-700 rounded-full px-4 py-2 text-sm text-white shadow-xl hover:bg-blue-500">ログアウト</a>
+          </div>
+  
+          <div class="-mr-2 flex items-center sm:hidden">
+            <!-- Mobile menu button -->
+            <button type="button" class="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-controls="mobile-menu" aria-expanded="false"
+                      x-on:click="open = !open" x-data="{ showMenu: false }">
+              <span class="sr-only">Open main menu</span>
+              <!-- Heroicon name: outline/bars-3 -->
+              <svg x-show="!open" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+              <!-- Heroicon name: outline/x-mark -->
+              <svg x-show="open" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Mobile menu, show/hide based on menu state. -->
+      <div class="sm:hidden" id="mobile-menu" x-show="open">
+        <div class="space-y-1 pt-2 pb-3" x-data="{ activeClass: 'bg-blue-50 border-blue-700 text-blue-700',
+                    inactiveClass: 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800' }" >
+          <a href="/customer" class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium" x-bind:class="window.location.pathname.startsWith('/customer') ? activeClass : inactiveClass">ホーム</a>
+  
+          <a href="/delivery" class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium" x-bind:class="window.location.pathname.startsWith('/delivery') ? activeClass : inactiveClass">配送</a>
+  
+          <a href="/order/data" class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium" x-bind:class="window.location.pathname.startsWith('/order') ? activeClass : inactiveClass">受注</a>
+  
+          <a href="/product" class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium" x-bind:class="window.location.pathname.startsWith('/product') ? activeClass : inactiveClass">商品</a>
+        </div>
+        <div class="border-t border-gray-200 pt-4 pb-3">
+          <div class="flex items-center px-4">
+            <div class="">
+              <div class="text-sm text-gray-500">{{ current_user.email if current_user.is_authenticated }}</div>
+            </div>
+          </div>
+          <div class="mt-3 px-3">
+              <a href="/logout" class="block text-center bg-blue-700 rounded-full px-4 py-2 text-sm text-white hover:bg-blue-500">ログアウト</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+</header>
