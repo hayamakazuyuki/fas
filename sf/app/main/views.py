@@ -113,6 +113,10 @@ def prepare_csv(orders, filename):
 
     return response
 
+@main.route('/mock')
+def mock():
+    return render_template('mock.html')
+
 @main.route('/test')
 def test():
 
@@ -132,3 +136,4 @@ def test():
     #     db.session.commit()
 
     return '完了'
+

@@ -7,7 +7,7 @@ import csv
 
 from ..extentions import db
 
-from ..models import DeliveryRequest, Shop, ProductOrder
+from ..models import DeliveryRequest, Shop, ProductOrder, Customer
 
 from .forms import order_edit_form, DeliveryRequestForm
 
@@ -16,10 +16,23 @@ order = Blueprint('order', __name__, url_prefix='/order')
 
 JST = timezone(timedelta(hours=+9), 'JST')
 
-@order.route('/<int:customer_id>/<int:id>', methods=['GET', 'POST'])
+@order.route('/<int:customer_id>/<int:id>')
 @login_required
 def index(customer_id, id):
+
+    customer = Customer.query.get(customer_id)
+
+    if not customer.staff:
+        return redirect(url_for('customer.profile', id=customer_id, mode='edit'))
+
+    else:
+        return redirect(url_for('order.register', customer_id=customer_id, id=id))
     
+
+@order.route('/<int:customer_id>/<int:id>/register', methods=['GET', 'POST'])
+@login_required
+def register(customer_id, id):
+
     shop = Shop.query.get((customer_id, id))
 
     if request.method == 'POST':
@@ -86,7 +99,6 @@ def index(customer_id, id):
         return redirect(url_for('main.index'))
 
     return render_template('order/register.html', shop=shop)
-
 
 @order.route('/<int:id>', methods=['GET', 'POST'])
 @login_required
