@@ -280,9 +280,11 @@
         </div>
 
         <!-- modal goes here -->
-        <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center">
+        <div id="modal" class="hidden fixed z-50 inset-0 bg-black bg-opacity-70 flex justify-center items-center">
 
             <div class="w-full md:max-w-md bg-white shadow-xl border rounded-lg p-6">
+                <p class="text-xl font-bold mb-3 text-red-500">{{ shop.customer.sales.last_name }}
+                    <span class="ml-3 text-sm text-gray-500 font-normal">さんの受注</span></p>
                 <h2 class="text-sm font-bold text-gray-500">登録しますか？</h2>
                 <div class="mt-5">
                     <p class="text-gray-700 text-xl font-bold">{{ shop.name }}</p>
