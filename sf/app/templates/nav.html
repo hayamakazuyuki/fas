@@ -9,13 +9,11 @@
                     class="mr-3" alt="furoshiki logo">    
                 </a>
 
-              <!-- <img class="block h-8 w-auto lg:hidden" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company"> -->
-              <!-- <img class="hidden h-8 w-auto lg:block" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company"> -->
             </div>
             <div class="hidden sm:-my-px sm:ml-5 sm:flex sm:space-x-8" 
-              x-data="{ activeClass: 'border-blue-700 text-gray-900', 
+              x-data="{ activeClass: 'border-blue-800 text-gray-900 font-bold', 
                         inactiveClass: 'text-gray-500 hover:border-gray-300 hover:text-gray-700'}">
-              <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
+
               <a href="/customer" class="inline-flex border-transparent border-b-2 items-center px-1 pt-1 text-sm font-medium" x-bind:class="window.location.pathname.startsWith('/customer') ? activeClass : inactiveClass">顧客</a>
   
               <a href="/delivery" class="inline-flex border-transparent  border-b-2 items-center px-1 pt-1 text-sm font-medium" x-bind:class="window.location.pathname.startsWith('/delivery') ? activeClass : inactiveClass">配送</a>
