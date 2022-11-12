@@ -61,37 +61,37 @@ hideItem3.addEventListener('click', () => {
 }, false)
 
 // ---------- delivery inputs show/hide -------------- //
-const showDelivery = document.getElementById('showDelivery');
-const hideDelivery = document.getElementById('hideDelivery');
+// const showDelivery = document.getElementById('showDelivery');
+// const hideDelivery = document.getElementById('hideDelivery');
 const deliveryError = document.getElementById('deliveryError');
 
-const inputsDelivery = document.getElementById('inputsDelivery'); 
+// const inputsDelivery = document.getElementById('inputsDelivery'); 
 
-const showHideDelivery = () => {
-    if(deliveryError) {
-        deliveryError.textContent = '';
-    };
-    showDelivery.classList.toggle('hidden');
-    hideDelivery.classList.toggle('hidden');
-};
+// const showHideDelivery = () => {
+//     if(deliveryError) {
+//         deliveryError.textContent = '';
+//     };
+//     showDelivery.classList.toggle('hidden');
+//     hideDelivery.classList.toggle('hidden');
+// };
 
-showDelivery.addEventListener('click', () => {
-    showHideDelivery();
-    let template = document.getElementById('templateDelivery');
-    let clone = template.content.cloneNode(true);
+// showDelivery.addEventListener('click', () => {
+//     // showHideDelivery();
+//     let template = document.getElementById('templateDelivery');
+//     let clone = template.content.cloneNode(true);
 
-    inputsDelivery.appendChild(clone);
+//     inputsDelivery.appendChild(clone);
 
-}, false);
+// }, false);
 
-hideDelivery.addEventListener('click', () => {
-    showHideDelivery();
+// hideDelivery.addEventListener('click', () => {
+//     // showHideDelivery();
 
-    while (inputsDelivery.firstChild){
-        inputsDelivery.removeChild(inputsDelivery.firstChild);
-    };
+//     while (inputsDelivery.firstChild){
+//         inputsDelivery.removeChild(inputsDelivery.firstChild);
+//     };
 
-}, false);
+// }, false);
 
 // ------- calculating the total delivery qty -------- //
 const sumQty = () => {
@@ -130,22 +130,21 @@ confirmButton.addEventListener('click', () => {
         };
     };
 
-    const delivery = document.getElementById('delivery');
+    // const delivery = document.getElementById('delivery');
 
-    if(delivery){
-        const deliveryError = document.getElementById('deliveryError');
-        const deliveryInputs = inputsDelivery.querySelectorAll('input'); // grab inputs in deliveryInputs div
+    // if(delivery){
+    //     const deliveryError = document.getElementById('deliveryError');
+    //     const deliveryInputs = inputsDelivery.querySelectorAll('input');
 
-        // check if delivery price and qty are number and more than 1
-        for (var i=0; i<deliveryInputs.length; i++){
-            value = deliveryInputs[i].value;
+    //     for (var i=0; i<deliveryInputs.length; i++){
+    //         value = deliveryInputs[i].value;
     
-            if (value < 1){
-                return deliveryError.textContent = '単価と数量は 1 以上を入力してください。';
-            } else {
-            };
-        };
-    };
+    //         if (value < 1){
+    //             return deliveryError.textContent = '単価と数量は 1 以上を入力してください。';
+    //         } else {
+    //         };
+    //     };
+    // };
 
     prepareModal(selects, priceInputs, qtyInputs);
 
@@ -184,6 +183,6 @@ const showModal = () => {
     modal.classList.toggle('hidden');
 };
 
-const onlyNumbers = n => {
-    return n.replace(/[０-９]/g,s => String.fromCharCode(s.charCodeAt(0) - 65248)).replace(/\D/g,'');
-};
+// const onlyNumbers = n => {
+//     return n.replace(/[０-９]/g,s => String.fromCharCode(s.charCodeAt(0) - 65248)).replace(/\D/g,'');
+// };
