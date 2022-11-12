@@ -61,7 +61,7 @@ class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     parent_id = db.Column(db.Integer, db.ForeignKey('parent.id'), nullable=True)
     name = db.Column(db.String(100), nullable=False)
-    staff = db.Column(db.Integer, db.ForeignKey('staff.id'), nullable=True)
+    staff = db.Column(db.Integer, db.ForeignKey('staff.id'), nullable=False)
     registered_at = db.Column(db.DateTime, default=func.now())
     shops = db.relationship('Shop', backref=db.backref('customer', lazy=True))
 
