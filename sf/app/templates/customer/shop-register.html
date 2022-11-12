@@ -17,7 +17,6 @@
         <div class="text-sm my-3">
             {{ render_field_with_errors(form.id, class_="w-full border-b px-3 text-lg", placeholder="半角数字 最大５桁")}}
         </div>
-        <div id="error_id" style="color: red;"></div>
         <div class="text-sm my-3">
             {{ render_field_with_errors(form.shop_number, class_="w-full border-b px-3 text-lg")}}
         </div>
@@ -55,10 +54,14 @@
 </div>
 </div>
 
+{% endblock %}
+
+{% block script %}
 <!--java script -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/shop.js') }}"></script>
 
 <!-- 住所補完JavaScriptライブラリの読み込み -->
 <script type="text/javascript" src="https://postcode-jp.com/js/postcodejp.js" charset="utf-8"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/postcode.js') }}"></script>
+
 {% endblock %}
