@@ -90,7 +90,7 @@
             {% for order in orders %}
             <tbody>
                 <tr class="border-b">
-                    <td>{{ '{:06d}'.format(order.id) }}</td>
+                    <td><a href="/order/{{ order.id }}" class="text-blue-500">{{ '{:06d}'.format(order.id) }}</a></td>
                     <td>{{ order.date.strftime('%m-%d %H:%M') }}</td>
                     <td>{{ order.staff.last_name }}</td>
                     <td>{{ order.customer_id }}-{{ order.shop_id }} {{ order.shop.name }}</td>

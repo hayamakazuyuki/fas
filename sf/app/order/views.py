@@ -37,7 +37,7 @@ def register(customer_id, id):
 
     if request.method == 'POST':
 
-        staff = current_user.id
+        staff = shop.customer.staff
         customer_id = request.form['customer_id']
         id = request.form['id']
 
