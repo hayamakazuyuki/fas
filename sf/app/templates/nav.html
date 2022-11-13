@@ -12,15 +12,15 @@
             </div>
             <div class="hidden sm:-my-px sm:ml-5 sm:flex sm:space-x-8" 
               x-data="{ activeClass: 'border-blue-800 text-gray-900 font-bold', 
-                        inactiveClass: 'text-gray-500 hover:border-gray-300 hover:text-gray-700'}">
+                        inactiveClass: 'border-transparent font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700'}">
 
-              <a href="/customer" class="inline-flex border-transparent border-b-2 items-center px-1 pt-1 text-sm font-medium" x-bind:class="window.location.pathname.startsWith('/customer') ? activeClass : inactiveClass">顧客</a>
+              <a href="/customer" class="inline-flex border-b-2 items-center px-1 pt-1 text-sm" x-bind:class="window.location.pathname.startsWith('/customer') ? activeClass : inactiveClass">顧客</a>
   
-              <a href="/delivery" class="inline-flex border-transparent  border-b-2 items-center px-1 pt-1 text-sm font-medium" x-bind:class="window.location.pathname.startsWith('/delivery') ? activeClass : inactiveClass">配送</a>
+              <a href="/delivery" class="inline-flex border-b-2 items-center px-1 pt-1 text-sm" x-bind:class="window.location.pathname.startsWith('/delivery') ? activeClass : inactiveClass">配送</a>
   
-              <a href="/order/data" class="inline-flex border-transparent border-b-2 items-center px-1 pt-1 text-sm font-medium" x-bind:class="window.location.pathname.startsWith('/order') ? activeClass : inactiveClass">受注</a>
+              <a href="/order/data" class="inline-flex border-b-2 items-center px-1 pt-1 text-sm" x-bind:class="window.location.pathname.startsWith('/order') ? activeClass : inactiveClass">受注</a>
   
-              <a href="/product" class="inline-flex border-transparent border-b-2 items-center px-1 pt-1 text-sm font-medium" x-bind:class="window.location.pathname.startsWith('/product') ? activeClass : inactiveClass">商品</a>
+              <a href="/product" class="inline-flex border-b-2 items-center px-1 pt-1 text-sm" x-bind:class="window.location.pathname.startsWith('/product') ? activeClass : inactiveClass">商品</a>
             </div>
           </div>
 
