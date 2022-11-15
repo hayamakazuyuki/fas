@@ -1,8 +1,9 @@
-from email.policy import default
+from flask import redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from .extentions import db, admin, login_manager
 from flask_admin import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
+from flask_login import current_user
 
 from flask_login import UserMixin
 from sqlalchemy import ForeignKeyConstraint, func, event, true, UniqueConstraint
@@ -10,6 +11,14 @@ from sqlalchemy import ForeignKeyConstraint, func, event, true, UniqueConstraint
 from datetime import datetime, timedelta, timezone
 
 JST = timezone(timedelta(hours=+9), 'JST')
+
+
+class MyAdminIndexView(AdminIndexView):
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('staff.login'))
 
 
 class Staff(db.Model, UserMixin):
