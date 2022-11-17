@@ -14,7 +14,7 @@
               x-data="{ activeClass: 'border-blue-800 text-gray-900 font-bold', 
                         inactiveClass: 'border-transparent font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700'}">
 
-              <a href="/customer" class="inline-flex border-b-2 items-center px-1 pt-1 text-sm" x-bind:class="window.location.pathname.startsWith('/customer') ? activeClass : inactiveClass">顧客</a>
+              <a href="/customer" class="inline-flex border-b-2 items-center px-1 pt-1 text-sm" x-bind:class="window.location.pathname.startsWith('/customer') ? activeClass : inactiveClass">取引先</a>
   
               <a href="/delivery" class="inline-flex border-b-2 items-center px-1 pt-1 text-sm" x-bind:class="window.location.pathname.startsWith('/delivery') ? activeClass : inactiveClass">配送</a>
   
@@ -51,7 +51,7 @@
       <div class="sm:hidden" id="mobile-menu" x-show="open">
         <div class="space-y-1 pt-2 pb-3" x-data="{ activeClass: 'bg-blue-50 border-blue-700 text-blue-700',
                     inactiveClass: 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800' }" >
-          <a href="/customer" class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium" x-bind:class="window.location.pathname.startsWith('/customer') ? activeClass : inactiveClass">ホーム</a>
+          <a href="/customer" class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium" x-bind:class="window.location.pathname.startsWith('/customer') ? activeClass : inactiveClass">取引先</a>
   
           <a href="/delivery" class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium" x-bind:class="window.location.pathname.startsWith('/delivery') ? activeClass : inactiveClass">配送</a>
   
