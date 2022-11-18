@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- tailwind css -->
-    <!-- <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> -->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 
 
@@ -19,9 +19,8 @@
     <title>fas | 出荷</title>
 </head>
 <body>
-  {% block content %}
-  {% endblock %}
-  <script type="text/javascript" src="{{ url_for('static', filename='js/mobile_menu.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/dismiss_confirm.js') }}"></script>
+  {% block content %}{% endblock %}
+
+  {% block script %}{% endblock %}
 </body>
 </html>

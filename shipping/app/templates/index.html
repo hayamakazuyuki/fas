@@ -5,10 +5,15 @@
     <div class="max-w-4xl mx-auto my-8">
         <h1 class="font-bold text-xl text-gray-500">出荷依頼一覧</h1>
 
-        <div class="my-5 flex" x-data="getToday">
-            <p class="text-lg mr-20" x-text="today"></p>
-            <button x-on:click="open = true" class="bg-blue-500 hover:bg-blue-700 text-white text-sm py-1 px-5 rounded-full shadow-md" type="button">ダウンロード</button>
-        </div>
+        <div class="my-5 flex space-x-10 items-center" x-data="getToday">
+            <p class="text-lg" x-text="today"></p>
+            <button x-on:click="open = true" class="flex bg-blue-500 text-white text-sm py-3 px-5 rounded-full shadow-md hover:bg-blue-700" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15M9 12l3 3m0 0l3-3m-3 3V2.25" />
+                  </svg>
+                  <span class="">ダウンロード</span>
+                </button>    
+            </div>
     
         <table class="w-full table-auto my-5 text-sm">
             <thead>
@@ -57,7 +62,12 @@
     </div>
 
 </div>
+{% endblock %}
+
+{% block script %}
 <!-- alpine.js -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/mobile_menu.js') }}"></script>
+
 <script>
     const getToday = () => {
         let now = new Date();
