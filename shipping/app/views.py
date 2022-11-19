@@ -5,6 +5,8 @@ from datetime import datetime, timezone, timedelta
 from io import StringIO
 from sqlalchemy import or_, and_
 
+from .forms import FileUploadForm
+
 import csv
 
 from .models import ProductOrder, DeliveryRequest
@@ -191,14 +193,12 @@ def request_detail(id):
     return render_template('request-detail.html', delivery_request=delivery_request)
 
 
-# @shipping.route('/change')
-# @login_required
-# def change():
-    
-#     orders = Order.query.filter(Order.item != 901).filter(Order.delivery_check == 2).all()
+@shipping.route('/shipped', methods=['GET', 'POST'])
+@login_required
+def shipped():
+    form = FileUploadForm()
 
-#     for order in orders:
-#         order.delivery_check = 1
-#     db.session.commit()
+    if form.validate_on_submit():
+        return 'oka'
 
-#     return redirect(url_for('shipping.count'))
+    return render_template('shipped.html', form=form)

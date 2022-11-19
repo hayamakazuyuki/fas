@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="container max-w-4xl mx-auto" x-data="{ open: false }">
+    <div class="mx-auto my-8 px-3">
+        <h1 class="font-bold text-xl text-gray-500">出荷データ</h1>
+        <form class="mt-5" method="post">
+            {{ form.csrf_token }}
+            {{ form.file(class_="text-sm") }}{{ form.submit(class_="py-2 px-5 text-white text-sm bg-blue-500 rounded-full cursor-pointer hover:bg-blue-700") }}
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<!-- alpine.js -->
+<script>
+    const getToday = () => {
+        let now = new Date();
+        let year = now.getFullYear();
+        let month = now.getMonth() + 1;
+        let date = now.getDate();
+        let hours = now.getHours().toString().padStart(2, '0');
+        let minutes = now.getMinutes().toString().padStart(2, '0');
+        return {
+            today: year + "年" + month + "月" + date + "日" + "　" + hours + ":" + minutes
+        }
+    }
+</script>
+{% endblock %}
