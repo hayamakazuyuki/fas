@@ -4,19 +4,18 @@
 
 <!-- alert goes here -->
 {% include "_flashing.html" -%}
-<div class="container max-w-4xl mx-auto mt-5">
-
-    <p class="font-bold text-lg mb-5">配送関連依頼の一覧</p>
+<div class="container max-w-4xl mx-auto">
+    <div class="mt-10 w-full px-3">
+        <p class="font-bold text-lg mb-5">出荷情報</p>
         <table class="table-auto w-full my-5 text-sm">
         <thead>
             <tr class="border-black border-b">
-                <th class="px-1">依頼日</th>
-                <th class="px-1">配送先名</th>
+                <th class="px-1">ID</th>
+                <th class="px-1">出荷先</th>
                 <th class="px-1">商品</th>
                 <th class="px-1">数量</th>
-                <th class="px-1">指定日</th>
-                <th class="px-1">時間帯</th>
-                <th class="px-1">確認</th>
+                <th class="px-1">問合せ番号</th>
+                <th class="px-1">出荷日</th>
             </tr>
         </thead>
 
@@ -32,18 +31,10 @@
                 {% endif %}
             </td>
             <td class="px-1">{{ request.time_range or '' }}</td>
-            <td class="px-1">
-                {% if request.checked == 1 %}
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                {% endif %}
-            </td>
          </tr>
 
         {% endfor %}
-            </form>
-
     </table>
+    </div>
 </div>
 {% endblock %}
