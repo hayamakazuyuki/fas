@@ -12,13 +12,9 @@
 
                 <!-- primary nav -->
                 <div class="hidden md:flex items-center space-x-1">
-                    <a href="/" class="py-3 px-3 text-gray-700 hover:text-gray-900 hover:underline">
-                        ホーム</a>
-                    <a href="/requests" class="py-3 px-3 text-gray-700 hover:text-gray-900 hover:underline">
-                        配送依頼事項</a>
-                    <a href="#" class="py-3 px-3 text-gray-700 hover:text-gray-900 hover:underline">
-                        出荷データ</a>
-                    </div>
+                    <a href="/requests" class="py-3 px-3 text-gray-700 hover:text-gray-900 hover:underline">配送依頼事項</a>
+                    <a href="/shipped" class="py-3 px-3 text-gray-700 hover:text-gray-900 hover:underline">出荷データ</a>
+                </div>
             </div>
 
         <!-- secondary nav -->
@@ -49,9 +45,8 @@
 
     <!-- mobile menu goes here -->
     <div class="md:hidden" x-show="open">
-        <a href="/" class="block py-2 px-3 text-gray-700 hover:bg-gray-200">ホーム</a>
         <a href="/requests" class="block py-2 px-3 text-gray-700 hover:bg-gray-200">配送依頼事項</a>
-        <a href="#" class="block py-2 px-3 text-gray-700 hover:bg-gray-200">出荷データ</a>
+        <a href="/shipped" class="block py-2 px-3 text-gray-700 hover:bg-gray-200">出荷データ</a>
     
         <div class="block py-2 px-3">
         {% if current_user.is_authenticated %}
