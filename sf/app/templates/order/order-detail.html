@@ -10,9 +10,10 @@
     <div class="mx-3 my-10">
         <!-- order details go here-->
             <div class="w-full border p-6 rounded-lg shadow-lg">
-                <h1 class="font-bold text-lg border-b">受注情報</h1>
-                <p class="font-bold my-3"><span class="text-sm font-normal text-gray-500">No.</span> {{ '{:06d}'.format(order.id) }}</p>
-                <p class="my-3">{{ order.date.strftime('%Y-%m-%d %H:%M') }}</p>
+                <div class="flex border-b items-end justify-between">
+                    <h1 class="font-bold text-lg"><span class="text-sm font-normal text-gray-500">受注 ID</span> {{ '{:06d}'.format(order.id) }}</h1>
+                    <p class="">{{ order.date.strftime('%Y-%m-%d %H:%M') }}</p>    
+                </div>
                 <p class="font-bold my-3"><span class="text-base font-normal text-gray-500">
                     {{ order.customer_id }}-{{ order.shop_id }}
                 </span> {{ order.shop.name }}</p>
