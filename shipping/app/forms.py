@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import FileField, SubmitField
-from wtforms.validators import InputRequired
+from flask_wtf.file import FileField, FileRequired
+from wtforms import SubmitField
 
 
 class FileUploadForm(FlaskForm):
-    file = FileField('ファイル', validators=[InputRequired('csvファイルを選択して下さい。')])
+    file = FileField('ファイル', validators=[FileRequired('csvファイルを選択して下さい。')])
     submit = SubmitField('登録')

@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
 {% include "navbar.html" %}
+{% include "message_flashing.html" %}
 <div class="container max-w-4xl mx-auto" x-data="{ open: false }">
     <div class="mx-auto my-8 px-3">
         <h1 class="font-bold text-xl text-gray-500">出荷データ</h1>
-        <form class="mt-5" method="post">
+        <form class="mt-5" method="post" enctype="multipart/form-data">
             {{ form.csrf_token }}
             {{ form.file(class_="text-sm") }}{{ form.submit(class_="py-2 px-5 text-white text-sm bg-blue-500 rounded-full cursor-pointer hover:bg-blue-700") }}
         </form>
