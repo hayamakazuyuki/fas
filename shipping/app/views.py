@@ -151,8 +151,6 @@ def index(dl=None):
             return csv_file
 
     elif shipper == 5808:
-        # orders = ProductOrder.query.filter(ProductOrder.item != 901)\
-        #     .filter(or_(ProductOrder.delivery_check ==2, and_(ProductOrder.product.has(shipper=True), ProductOrder.delivery_check.is_(None)))).all()
 
         orders = ProductOrder.query.filter(ProductOrder.item != 901)\
             .filter(ProductOrder.product.has(shipper=True)).filter(ProductOrder.delivery_check.is_(None)).all()
