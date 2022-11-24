@@ -19,36 +19,6 @@ shipping = Blueprint('shipping', __name__)
 JST = timezone(timedelta(hours=+9), 'JST')
 
 
-# def prepare_csv(orders, now):
-#     file = StringIO()
-#     writer = csv.writer(file, lineterminator="\n")
-
-#     writer.writerow(['荷送人コード','西濃発店コード','出荷予定日','お問合番号','管理番号','元着区分','原票区分'
-#                     ,'個数','重量区分','重量K','重量才','荷送人名称','荷送人住所','荷送人住所2','荷送人電話番号'
-#                     ,'部署コード','部署名','重量契約区分','お届先郵便番号','お届先名称','お届先名称2','お届先住所'
-#                     ,'お届先住所2','お届先電話番号','お届先コード','お届先JIS市町村','着店コード付け区分','着地コード'
-#                     ,'着店コード','保険金額','輸送指示','輸送指示2','記事1','記事2','記事3','記事4','記事5'
-#                     ,'輸送指示','輸送指示コード','輸送指示コード2','輸送指示止め店','予備'])
-
-#     for order in orders:
-#         writer.writerow(['','','','',order.id,1,0,order.qty,'','','','','','',''
-#                     ,'','','',f"{order.shop.zip[:3]}-{order.shop.zip[3:]}",order.shop.name
-#                     ,order.shop.department,order.shop.prefecture + order.shop.city + order.shop.town + order.shop.address
-#                     ,order.shop.building,order.shop.telephone,'','','',''
-#                     ,'','','','','','','','',''
-#                     ,'輸送指示','輸送指示コード','','',0])
-
-#     # prepare the file name
-#     filename = 'dl-' + now + '.csv'
-
-#     response = make_response()
-#     response.data = file.getvalue().encode('sjis', 'replace')
-#     response.headers['Content-Type'] = 'text/csv'
-#     response.headers['Content-Disposition'] = 'attachment; filename=' + filename
-
-#     return response
-
-
 def prepare_csv(orders, filename):
     file = StringIO()
     writer = csv.writer(file, lineterminator="\n")
