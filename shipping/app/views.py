@@ -131,7 +131,9 @@ def prepare_csv(orders, filename):
                     pass
 
             for i in range(order.qty):
-                writer.writerow(['','','','',order.id,1,3,1,'','','','','','',''
+                order_id = str(order.id) + '-' + str(i)
+                    
+                writer.writerow(['','','','',order_id,1,3,1,'','','','','','',''
                     ,'','','',order.shop.zip.zfill(7),order.shop.name
                     ,order.shop.department,order.shop.prefecture + order.shop.city + order.shop.town + order.shop.address
                     ,order.shop.building,order.shop.telephone,'','','',''
@@ -190,10 +192,10 @@ def index(dl=None):
 
             csv_file = prepare_csv(orders, filename)
 
-            if orders:
-                for order in orders:
-                    order.delivery_check = 1
-                db.session.commit()
+            # if orders:
+            #     for order in orders:
+            #         order.delivery_check = 1
+            #     db.session.commit()
 
             return csv_file
 
