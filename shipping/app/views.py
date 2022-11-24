@@ -176,7 +176,7 @@ def index(dl=None):
 
             return csv_file
 
-    elif shipper == 9999:
+    elif shipper == 5808:
         # orders = ProductOrder.query.filter(ProductOrder.item != 901)\
         #     .filter(or_(ProductOrder.delivery_check ==2, and_(ProductOrder.product.has(shipper=True), ProductOrder.delivery_check.is_(None)))).all()
 
@@ -198,7 +198,13 @@ def index(dl=None):
             return csv_file
 
     else:
-        orders = ''
+        orders = ProductOrder.query.filter(ProductOrder.item != 901)\
+            .filter(ProductOrder.delivery_check.is_(None)).all()
+
+        if dl == 'csv':
+            flash('ダウンロードするデータはありません。', 'success')
+
+            redirect(url_for('shipping.index'))
 
     return render_template('index.html', orders=orders)
 
