@@ -2,14 +2,15 @@ from operator import or_
 from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response
 from flask_login import login_required, current_user
 from datetime import datetime, timezone, timedelta
-from io import StringIO, TextIOWrapper
+
+from io import StringIO
 from sqlalchemy import or_, and_
 from werkzeug.utils import secure_filename
 
 from .forms import FileUploadForm
 
+import io
 import os, csv
-import tempfile
 
 from .models import ProductOrder, DeliveryRequest
 from .extentions import db
@@ -35,6 +36,7 @@ def prepare_csv(orders, filename):
         is_request = ''
         memo = ''
         delivery_req = ''
+        shipper_code = '0355425300'
 
         if order.qty == 1 or order.qty >= 5 :
 
@@ -65,7 +67,7 @@ def prepare_csv(orders, filename):
                 else:
                     pass
 
-            writer.writerow(['','','','',order.id,1,3 if order.qty == 1 else 0,order.qty,'','','','','','',''
+            writer.writerow([shipper_code,'','','',order.id,1,3 if order.qty == 1 else 0,order.qty,'','','','','','',''
                 ,'','','',order.shop.zip.zfill(7),order.shop.name
                 ,order.shop.department,order.shop.prefecture + order.shop.city + order.shop.town + order.shop.address
                 ,order.shop.building,order.shop.telephone,'','','',''
@@ -103,7 +105,7 @@ def prepare_csv(orders, filename):
             for i in range(order.qty):
                 order_id = str(order.id) + '-' + str(i)
                     
-                writer.writerow(['','','','',order_id,1,3,1,'','','','','','',''
+                writer.writerow([shipper_code,'','','',order_id,1,3,1,'','','','','','',''
                     ,'','','',order.shop.zip.zfill(7),order.shop.name
                     ,order.shop.department,order.shop.prefecture + order.shop.city + order.shop.town + order.shop.address
                     ,order.shop.building,order.shop.telephone,'','','',''
@@ -215,9 +217,6 @@ def request_detail(id):
     return render_template('request-detail.html', delivery_request=delivery_request)
 
 
-def read_csv_file(file):
-    return 'csb'
-
 
 ALLOWED_EXTENSIONS = set(['csv'])
 
@@ -236,7 +235,18 @@ def shipped():
 
         if f and allowed_file(f.filename):
             
-            fstring = f.read()
+            stream = io.StringIO(f.read())
+            # stream = io.StringIO(f.stream) # TypeError: initial_value must be str or None, not SpooledTemporaryFile
+            # stream = io.TextIOWrapper(f.stream) # AttributeError: 'SpooledTemporaryFile' object has no attribute 'readable'
+
+            # stream = io.BytesIO(f.stream) # TypeError: a bytes-like object is required, not 'SpooledTemporaryFile'
+
+            csv_input = csv.reader(stream)
+
+            for row in csv_input:
+                print(row)
+
+            return 'ok'
 
             # csv_dicts = [{k: v for k, v in row.items()} for row in csv.DictReader(fstring, skipinitialspace=True)]
 
