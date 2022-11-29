@@ -16,8 +16,6 @@
 
               <a href="/customer" class="inline-flex border-b-2 items-center px-1 pt-1 text-sm" x-bind:class="window.location.pathname.startsWith('/customer') ? activeClass : inactiveClass">取引先</a>
   
-              <a href="/shipping" class="inline-flex border-b-2 items-center px-1 pt-1 text-sm" x-bind:class="window.location.pathname.startsWith('/shipping') ? activeClass : inactiveClass">出荷情報</a>
-  
               <a href="/order/data" class="inline-flex border-b-2 items-center px-1 pt-1 text-sm" x-bind:class="window.location.pathname.startsWith('/order') ? activeClass : inactiveClass">受注</a>
   
               <a href="/product" class="inline-flex border-b-2 items-center px-1 pt-1 text-sm" x-bind:class="window.location.pathname.startsWith('/product') ? activeClass : inactiveClass">商品</a>
@@ -52,11 +50,9 @@
         <div class="space-y-1 pt-2 pb-3" x-data="{ activeClass: 'bg-blue-50 border-blue-700 text-blue-700',
                     inactiveClass: 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800' }" >
           <a href="/customer" class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium" x-bind:class="window.location.pathname.startsWith('/customer') ? activeClass : inactiveClass">取引先</a>
-  
-          <a href="/shipping" class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium" x-bind:class="window.location.pathname.startsWith('/shipping') ? activeClass : inactiveClass">出荷情報</a>
-  
+
           <a href="/order/data" class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium" x-bind:class="window.location.pathname.startsWith('/order') ? activeClass : inactiveClass">受注</a>
-  
+
           <a href="/product" class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium" x-bind:class="window.location.pathname.startsWith('/product') ? activeClass : inactiveClass">商品</a>
         </div>
         <div class="border-t border-gray-200 pt-4 pb-3">
