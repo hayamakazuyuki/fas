@@ -16,18 +16,18 @@ order = Blueprint('order', __name__, url_prefix='/order')
 
 JST = timezone(timedelta(hours=+9), 'JST')
 
-@order.route('/<int:customer_id>/<int:id>')
-@login_required
-def index(customer_id, id):
+# @order.route('/<int:customer_id>/<int:id>')
+# @login_required
+# def index(customer_id, id):
 
-    customer = Customer.query.get(customer_id)
+#     customer = Customer.query.get(customer_id)
 
-    if not customer.staff:
-        return redirect(url_for('customer.profile', id=customer_id, mode='edit'))
+#     if not customer.staff:
+#         return redirect(url_for('customer.profile', id=customer_id, mode='edit'))
 
-    else:
-        return redirect(url_for('order.register', customer_id=customer_id, id=id))
-    
+#     else:
+#         return redirect(url_for('order.register', customer_id=customer_id, id=id))
+
 
 @order.route('/<int:customer_id>/<int:id>/register', methods=['GET', 'POST'])
 @login_required
