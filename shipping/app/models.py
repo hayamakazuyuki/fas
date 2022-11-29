@@ -1,7 +1,7 @@
 from werkzeug.security import check_password_hash
 from .extentions import db, login_manager
 from flask_login import UserMixin
-from sqlalchemy import ForeignKeyConstraint
+from sqlalchemy import ForeignKeyConstraint, func
 
 
 class Shipper(db.Model):
@@ -92,3 +92,11 @@ class DeliveryRequest(db.Model):
     memo = db.Column(db.String(255), nullable=True)
     # reply = db.Column(db.String(255), nullable=True)
     checked = db.Column(db.Integer, nullable=True)
+
+
+class Shipping(db.Model):
+    id = db.Column(db.Integer, primary_key=True, auto_increment=True)
+    order_id = db.Column(db.Integer, nullable=False)
+    shipped_on = db.Column(db.Date, nullable=False)
+    code = db.Column(db.String(15), nullable=False)
+    registered_at = db.Column(db.DateTime, default=func.now())

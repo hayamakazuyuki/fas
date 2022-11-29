@@ -2,30 +2,36 @@
 {% block content %}
 {% include "navbar.html" %}
 {% include "_flashing.html" %}
-<div class="container max-w-4xl mx-auto" x-data="{ open: false }">
-    <div class="mx-auto my-8 px-3">
-        <h1 class="font-bold text-xl text-gray-500">出荷データ</h1>
+<div x-data="" class="container mx-auto">
+    <div class="my-8 px-3 mx-auto w-full md:max-w-md">
+        <h1 class="font-bold text-lg text-gray-500">出荷データ登録</h1>
         <form class="mt-5" method="post" enctype="multipart/form-data">
             {{ form.csrf_token }}
-            {{ form.file(class_="text-sm") }}{{ form.submit(class_="py-2 px-5 text-white text-sm bg-blue-500 rounded-full cursor-pointer hover:bg-blue-700") }}
+            {{ form.file(class_="text-sm") }}{{ form.submit(class_="py-2 px-5 text-white text-sm bg-blue-500 shadow-lg rounded-full cursor-pointer hover:bg-blue-700") }}
         </form>
+        <div>
+            <h1 class="mt-10 mb-5 font-bold text-lg text-gray-500">登録済みデータ</h1>
+            {% if shippings %}
+            <ul class="space-y-2">
+                {% for shipping in shippings %}
+                <li class="w-full border rounded-lg p-2 hover:border-blue-500 hover:shadow-md">
+                    <div class="flex justify-around text-xs text-gray-500">
+                        <p class="text-xs text-gray-500">管理ID <span class="text-base text-gray-700"> {{ shipping.order_id }}</span></p>
+                        <p class="">登録 <span class="text-base text-gray-700"> {{ shipping.registered_at.strftime('%Y-%m-%d %H:%M') }}</span></p>
+                    </div>
+                    <div class="mt-1 flex justify-around text-xs text-gray-500">
+                        <h3 class="text-base text-blue-700"><span class="text-xs text-gray-500">問合せ番号 </span> {{ shipping.code }}</h3>
+                        <p class="">出荷日 <span class="text-base text-gray-700"> {{ shipping.shipped_on }}</span></p>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block script %}
-<!-- alpine.js -->
-<script>
-    const getToday = () => {
-        let now = new Date();
-        let year = now.getFullYear();
-        let month = now.getMonth() + 1;
-        let date = now.getDate();
-        let hours = now.getHours().toString().padStart(2, '0');
-        let minutes = now.getMinutes().toString().padStart(2, '0');
-        return {
-            today: year + "年" + month + "月" + date + "日" + "　" + hours + ":" + minutes
-        }
-    }
-</script>
+
 {% endblock %}

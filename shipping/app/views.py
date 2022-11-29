@@ -1,18 +1,16 @@
-from operator import or_
 from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response
 from flask_login import login_required, current_user
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta, date
 
 from io import StringIO
 from sqlalchemy import or_, and_
-from werkzeug.utils import secure_filename
 
 from .forms import FileUploadForm
 
 import io
-import os, csv
+import csv
 
-from .models import ProductOrder, DeliveryRequest
+from .models import ProductOrder, DeliveryRequest, Shipping
 from .extentions import db
 
 
@@ -225,6 +223,9 @@ def allowed_file(filename):
 @shipping.route('/shipped', methods=['GET', 'POST'])
 @login_required
 def shipped():
+
+    shippings = Shipping.query.order_by(Shipping.id.desc()).all()
+
     form = FileUploadForm()
 
     if form.validate_on_submit():
@@ -232,52 +233,21 @@ def shipped():
         f = request.files['file']
 
         if f and allowed_file(f.filename):
-            
-            stream = io.StringIO(f.read())
-            # stream = io.StringIO(f.stream) # TypeError: initial_value must be str or None, not SpooledTemporaryFile
-            # stream = io.TextIOWrapper(f.stream) # AttributeError: 'SpooledTemporaryFile' object has no attribute 'readable'
 
-            # stream = io.BytesIO(f.stream) # TypeError: a bytes-like object is required, not 'SpooledTemporaryFile'
+            text = io.TextIOWrapper(f)
 
-            csv_input = csv.reader(stream)
+            reader = csv.reader(text)
+            next(reader)
 
-            for row in csv_input:
-                print(row)
+            for row in reader:
+                idx = row[1].find('-')
+                order_id = row[1][:idx]
 
-            return 'ok'
+                shipping = Shipping(order_id=order_id, shipped_on=row[0], code=row[2])
+                db.session.add(shipping)
+            db.session.commit()
 
-            # csv_dicts = [{k: v for k, v in row.items()} for row in csv.DictReader(fstring, skipinitialspace=True)]
+            flash('出荷データを登録しました。', 'success')
+            return redirect(url_for('shipping.shipped'))
 
-            # filename = secure_filename(upload_file.filename)
-            # temp_path = tempfile.TemporaryDirectory()
-
-            # upload_file.save(os.path.join(temp_path, filename))
-
-
-            # with open(filename, 'r') as f:
-            #     reader = csv.reader(f)
-            #     result = list(reader)
-
-            return fstring
-
-            # with tempfile.TemporaryFile("w+") as f:
-
-
-
-
-            # temp_path = tempfile.TemporaryDirectory()
-
-            # with temp_path:
-            #     upload_file.save(temp_path, filename)
-
-            #     f = open(temp_path + filename, 'r')
-            #     f_reader = csv.read(f)
-            #     result = list(f_reader)
-
-            #     return result
-            # return temp_path
-
-        # flash('出荷データを登録しました。', 'success')
-        # return redirect(url_for('shipping.shipped'))
-
-    return render_template('shipped.html', form=form)
+    return render_template('shipped.html', form=form, shippings=shippings)
