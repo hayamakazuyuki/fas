@@ -3,7 +3,7 @@ from .extentions import db, admin, login_manager, mail
 
 from .main.views import main
 from .customer.views import customer
-from .delivery.views import delivery
+from .shipping.views import shipping
 from .order.views import order
 from .staff.views import staff
 from .models import MyAdminIndexView
@@ -32,7 +32,7 @@ def create_app():
     app.register_blueprint(main)
     app.register_blueprint(customer)
     app.register_blueprint(staff)
-    app.register_blueprint(delivery)
+    app.register_blueprint(shipping)
     app.register_blueprint(order)
 
     return app
