@@ -98,5 +98,5 @@ class Shipping(db.Model):
     id = db.Column(db.Integer, primary_key=True, auto_increment=True)
     order_id = db.Column(db.Integer, nullable=False)
     shipped_on = db.Column(db.Date, nullable=False)
-    code = db.Column(db.String(15), nullable=False)
+    code = db.Column(db.String(15), nullable=False, unique=True)
     registered_at = db.Column(db.DateTime, default=func.now())

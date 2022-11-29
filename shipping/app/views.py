@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response
 from flask_login import login_required, current_user
-from datetime import datetime, timezone, timedelta, date
+from datetime import datetime, timezone, timedelta
 
 from io import StringIO
 from sqlalchemy import or_, and_
@@ -224,7 +224,11 @@ def allowed_file(filename):
 @login_required
 def shipped():
 
-    shippings = Shipping.query.order_by(Shipping.id.desc()).all()
+    today = datetime.today()
+    a_week_ago = today - timedelta(weeks=1)
+
+    page = request.args.get('page', 1, type=int)
+    shippings = Shipping.query.filter(Shipping.registered_at >= a_week_ago).order_by(Shipping.id.desc()).paginate(page=page, per_page=20)
 
     form = FileUploadForm()
 
@@ -234,7 +238,7 @@ def shipped():
 
         if f and allowed_file(f.filename):
 
-            text = io.TextIOWrapper(f)
+            text = io.TextIOWrapper(f, encoding='CP932')
 
             reader = csv.reader(text)
             next(reader)
@@ -260,5 +264,9 @@ def shipped():
 
             flash('出荷データを登録しました。', 'success')
             return redirect(url_for('shipping.shipped'))
+        
+        else:
+            flash('登録するファイルを確認して下さい。', 'error')
+            return redirect(url_for('shipping.shipped'))
 
-    return render_template('shipped.html', form=form, shippings=shippings)
+    return render_template('shipped.html', form=form, shippings=shippings, a_week_ago=a_week_ago)

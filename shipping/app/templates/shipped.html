@@ -10,13 +10,31 @@
             {{ form.file(class_="text-sm") }}{{ form.submit(class_="py-2 px-5 text-white text-sm bg-blue-500 shadow-lg rounded-full cursor-pointer hover:bg-blue-700") }}
         </form>
         <div>
-            <h1 class="mt-10 mb-5 font-bold text-lg text-gray-500">登録済みデータ</h1>
+            <h1 class="mt-10 mb-2 font-bold text-lg text-gray-500">登録済みデータ</h1>
+            <p>{{ a_week_ago.strftime('%Y-%m-%d') }} <span class="text-xs text-gray-500">以降の登録分のみ</span></p>
+            
+
             {% if shippings %}
+
+            <p class="my-5 space-x-2">
+                {% for page_num in shippings.iter_pages(left_edge=3, right_edge=3) %}
+                {% if page_num %}
+                {% if shippings.page == page_num %}
+                <a class="text-blue-500 underline hover:text-blue-800" href="{{ url_for('shipping.shipped', page=page_num) }}">{{ page_num }}</a>
+                {% else %}
+                <a class="text-blue-500 hover:text-blue-800" href="{{ url_for('shipping.shipped', page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+                {% else %}
+                ...
+                {% endif %}
+                {% endfor %}
+            </p>
+
             <ul class="space-y-2">
-                {% for shipping in shippings %}
+                {% for shipping in shippings.items %}
                 <li class="w-full border rounded-lg p-2 hover:border-blue-500 hover:shadow-md">
                     <div class="flex justify-around text-xs text-gray-500">
-                        <p class="text-xs text-gray-500">管理ID <span class="text-base text-gray-700"> {{ shipping.order_id }}</span></p>
+                        <p class="text-xs text-gray-500">管理番号 <span class="text-base text-gray-700"> {{ shipping.order_id }}</span></p>
                         <p class="">登録 <span class="text-base text-gray-700"> {{ shipping.registered_at.strftime('%Y-%m-%d %H:%M') }}</span></p>
                     </div>
                     <div class="mt-1 flex justify-around text-xs text-gray-500">
