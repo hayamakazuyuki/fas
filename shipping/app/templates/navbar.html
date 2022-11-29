@@ -1,17 +1,16 @@
 <nav class="bg-white sticky top-0 shadow-md px-3 py-3" x-data="{ open : false }">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-3xl mx-auto">
         <div class="flex justify-between">
-            <div class="flex space-x-5">
+            <div class="flex">
                 <!-- logo -->
                 <div>
                     <a href="/" class="flex items-center py-3">
-                    <img src="{{ url_for('static', filename='img/logo_FUROSHIKI.png') }}" width=30 height=33
+                    <img src="{{ url_for('static', filename='img/logo_FUROSHIKI.png') }}" width=36 height=40
                     class="mr-3" alt="furoshiki logo">
-                <span class="text-xl font-bold text-gray-600 hover:text-gray-800">fas</span></a>
                 </div>
 
                 <!-- primary nav -->
-                <div class="hidden md:flex items-center space-x-1">
+                <div class="hidden md:flex items-center">
                     <a href="/shipped" class="py-3 px-3 text-gray-700 hover:text-gray-900 hover:underline">出荷データ</a>
                 </div>
             </div>
