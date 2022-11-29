@@ -240,11 +240,22 @@ def shipped():
             next(reader)
 
             for row in reader:
-                idx = row[1].find('-')
-                order_id = row[1][:idx]
+                order_id = row[1]
+
+                if not order_id:
+                    continue # to next loop
+
+                else:
+                    if not '-' in order_id:
+                        pass
+
+                    else:
+                        idx = order_id.find('-')
+                        order_id = order_id[:idx]
 
                 shipping = Shipping(order_id=order_id, shipped_on=row[0], code=row[2])
                 db.session.add(shipping)
+
             db.session.commit()
 
             flash('出荷データを登録しました。', 'success')
