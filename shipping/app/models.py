@@ -100,3 +100,4 @@ class Shipping(db.Model):
     shipped_on = db.Column(db.Date, nullable=False)
     code = db.Column(db.String(15), nullable=False, unique=True)
     registered_at = db.Column(db.DateTime, default=func.now())
+    registered_by = db.Column(db.String(255), nullable=False)

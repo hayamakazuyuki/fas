@@ -228,7 +228,7 @@ def shipped():
     a_week_ago = today - timedelta(weeks=1)
 
     page = request.args.get('page', 1, type=int)
-    shippings = Shipping.query.filter(Shipping.registered_at >= a_week_ago).order_by(Shipping.id.desc()).paginate(page=page, per_page=20)
+    shippings = Shipping.query.filter(Shipping.registered_at >= a_week_ago).filter_by(registered_by = current_user.shipper_id).order_by(Shipping.id.desc()).paginate(page=page, per_page=20)
 
     form = FileUploadForm()
 
@@ -257,7 +257,7 @@ def shipped():
                         idx = order_id.find('-')
                         order_id = order_id[:idx]
 
-                shipping = Shipping(order_id=order_id, shipped_on=row[0], code=row[2])
+                shipping = Shipping(order_id=order_id, shipped_on=row[0], code=row[2], registered_by=current_user.shipper_id)
                 db.session.add(shipping)
 
             db.session.commit()
