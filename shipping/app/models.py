@@ -77,6 +77,7 @@ class ProductOrder(db.Model):
     exported = db.Column(db.Integer, nullable=True)
     request = db.relationship('DeliveryRequest', backref='product_order', uselist=False,
                               cascade="save-update, merge, delete")
+    shippings = db.relationship('Shipping', backref='product_order')
 
     __table_args__ = (ForeignKeyConstraint(['customer_id', 'shop_id'], ['shop.customer_id', 'shop.id']),)
 
@@ -96,7 +97,7 @@ class DeliveryRequest(db.Model):
 
 class Shipping(db.Model):
     id = db.Column(db.Integer, primary_key=True, auto_increment=True)
-    order_id = db.Column(db.Integer, nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('product_order.id'), nullable=False)
     shipped_on = db.Column(db.Date, nullable=False)
     code = db.Column(db.String(15), nullable=False, unique=True)
     registered_at = db.Column(db.DateTime, default=func.now())
