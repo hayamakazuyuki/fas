@@ -80,10 +80,11 @@
                     <th class="py-2">受注日</th>
                     <th class="py-2">担当</th>
                     <th class="py-2">事業所</th>
-                    <th class="py-2">住所</th>
                     <th class="py-2">商品</th>
                     <th class="py-2">単価</th>
                     <th class="py-2">数量</th>
+                    <th class="py-2">出荷日</th>
+                    <th class="py-2">問い合わせ番号</th>
                 </tr>
             </thead>
             {% for order in orders %}
@@ -92,11 +93,28 @@
                     <td><a href="/order/{{ order.id }}" class="text-blue-500">{{ '{:06d}'.format(order.id) }}</a></td>
                     <td>{{ order.date.strftime('%m-%d %H:%M') }}</td>
                     <td>{{ order.staff.last_name }}</td>
-                    <td>{{ order.customer_id }}-{{ order.shop_id }} {{ order.shop.name }}</td>
-                    <td>{{ order.shop.prefecture }}</td>
-                    <td>{{ order.product.name }}</td>
+                    <td>{{ order.shop.name }}</td>
+                    <td>{{ order.product.abbre }}</td>
                     <td class="text-right">{{ '{:,d}'.format(order.price) }}</td>
                     <td class="text-right">{{ order.qty }}</td>
+                    <td class=" text-center">
+                        {% if order.shippings %}
+                            {% for shipping in order.shippings %}
+                            <ul>
+                                <li>{{ shipping.shipped_on }}</li>
+                            </ul>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if order.shippings %}
+                            {% for shipping in order.shippings %}
+                            <ul>
+                                <li>{{ shipping.code }}</li>
+                            </ul>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
                 </tr>
             </tbody> 
             {% endfor %}
@@ -155,7 +173,23 @@
             {% endfor %}
         </table>
         {% endif %}
+
     </div>
+    {% if posts %}
+    <ul>
+        {% for post in posts %}
+        <li>{{ post.order_id }} = {{ post.id }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <!-- {% if shippings %}
+    <ul>
+        {% for shipping in shippings %}
+        <li>{{ shipping.order_id }} = {{ shipping.shipped_on }} = {{ shipping.code }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %} -->
 </div>
 {% endblock %}
 

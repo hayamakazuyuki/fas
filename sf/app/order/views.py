@@ -7,7 +7,7 @@ import csv
 
 from ..extentions import db
 
-from ..models import DeliveryRequest, Shop, ProductOrder, Customer
+from ..models import DeliveryRequest, Shop, ProductOrder, Customer, Shipping
 
 from .forms import order_edit_form, DeliveryRequestForm
 
@@ -105,7 +105,6 @@ def register(customer_id, id):
 def order_detail(id):
 
     order = ProductOrder.query.get(id)
-
     mode = request.args.get('mode')
 
     # get 2hours before and remove timezone info
@@ -186,6 +185,7 @@ def data():
         target = today.strftime('%Y-%m-%d')
 
     orders = ProductOrder.query.filter(func.DATE(ProductOrder.date) == target).all()
+    shippings = Shipping.query.all() # for testing
 
     if dl == 'csv':
         file = StringIO()
@@ -216,7 +216,7 @@ def data():
         .scalar()
 
     return render_template('order/data.html', target=target, orders=orders, sum_qty=sum_qty, sum_price=sum_price,
-    sum_delivery_price=sum_delivery_price, total_price=total_price)
+    sum_delivery_price=sum_delivery_price, total_price=total_price, shippings=shippings)
 
 
 @order.route('/range')
