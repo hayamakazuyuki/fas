@@ -77,7 +77,7 @@
             <thead>
                 <tr class="border-b border-black">
                     <th clss="py-2">番号</th>
-                    <th class="py-2">受注日</th>
+                    <th class="py-2">登録日時</th>
                     <th class="py-2">担当</th>
                     <th class="py-2">事業所</th>
                     <th class="py-2">商品</th>
@@ -101,7 +101,7 @@
                         {% if order.shippings %}
                             {% for shipping in order.shippings %}
                             <ul>
-                                <li>{{ shipping.shipped_on }}</li>
+                                <li>{{ shipping.shipped_on.strftime('%m-%d') }}</li>
                             </ul>
                             {% endfor %}
                         {% endif %}
