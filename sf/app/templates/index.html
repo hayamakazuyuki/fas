@@ -3,8 +3,8 @@
 {% include "nav.html" -%}
 <div class="container max-w-4xl mx-auto px-5 md:px-0">
     {% include "_flashing.html" -%}
-    
-    <div class="my-5 md:flex" x-data="getToday">
+
+    <!-- <div class="my-5 md:flex" x-data="getToday">
         <div class="w-full mx-auto md:w-1/3 py-4 px-8 bg-white shadow-lg rounded-lg">
             <h1 class="text-gray-500 text-sm"><span class="text-gray-800 text-lg font-bold" x-text="thisMonth"></span>の受注</h1>
             <p class="text-lg font-bold mt-3">{{ sum_qty_month or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
@@ -15,24 +15,10 @@
             <p class="text-lg font-bold mt-3">{{ sum_qty_today or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
             <p class="text-lg font-bold mt-1">{{ "{:,}".format(sum_amount_today) if sum_amount_today else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
         </div>
-    </div>
+    </div> -->
 
     <div class="my-8">
-        <p class="text-xl">{{ current_user.last_name }}<span class="text-sm">さんの受注</span></p>
-        <p class="my-3">
-            {% for page_num in orders.iter_pages(left_edge=3, right_edge=2) %}
-            {% if page_num %}
-            {% if orders.page == page_num %}
-            <a class="text-blue-500 underline hover:text-blue-800" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
-            {% else %}
-            <a class="text-blue-500 hover:text-blue-800" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
-            {% endif %}
-            {% else %}
-            ...
-            {% endif %}
-            {% endfor %}
-        </p>
-        <table class="table-auto w-full text-sm">
+        <!-- <table class="table-auto w-full text-sm">
             <thead>
             <tr class="border-black border-b">
                 <th>受注ID</th>
@@ -53,7 +39,38 @@
                 <td class="p-1 text-right">{{ order.qty }}</td>
             </tr>
             {% endfor %}
-        </table>
+        </table> -->
+        <div class="mx-auto w-full md:max-w-lg">
+            <p class="text-xl">{{ current_user.last_name }}<span class="text-sm">さんの受注</span></p>
+            <p class="my-3">
+                {% for page_num in orders.iter_pages(left_edge=3, right_edge=2) %}
+                {% if page_num %}
+                {% if orders.page == page_num %}
+                <a class="text-blue-500 underline hover:text-blue-800" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+                {% else %}
+                <a class="text-blue-500 hover:text-blue-800" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+                {% else %}
+                ...
+                {% endif %}
+                {% endfor %}
+            </p>
+    
+            <ul>
+                {% for order in orders.items %}
+                <li class="border mb-2 py-2 px-3 rounded-lg text-sm text-gray-600 hover:border-blue-500 hover:shadow-lg">
+                    <a href="/order/{{ order.id }}">
+                        {{ '{:06d}'.format(order.id) }}<span class="ml-10">{{ order.date.strftime('%Y-%m-%d') }}</span>
+                        <p class="mt-2 text-base font-bold">{{ order.shop.name }}</p>
+                        <p class="mt-1 text-base text-right">
+                            {{ order.product.name }} {{ '{:,d}'.format(order.price) }}円 x {{ order.qty }} 個
+                        </p>    
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+
+        </div>
     </div>
 </div>
 </div>

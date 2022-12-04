@@ -22,7 +22,7 @@ now = datetime.now(JST).strftime('%Y%m%d-%H%M')
 @login_required
 def index():
     page = request.args.get('page', 1, type=int)
-    orders = ProductOrder.query.filter(ProductOrder.sales_by == current_user.id).order_by(ProductOrder.id.desc()).paginate(page=page, per_page=20)
+    orders = ProductOrder.query.order_by(ProductOrder.id.desc()).filter(ProductOrder.sales_by == current_user.id).paginate(page=page, per_page=20)
     
     this_year  = datetime.now(JST).strftime('%Y')
     this_month = datetime.now(JST).strftime('%m')
