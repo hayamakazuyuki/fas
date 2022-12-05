@@ -84,22 +84,22 @@
         </div>
 
         <!-- items2 here-->
-        <div class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
+        <div class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm" x-data="{ open : false }">
             <div class="flex justify-between">
                 <h2 class="text-base font-bold text-gray-800">商品 2</h2>    
-                <div class="rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" id="showItem2" class="h-6 w-6 rounded-full cursor-pointer hover:bg-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="rounded-full cursor-pointer" x-on:click="open = ! open">
+                    <svg xmlns="http://www.w3.org/2000/svg" x-show="!open" class="h-6 w-6 rounded-full hover:bg-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" id="hideItem2" class="h-6 w-6 rounded-full cursor-pointer hover:bg-gray-200 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" x-show="open" class="h-6 w-6 rounded-full hover:bg-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </div>
             </div>
 
             <!-- inputs for item2 goes here-->
-            <div id="inputs2"></div>
-            <template id="templateItem2">
+            <template x-if="open">
+                <div>
                 <!-- errors go here -->
                 <div class="itemError mt-3 text-red-400 font-bold"></div>
 
@@ -149,33 +149,35 @@
 
                 <div class="mt-3">
                     <label for="price2" class="mr-5">単価</label>
-                    <input type="text" oninput="value = onlyNumbers(value)" class="price border-b text-gray-800 text-lg" id="price2" name="price2" placeholder="¥ 1箱あたり" required>
+                    <input type="number" class="price border-b text-gray-800 text-lg" id="price2" name="price2" placeholder="¥ 1箱あたり" required>
                 </div>
 
                 <div class="mt-3">
                     <label for="qty2" class="mr-5">数量</label>
-                    <input type="text" oninput="value = onlyNumbers(value)" class="qty border-b text-gray-800 text-lg" id="qty2" name="qty2" placeholder="数量" required>
+                    <input type="number" min="1" class="qty border-b text-gray-800 text-lg" id="qty2" name="qty2" placeholder="数量" required>
+                </div>
+
                 </div>
             </template>
         </div>
 
         <!-- items3 here-->
-        <div class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
+        <div class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm" x-data="{ open: false }">
             <div class="flex justify-between">
                 <h2 class="text-base font-bold text-gray-800">商品 3</h2>    
-                <div class="rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" id="showItem3" class="h-6 w-6 rounded-full cursor-pointer hover:bg-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="rounded-full cursor-pointer" x-on:click="open = ! open">
+                    <svg xmlns="http://www.w3.org/2000/svg" x-show="!open" class="h-6 w-6 rounded-full hover:bg-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" id="hideItem3" class="h-6 w-6 rounded-full cursor-pointer hover:bg-gray-200 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" x-show="open" class="h-6 w-6 rounded-full hover:bg-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </div>
             </div>
 
             <!-- inputs for item3 goes here-->
-            <div id="inputs3"></div>
-            <template id="templateItem3">
+            <template x-if="open">
+                <div>
                 <!-- errors go here -->
                 <div class="itemError mt-3 text-red-400 font-bold"></div>
 
@@ -225,12 +227,14 @@
 
                 <div class="mt-3">
                     <label for="price3" class="mr-5">単価</label>
-                    <input type="text" oninput="value = onlyNumbers(value)" class="price border-b text-gray-800 text-lg" id="price3" name="price3" placeholder="¥ 1箱あたり" required>
+                    <input type="number" class="price border-b text-gray-800 text-lg" id="price3" name="price3" placeholder="¥ 1箱あたり" required>
                 </div>
 
                 <div class="mt-3">
                     <label for="qty3" class="mr-5">数量</label>
-                    <input type="text" oninput="value = onlyNumbers(value)" class="qty border-b text-gray-800 text-lg" id="qty3" name="qty3" placeholder="数量" required>
+                    <input type="number" min="1" class="qty border-b text-gray-800 text-lg" id="qty3" name="qty3" placeholder="数量" required>
+                </div>
+
                 </div>
             </template>
         </div>

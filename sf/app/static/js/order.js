@@ -1,69 +1,69 @@
 // -------- item2 inputs show/hide --------------- //
-const showItem2 = document.getElementById('showItem2');
-const hideItem2 = document.getElementById('hideItem2');
+// const showItem2 = document.getElementById('showItem2');
+// const hideItem2 = document.getElementById('hideItem2');
 
-const inputs2 = document.getElementById('inputs2');
+// const inputs2 = document.getElementById('inputs2');
 
-const showHideItem2 = () => {
-    showItem2.classList.toggle('hidden');
-    hideItem2.classList.toggle('hidden');
-};
+// const showHideItem2 = () => {
+//     showItem2.classList.toggle('hidden');
+//     hideItem2.classList.toggle('hidden');
+// };
 
-showItem2.addEventListener('click', () => {
+// showItem2.addEventListener('click', () => {
 
-    showHideItem2();
+//     showHideItem2();
 
-    let template = document.getElementById('templateItem2');
-    let clone = template.content.cloneNode(true);
+//     let template = document.getElementById('templateItem2');
+//     let clone = template.content.cloneNode(true);
 
-    inputs2.appendChild(clone);
+//     inputs2.appendChild(clone);
 
-}, false)
+// }, false)
 
-hideItem2.addEventListener('click', () => {
+// hideItem2.addEventListener('click', () => {
 
-    showHideItem2();
+//     showHideItem2();
 
-    while (inputs2.firstChild){
-        inputs2.removeChild(inputs2.firstChild);
-    };
+//     while (inputs2.firstChild){
+//         inputs2.removeChild(inputs2.firstChild);
+//     };
 
-}, false)
+// }, false)
 
 // -------- item3 inputs show/hide --------------- //
-const showItem3 = document.getElementById('showItem3');
-const hideItem3 = document.getElementById('hideItem3');
+// const showItem3 = document.getElementById('showItem3');
+// const hideItem3 = document.getElementById('hideItem3');
 
-const inputs3 = document.getElementById('inputs3');
+// const inputs3 = document.getElementById('inputs3');
 
-const showHideItem3 = () => {
-    showItem3.classList.toggle('hidden');
-    hideItem3.classList.toggle('hidden');
-};
+// const showHideItem3 = () => {
+//     showItem3.classList.toggle('hidden');
+//     hideItem3.classList.toggle('hidden');
+// };
 
-showItem3.addEventListener('click', () => {
-    showHideItem3();
+// showItem3.addEventListener('click', () => {
+//     showHideItem3();
 
-    let template = document.getElementById('templateItem3');
-    let clone = template.content.cloneNode(true);
+//     let template = document.getElementById('templateItem3');
+//     let clone = template.content.cloneNode(true);
 
-    inputs3.appendChild(clone);
+//     inputs3.appendChild(clone);
 
-}, false)
+// }, false)
 
-hideItem3.addEventListener('click', () => {
-    showHideItem3();
+// hideItem3.addEventListener('click', () => {
+//     showHideItem3();
 
-    while (inputs3.firstChild){
-        inputs3.removeChild(inputs3.firstChild);
-    };
+//     while (inputs3.firstChild){
+//         inputs3.removeChild(inputs3.firstChild);
+//     };
 
-}, false)
+// }, false)
 
 // ---------- delivery inputs show/hide -------------- //
 // const showDelivery = document.getElementById('showDelivery');
 // const hideDelivery = document.getElementById('hideDelivery');
-const deliveryError = document.getElementById('deliveryError');
+// const deliveryError = document.getElementById('deliveryError');
 
 // const inputsDelivery = document.getElementById('inputsDelivery'); 
 
