@@ -38,8 +38,8 @@ def register(customer_id, id):
     if request.method == 'POST':
 
         staff = shop.customer.staff
-        customer_id = request.form['customer_id']
-        id = request.form['id']
+        # customer_id = request.form['customer_id']
+        # id = request.form['id']
 
         item2 = request.form.get('item2')
         item3 = request.form.get('item3')
