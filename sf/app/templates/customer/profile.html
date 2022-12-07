@@ -57,7 +57,6 @@
             <th>事業所ID</th>
             <th>事業所名</th>
             <th>住所</th>
-            <th>TEL</th>
             </tr>
         </thead>
 
@@ -67,7 +66,6 @@
            <td><a href="/customer/{{ shop.customer_id }}/{{ shop.id }}" class="text-blue-500 hover:underline hover:text-blue-800">
                {{ shop.name }}</a></td>
            <td>{{ shop.prefecture }}{{ shop.city }}{{ shop.town }}{{ shop.address }}</td>
-           <td>{{ shop.telephone }}</td>
         </tr>
 
     {% endfor %}

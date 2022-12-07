@@ -5,10 +5,6 @@
     <div class="max-w-md mx-auto my-8">
         <p class="font-bold text-xl text-gray-800">受注登録</p>
 
-        <form method="POST">
-            <!-- <input type="hidden" name="customer_id" value="{{ shop.customer_id }}">
-            <input type="hidden" name="id" value="{{ shop.id }}"> -->
-    
             <!-- delivery destination goes here-->
             <div class="max-w-lg my-3 py-4 px-8 bg-white border rounded-lg">
                 <h2 class="mt-2 text-gray-800 text-2xl">{{ shop.name }}</h2>
@@ -19,7 +15,9 @@
                 <p class="mt-2 text-gray-600">{{ shop.telephone }}</p>
             </div>
 
-            <!-- div for item 1 -->
+            <!-- order input form -->
+            <form method="POST">
+            <!-- item 1 -->
             <div class="my-3 py-4 px-8 bg-white shadow-lg rounded-lg text-gray-500 text-sm">
                 <h2 class="text-base font-bold text-gray-800">商品 1</h2>
                 

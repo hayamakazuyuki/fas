@@ -38,8 +38,6 @@ def register(customer_id, id):
     if request.method == 'POST':
 
         staff = shop.customer.staff
-        # customer_id = request.form['customer_id']
-        # id = request.form['id']
 
         item2 = request.form.get('item2')
         item3 = request.form.get('item3')
@@ -53,7 +51,7 @@ def register(customer_id, id):
         order.item = request.form['item']
         order.price = request.form['price']
         order.qty = request.form['qty']
-        order.delivery_check = request.form.get('noDelivery')
+        # order.delivery_check = request.form.get('noDelivery')
 
         db.session.add(order)
 
@@ -65,7 +63,7 @@ def register(customer_id, id):
             order2.item = request.form['item2']
             order2.price = request.form['price2']
             order2.qty = request.form['qty2']
-            order2.delivery_check = request.form.get('noDelivery2')
+            # order2.delivery_check = request.form.get('noDelivery2')
 
             db.session.add(order2)
 
@@ -77,7 +75,7 @@ def register(customer_id, id):
             order3.item = request.form['item3']
             order3.price = request.form['price3']
             order3.qty = request.form['qty3']
-            order3.delivery_check = request.form.get('noDelivery3')
+            # order3.delivery_check = request.form.get('noDelivery3')
 
             db.session.add(order3)
 
