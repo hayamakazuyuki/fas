@@ -16,7 +16,7 @@
             </div>
 
             <!-- order input form -->
-            <form x-data="{ lists: [{id: 1, label: '午前'}, {id: 2, label:'午後'}],
+            <form x-data="{ lists: [{id: 1, label: '1_午前'}, {id: 2, label:'2_午後'}],
                             delivery_date : '',
                             time_range: '',
                             memo: '' }" method="POST">
@@ -261,7 +261,8 @@
                 <div class="mt-3">
 
                 <label for="delivery_date" class="mr-3">指定日</label>
-                <input type="date" id="delivery_date" name="delivery_date" class="border-b text-gray-800" x-model="delivery_date">
+                <input type="date" id="delivery_date" name="delivery_date" class="border-b text-gray-800"
+                min="{{ min_date.strftime('%Y-%m-%d') }}", max="{{ max_date.strftime('%Y-%m-%d') }}" x-model="delivery_date">
 
                 <div class="mt-3 flex">
                     <fieldset>
@@ -284,7 +285,7 @@
 
                 <div class="mt-3">
                     <label for="memo" class="mr-3">メモ</label>
-                    <input type="text" size="20" maxlength="15" class="qty border-b text-gray-800 text-sm w-fit"
+                    <input type="text" size="20" maxlength="15" class="border-b text-gray-800 text-sm w-fit"
                      id="memo" name="memo" placeholder="最大15文字" x-model="memo">
                 </div>
                 </div>

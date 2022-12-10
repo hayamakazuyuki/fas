@@ -35,12 +35,20 @@ def register(customer_id, id):
 
     shop = Shop.query.get((customer_id, id))
 
+    # generate min and max dates for delivery date request.
+    min_date = datetime.now(JST) + timedelta(days=4)
+    max_date = datetime.now(JST) + timedelta(days=29)
+
     if request.method == 'POST':
 
         staff = shop.customer.staff
 
         item2 = request.form.get('item2')
         item3 = request.form.get('item3')
+
+        delivery_date = request.form.get('delivery_date')
+        time_range = request.form.get('time_range')
+        memo = request.form.get('memo')
         delivery = request.form.get('delivery')
 
         # item
@@ -54,6 +62,21 @@ def register(customer_id, id):
         # order.delivery_check = request.form.get('noDelivery')
 
         db.session.add(order)
+        db.session.commit()
+
+        if delivery_date or time_range or memo:
+            order_id = order.id
+            delivery_request = DeliveryRequest()
+
+            delivery_request.order_id = order_id
+            delivery_request.requested_by = current_user.id
+            if delivery_date:
+                delivery_request.delivery_date = delivery_date
+            delivery_request.time_range = time_range
+            delivery_request.memo = memo
+
+            db.session.add(delivery_request)
+            db.session.commit()
 
         if item2:
             order2 = ProductOrder()
@@ -66,6 +89,21 @@ def register(customer_id, id):
             # order2.delivery_check = request.form.get('noDelivery2')
 
             db.session.add(order2)
+            db.session.commit()
+
+            if delivery_date or time_range or memo:
+                order_id = order2.id
+                delivery_request = DeliveryRequest()
+
+                delivery_request.order_id = order_id
+                delivery_request.requested_by = current_user.id
+                if delivery_date:
+                    delivery_request.delivery_date = delivery_date
+                delivery_request.time_range = time_range
+                delivery_request.memo = memo
+
+                db.session.add(delivery_request)
+                db.session.commit()
 
         if item3:
             order3 = ProductOrder()
@@ -78,6 +116,22 @@ def register(customer_id, id):
             # order3.delivery_check = request.form.get('noDelivery3')
 
             db.session.add(order3)
+            db.session.commit()
+
+            if delivery_date or time_range or memo:
+                order_id = order3.id
+
+                delivery_request = DeliveryRequest()
+
+                delivery_request.order_id = order_id
+                delivery_request.requested_by = current_user.id
+                if delivery_date:
+                    delivery_request.delivery_date = delivery_date
+                delivery_request.time_range = time_range
+                delivery_request.memo = memo
+
+                db.session.add(delivery_request)
+                db.session.commit()
 
         if delivery:
             orderd = ProductOrder()
@@ -89,37 +143,29 @@ def register(customer_id, id):
             orderd.qty = request.form['deliveryQty']
 
             db.session.add(orderd)
+            db.session.commit()
 
-        db.session.commit()
-        
         flash('受注を登録しました。', 'success')
 
         return redirect(url_for('main.index'))
 
-    return render_template('order/register.html', shop=shop)
+    return render_template('order/register.html', shop=shop, min_date=min_date, max_date=max_date)
 
-@order.route('/<int:id>', methods=['GET', 'POST'])
+
+@order.route('/<int:id>')
+@order.route('/<int:id>/<edit>', methods=['GET', 'POST'])
 @login_required
-def order_detail(id):
+def order_detail(id, edit=None, request_id=None):
 
     order = ProductOrder.query.get(id)
-    mode = request.args.get('mode')
+    # mode = request.args.get('mode')
 
     # get 2hours before and remove timezone info
-    before2hours = datetime.now(JST) - timedelta(seconds=7200)
-    before2h = before2hours.replace(tzinfo=None)
+    # before2hours = datetime.now(JST) - timedelta(seconds=7200)
+    # before2h = before2hours.replace(tzinfo=None)
 
-    # generate min and max dates for delivery date request.
-    min_date = datetime.now(JST) + timedelta(days=4)
-    max_date = datetime.now(JST) + timedelta(days=29)
-
-    form = DeliveryRequestForm()
-
-    if mode == 'request':
-        if form.validate_on_submit():
-            return register_request(id)
  
-    if mode == 'edit':
+    if edit == 'order':
         current_item = order.product.id
         OrderEditForm = order_edit_form(current_item)
 
@@ -131,32 +177,75 @@ def order_detail(id):
             order.qty = request.form['qty']
             db.session.commit()
 
-            flash('受注情報を変更しました。', 'success')
+            flash('受注内容を変更しました。', 'success')
             return redirect(url_for('order.order_detail', id=id))
 
         return render_template('order/order-edit.html', order=order, form=form)
 
-    return render_template('order/order-detail.html', order=order, before2h=before2h, 
-                    min_date=min_date, max_date=max_date, form=form)
+    return render_template('order/order-detail.html', order=order)
 
 
-# func register delivery request
-def register_request(id):
+@order.route('/<int:id>/request/', methods=['GET', 'POST'])
+@order.route('/<int:id>/request/<int:request_id>', methods=['GET', 'POST'])
+@login_required
+def order_request(id, request_id=None):
 
-    deliveryreq = DeliveryRequest()
-    deliveryreq.order_id = id
-    deliveryreq.requested_by = current_user.id
-    if request.form.get('delivery_date'):
-        deliveryreq.delivery_date = request.form.get('delivery_date')
-    deliveryreq.time_range = request.form.get('time_range')
-    deliveryreq.memo = request.form.get('memo')
+    order = ProductOrder.query.get(id)
 
-    db.session.add(deliveryreq)
-    db.session.commit()
+    # generate min and max dates for delivery date request.
+    min_date = datetime.now(JST) + timedelta(days=4)
+    max_date = datetime.now(JST) + timedelta(days=29)
 
-    flash('配送に関する依頼を登録しました。', 'success')
+    if request_id:
 
-    return redirect(url_for('order.order_detail', id=id))
+        delivery_request = DeliveryRequest.query.get(request_id)
+        form = DeliveryRequestForm(obj=delivery_request)
+
+        if form.validate_on_submit():
+            delivery_date = request.form.get('delivery_date')
+
+            if delivery_date:
+                delivery_request.delivery_date = delivery_date
+            else:
+                delivery_request.delivery_date = None
+            delivery_request.time_range = request.form.get('time_range')
+            delivery_request.memo = request.form.get('memo')
+
+            if order.delivery_check is None:
+                db.session.commit()
+                flash('配送依頼を変更しました。', 'success')
+
+            else:
+                flash('配送依頼は既にダウンロードされています.', 'error')
+            
+            return redirect(url_for('order.order_detail', id=id))
+
+    elif not request_id:
+
+        form = DeliveryRequestForm()
+
+        if form.validate_on_submit():
+            delivery_request = DeliveryRequest()
+            delivery_request.order_id = id
+            delivery_request.requested_by = current_user.id
+            if request.form.get('delivery_date'):
+                delivery_request.delivery_date = request.form.get('delivery_date')
+            delivery_request.time_range = request.form.get('time_range')
+            delivery_request.memo = request.form.get('memo')
+
+            if order.delivery_check is None:
+
+                db.session.add(delivery_request)
+                db.session.commit()
+    
+                flash('配送依頼を登録しました。', 'success')
+
+            else:
+                flash('配送依頼は既にダウンロードされています.', 'error')
+
+            return redirect(url_for('order.order_detail', id=id))
+
+    return render_template('order/order-request-edit.html', order=order, form=form, min_date=min_date, max_date=max_date)
 
 
 # delete order

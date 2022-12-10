@@ -3,36 +3,98 @@
 {% include "nav.html" %}
 {% from "_macros.html" import render_order_select, render_order_input %}
 
-<div class="container max-w-5xl mx-auto">
+<div x-data="{ item : '{{ order.item }}',
+                price : '{{ order.price }}',
+                qty : '{{ order.qty }}',
+                open : false }" class="container max-w-5xl mx-auto">
+
     <div class="flex justify-center my-5 mx-3">
         <div class="">
-            <div class="p-6">
-                <h1 class="font-bold text-lg">注文の編集</h1>
-                <p class="font-bold my-3"><span class="text-sm font-normal text-gray-500">No.</span> {{ '{:06d}'.format(order.id) }}</p>
-                <p class="my-3">{{ order.date.strftime('%Y-%m-%d %H:%M') }}</p>
+            <h1 class="my-5 font-bold text-lg">注文の編集</h1>
+
+            <div class="p-6 border rounded-lg shadow-lg">
+                <div class="flex mb-5 border-b items-end justify-between">
+                    <h1 class="font-bold text-lg">{{ '{:06d}'.format(order.id) }}</h1>
+                    <p class="">{{ order.date.strftime('%Y-%m-%d %H:%M') }}</p>    
+                </div>
+
                 <p class="font-bold my-3"><span class="text-base font-normal text-gray-500">
                     {{ order.customer_id }}-{{ order.shop_id }}
                 </span> {{ order.shop.name }}</p>
                 <p class="font-bold my-3">{{ order.shop.prefecture }}{{ order.shop.city }}{{ order.shop.town }}
                     {{ order.shop.address }}{{ order.shop.bldg }}
-                </p>            
-            </div>
-            <div class="px-6 border rounded-lg shadow-lg">
-                <form action="/order/{{ order.id }}?mode=edit" method="POST">
+                </p>
+
+                <form method="POST" x-ref="form">
                     {{ form.csrf_token }}
                     <p class="w-full my-5 text-sm text-gray-500">
-                        {{ render_order_select(form.item, order.item, class_="px-5 text-lg text-gray-800")}}
+                        {{ render_order_select(form.item, class_="px-5 text-lg text-gray-800", **{'x-model' : 'item'} )}}
                     </p>
                     <p class="w-full my-5 text-sm text-gray-500">
-                        {{ render_order_input(form.price, value=order.price, class_="px-5 text-lg border-b text-gray-800" )}}
+                        {{ render_order_input(form.price, class_="px-5 text-lg border-b text-gray-800", **{'x-model' : 'price'} )}}
                     </p>
                     <p class="w-full my-5 text-sm text-gray-500">
-                        {{ render_order_input(form.qty, value=order.qty, class_="px-5 text-lg border-b text-gray-800" )}}
+                        {{ render_order_input(form.qty, class_="px-5 text-lg border-b text-gray-800", **{'x-model' : 'qty'} )}}
                     </p>
-                    <button class="my-3 w-full text-white rounded-lg bg-blue-500 hover:bg-blue-800">修正</button> 
+                    <button type="button" class="mt-3 w-full text-white rounded-lg bg-blue-500 hover:bg-blue-800"
+                    x-on:click="item && price && qty ? open = true : alert('未入力の項目があります')">
+                    修正</button>
+
                 </form>
             </div>
+
+            {% if order.item != 901 %}
+            <div class="mt-3 w-full border p-6 rounded-lg shadow-lg">
+                <h2 class="text-base font-bold border-b mb-3">配送に関する依頼</h2>
+                {% if order.request %}
+                <p class="text-sm text-gray-500">指定日<span class="ml-5 text-base text-gray-800 font-bold">{{ order.request.delivery_date or ''}}</span></p>
+                <p class="mt-3 text-sm text-gray-500">時間帯
+                    <span class="ml-5 text-base text-gray-800 font-bold">
+                        {% if order.request.time_range == '1' %}
+                        午前
+                        {% elif order.request.time_range == '2' %}
+                        午後
+                        {% else %}
+                        {% endif %}
+                    </span>
+                </p>
+                <p class="mt-3 text-sm text-gray-500">依頼事項<span class="ml-5 text-sm text-gray-800 font-bold">{{ order.request.memo or ''}}</span></p>
+                {% else %}
+                <p>なし</p>
+                {% endif %}
+            </div>
+            {% endif %}
         </div>
     </div>
+    <!-- confirmation modal starts -->
+    <div class="relative z-50" aria-labelledby="confirm-modal" role="dialog" aria-modal="true" x-cloak="" x-show="open">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+        
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <h3 class="text-lg font-bold leading-6 text-blue-800" id="modal-title">受注を以下に変更</h3>
+                  <div class="mt-5 space-y-3">
+                    <p class="text-sm text-gray-500">商品<span class="ml-5 text-lg text-gray-700" x-text="item"></span></p>
+                    <p class="text-sm text-gray-500">単価<span class="ml-5 text-lg text-gray-700" x-text="price"></span></p>
+                    <p class="text-sm text-gray-500">数量<span class="ml-5 text-lg text-gray-700" x-text="qty"></span></p>
+                </div>
+              </div>
+              <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <button type="button" 
+                x-on:click="$refs.form.submit()"
+                class="inline-flex w-full justify-center rounded-full border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">変更する</button>
+                <button type="button" 
+                x-on:click="open = ! open"
+                class="mt-3 inline-flex w-full justify-center rounded-full border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm">戻る</button>
+                 </div>
+                </div>
+          </div>
+        </div>
+      </div>
+    <!-- confirmation modal ends -->
 </div>
+
 {% endblock %}
