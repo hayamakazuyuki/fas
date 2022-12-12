@@ -1,51 +1,203 @@
-from datetime import datetime, timedelta, timezone, date
-from flask import Blueprint, render_template, request, make_response, current_app
+from flask import Blueprint, render_template, request, make_response, session, redirect, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import extract, func, or_, and_
 from io import StringIO
 import csv
+import datetime
 
 from ..email import send_email
 
-from ..models import Product, ProductOrder
+from ..models import Product, ProductOrder, Staff, Shop
 
 from app import db
 
-main = Blueprint('main', __name__)
-JST = timezone(timedelta(hours=+9), 'JST')
 
-now = datetime.now(JST).strftime('%Y%m%d-%H%M')
+main = Blueprint('main', __name__)
+JST = datetime.timezone(datetime.timedelta(hours=+9), 'JST')
+
+this_year  = datetime.datetime.now(JST).strftime('%Y')
+this_month = datetime.datetime.now(JST).strftime('%m')
+today = datetime.date.today()
+
+
+def get_my_qty_month():
+    my_qty_month = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.sales_by ==current_user.id)\
+        .filter(extract('year', ProductOrder.date) == this_year).filter(extract('month', ProductOrder.date) == this_month)\
+        .filter(ProductOrder.item != 901).scalar()
+    return my_qty_month
+
+
+def get_my_amount_month():
+    my_amount_month = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
+        .filter(ProductOrder.sales_by == current_user.id)\
+        .filter(extract('year', ProductOrder.date) == this_year).filter(extract('month', ProductOrder.date) == this_month)\
+        .scalar()
+    return my_amount_month
+
+
+def get_my_qty_today():
+    my_qty_today = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.sales_by ==current_user.id)\
+        .filter(func.date(ProductOrder.date) == today).filter(ProductOrder.item != 901).scalar()
+    return my_qty_today
+
+
+def get_my_amount_today():
+    my_amount_today = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
+        .filter(ProductOrder.sales_by == current_user.id).filter(func.date(ProductOrder.date) == today).scalar()
+    return my_amount_today
+
+
+def get_total_qty_today():
+    total_qty_today = db.session.query(func.sum(ProductOrder.qty))\
+        .filter(func.date(ProductOrder.date) == today).filter(ProductOrder.item != 901).scalar()
+    return total_qty_today
+
+
+def get_total_amount_today():
+    total_amount_today = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
+        .filter(func.date(ProductOrder.date) == today).scalar()
+    return total_amount_today
+
 
 
 # index: sf.furoshiki.in
 @main.route('/')
 @login_required
 def index():
+
+    for key in list(session.keys()):
+        session.pop(key)
+
     page = request.args.get('page', 1, type=int)
-    orders = ProductOrder.query.order_by(ProductOrder.id.desc()).filter(ProductOrder.sales_by == current_user.id).paginate(page=page, per_page=20)
-    
-    this_year  = datetime.now(JST).strftime('%Y')
-    this_month = datetime.now(JST).strftime('%m')
-    today = datetime.now(JST).strftime('%Y-%m-%d')
 
-    sum_qty_month = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.sales_by ==current_user.id)\
-        .filter(extract('year', ProductOrder.date) == this_year).filter(extract('month', ProductOrder.date) == this_month)\
-        .filter(ProductOrder.item != 901).scalar()
+    today = datetime.datetime.today()
+    a_year_ago = today - datetime.timedelta(days=365)
 
-    sum_amount_month = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
-        .filter(ProductOrder.sales_by == current_user.id)\
-        .filter(extract('year', ProductOrder.date) == this_year).filter(extract('month', ProductOrder.date) == this_month)\
-        .scalar()
+    filters = [(ProductOrder.date >= a_year_ago)]
 
-    sum_qty_today = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.sales_by ==current_user.id)\
-        .filter(func.date(ProductOrder.date) == today).filter(ProductOrder.item != 901).scalar()
+    date = request.args.get('date')
+    staff = request.args.get('staff')
+    shipped = request.args.get('shipped')
+    q = request.args.get('q')
 
-    sum_amount_today = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
-        .filter(ProductOrder.sales_by == current_user.id).filter(func.date(ProductOrder.date) == today).scalar()
+    if date:
 
-    return render_template('index.html', orders=orders, sum_qty_month=sum_qty_month,
-                            sum_amount_month=sum_amount_month, 
-                            sum_qty_today=sum_qty_today, sum_amount_today=sum_amount_today)
+        session['date'] = date
+        filters.append(func.DATE(ProductOrder.date) == date)
+
+    if staff:
+
+        session['staff'] = staff
+        filters.append(ProductOrder.sales_by == staff)
+
+    if shipped:
+
+        session['shipped'] = shipped
+        filters.append(ProductOrder.shippings != None)
+
+    if q:
+        session['q'] = q
+
+        search = f'%{q}%'
+        filters.append(ProductOrder.shop.has(Shop.name.like(search)))
+
+    orders = ProductOrder.query.filter(*filters).order_by(ProductOrder.id.desc()).paginate(page=page, per_page=20)
+
+    staffs = Staff.query.filter(Staff.is_inactive==False).all()
+
+    # orders = ProductOrder.query.filter(func.DATE(ProductOrder.date) == date)\
+    #     .filter_by(sales_by=staff)\
+    #         .order_by(ProductOrder.id.desc()).paginate(page=page, per_page=20)
+
+    # this_year  = datetime.datetime.now(JST).strftime('%Y')
+    # this_month = datetime.datetime.now(JST).strftime('%m')
+    # today = datetime.date.today()
+
+    my_qty_month = get_my_qty_month()
+    my_amount_month = get_my_amount_month()
+    my_qty_today = get_my_qty_today()
+    my_amount_today = get_my_amount_today()
+    total_qty_today = get_total_qty_today()
+    total_amount_today = get_total_amount_today()
+
+    # my_qty_month = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.sales_by ==current_user.id)\
+    #     .filter(extract('year', ProductOrder.date) == this_year).filter(extract('month', ProductOrder.date) == this_month)\
+    #     .filter(ProductOrder.item != 901).scalar()
+
+    # my_amount_month = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
+    #     .filter(ProductOrder.sales_by == current_user.id)\
+    #     .filter(extract('year', ProductOrder.date) == this_year).filter(extract('month', ProductOrder.date) == this_month)\
+    #     .scalar()
+
+    # my_qty_today = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.sales_by ==current_user.id)\
+    #     .filter(func.date(ProductOrder.date) == today).filter(ProductOrder.item != 901).scalar()
+
+    # my_amount_today = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
+    #     .filter(ProductOrder.sales_by == current_user.id).filter(func.date(ProductOrder.date) == today).scalar()
+
+    # total_qty_today = db.session.query(func.sum(ProductOrder.qty))\
+    #     .filter(func.date(ProductOrder.date) == today).filter(ProductOrder.item != 901).scalar()
+
+    # total_amount_today = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
+    #     .filter(func.date(ProductOrder.date) == today).scalar()
+
+    return render_template('index.html', orders=orders, page=page, staffs=staffs, my_qty_today=my_qty_today,
+     my_amount_today=my_amount_today, my_qty_month=my_qty_month, my_amount_month=my_amount_month, total_qty_today=total_qty_today,
+     total_amount_today=total_amount_today)
+
+    # today = datetime.now(JST).strftime('%Y-%m-%d')
+
+@main.route('/search')
+def search():
+
+    page = request.args.get('page', 1, type=int)
+
+    today = datetime.datetime.today()
+    a_year_ago = today - datetime.timedelta(days=365)
+
+    filters = [(ProductOrder.date >= a_year_ago)]
+
+    date = request.args.get('date')
+    staff = request.args.get('staff')
+    shipped = request.args.get('shipped')
+    q = request.args.get('q')
+
+    if date:
+        filters.append(func.DATE(ProductOrder.date) == date)
+
+    if staff:
+        filters.append(ProductOrder.sales_by == staff)
+
+    if shipped:
+        filters.append(ProductOrder.shippings != None)
+
+    if q:
+        search = f'%{q}%'
+        filters.append(ProductOrder.shop.has(Shop.name.like(search)))
+
+    orders = ProductOrder.query.filter(*filters).order_by(ProductOrder.id.desc()).paginate(page=page, per_page=20)
+
+    staffs = Staff.query.filter(Staff.is_inactive==False).all()
+
+    my_qty_month = get_my_qty_month()
+    my_amount_month = get_my_amount_month()
+    my_qty_today = get_my_qty_today()
+    my_amount_today = get_my_amount_today()
+    total_qty_today = get_total_qty_today()
+    total_amount_today = get_total_amount_today()
+
+    return render_template('index.html', orders=orders, page=page, staffs=staffs, my_qty_today=my_qty_today,
+     my_amount_today=my_amount_today, my_qty_month=my_qty_month, my_amount_month=my_amount_month, total_qty_today=total_qty_today,
+     total_amount_today=total_amount_today)
+
+
+# @main.route('/drop-session')
+# def drop_session():
+
+#     for key in list(session.keys()):
+#         session.pop(key)
+
+#     return redirect(url_for('main.index'))
 
 
 # show products/items list
@@ -113,9 +265,9 @@ def prepare_csv(orders, filename):
 
     return response
 
-@main.route('/mock')
-def mock():
-    return render_template('mock.html')
+# @main.route('/mock')
+# def mock():
+#     return render_template('mock.html')
 
 @main.route('/test')
 def test():
@@ -137,3 +289,13 @@ def test():
 
     return '完了'
 
+# @main.route('/args')
+# def args():
+#     date = request.args.get('date')
+
+#     if date:
+
+#         return f'{date}'
+
+#     else:
+#         return 'なし'

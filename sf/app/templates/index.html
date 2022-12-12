@@ -1,74 +1,171 @@
 {% extends "layout.html" -%}
 {% block content -%}
 {% include "nav.html" -%}
-<div class="container lg:max-w-lg mx-auto px-5 md:px-0">
+<div class="container max-w-xl mx-auto px-5 md:px-0">
     {% include "_flashing.html" -%}
-    <h2 class="mt-10 text-xl">{{ current_user.last_name }}<span class="text-sm">さんの受注</span></h2>
 
-    <div class="my-5 grid gap-3 md:flex lg:max-w-lg" x-data="getToday">
-        <div class="w-full py-4 px-8 bg-white shadow-lg rounded-lg">
+    <div class="my-10 grid gap-3 md:flex" x-data="getToday">
+        <div class="w-full border p-3 bg-white shadow-lg rounded-lg">
+            <h2 class="text-base text-center text-gray-700">{{ current_user.last_name }}<span class="text-xs">さん</span></h2>
             <h3 class="text-sm text-center text-gray-500"><span class="text-gray-800 text-lg font-bold" x-text="thisYear"></span>年
                 <span class="text-gray-800 text-lg font-bold" x-text="thisMonth"></span>月</h3>
-            <p class="text-right text-lg font-bold mt-3">{{ sum_qty_month or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
-            <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(sum_amount_month) if sum_amount_month else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
+            <p class="text-right text-lg font-bold mt-3">{{ my_qty_month or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
+            <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(my_amount_month) if my_amount_month else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
         </div>
-        <div class="w-full py-4 px-8 bg-white shadow-lg rounded-lg">
+        <div class="w-full border p-3 bg-white shadow-lg rounded-lg">
+            <h2 class="text-base text-center text-gray-700">{{ current_user.last_name }}<span class="text-xs">さん</span></h2>
             <h3 class="text-sm text-center text-gray-500"><span class="text-gray-800 text-lg font-bold" x-text="thisYear"></span>年
                 <span class="text-gray-800 text-lg font-bold" x-text="thisMonth"></span>月
                 <span class="text-gray-800 text-lg font-bold" x-text="today"></span>日
             </h3>
-            <p class="text-right text-lg font-bold mt-3">{{ sum_qty_today or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
-            <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(sum_amount_today) if sum_amount_today else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
+            <p class="text-right text-lg font-bold mt-3">{{ my_qty_today or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
+            <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(my_amount_today) if my_amount_today else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
         </div>
+        <div class="w-full border p-3 bg-white shadow-lg rounded-lg">
+            <h2 class="text-base text-center text-gray-700">全社</h2>
+            <h3 class="text-sm text-center text-gray-500"><span class="text-gray-800 text-lg font-bold" x-text="thisYear"></span>年
+                <span class="text-gray-800 text-lg font-bold" x-text="thisMonth"></span>月
+                <span class="text-gray-800 text-lg font-bold" x-text="today"></span>日
+            </h3>
+            <p class="text-right text-lg font-bold mt-3">{{ total_qty_today or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
+            <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(total_amount_today) if total_amount_today else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
+        </div>
+
     </div>
 
-    <div class="my-8">
-        <!-- <table class="table-auto w-full text-sm">
-            <thead>
-            <tr class="border-black border-b">
-                <th>受注ID</th>
-                <th>受注日</th>
-                <th>事業所</th>
-                <th>商品</th>
-                <th class="text-center">単価</th>
-                <th class="text-center">数量</th>
-            </tr>
-            </thead>
-            {% for order in orders.items %}
-            <tr class="border-b">
-                <td class="p-1">{{ '{:06d}'.format(order.id) }}</td>
-                <td class="p-1">{{ order.date.strftime('%Y-%m-%d') }}</td>
-                <td class="p-1">{{ order.customer_id }}-{{ order.shop_id }} {{ order.shop.name }}</td>
-                <td class="p-1">{{ order.product.name }}</td>
-                <td class="p-1 text-right">{{ '{:,d}'.format(order.price) }}</td>
-                <td class="p-1 text-right">{{ order.qty }}</td>
-            </tr>
-            {% endfor %}
-        </table> -->
-        <div class="mx-auto w-full lg:max-w-lg">
-            <p class="my-3">
+    <div class="my-8 max-w-xl">
+        <div class="my-5 border py-5 px-4 rounded-lg shadow-lg">
+            <h2 class="text-base font-bold text-gray-700">受注検索</h2>
+            <form class="w-full" action="/">
+                <div class="flex w-full mt-6 justify-around">
+                    <label class="text-sm">登録日<input type="date" class="ml-3 border-b border-blue-300" name="date"></label>
+                    <label class="text-sm">担当者
+                        <select class="ml-3 border-b border-blue-300" name="staff">
+                            <option value="" selected></option>
+                            {% for staff in staffs %}
+                            <option value="{{ staff.id }}">{{ staff.last_name }}{{ staff.first_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label class="text-sm">出荷済み<input type="checkbox" class="ml-3" name="shipped"></label>
+                </div>
+                <div class="flex justify-center mt-4">
+                    <label class="text-sm">出荷先
+                        <input type="search" class="text-sm border-b border-blue-300 py-1 px-2" name="q" placeholder="キーワード...">
+                    </label>
+                </div>
+                <div class="flex justify-center mt-6">
+                    <button type="submit" class="bg-blue-700 px-10 py-1 text-white rounded-full hover:bg-blue-500">
+                        検索
+                    </button>
+                </div>
+            </form>
+
+            <!-- {% if session['date'] or session['staff'] or session['shipped'] or session['q'] %}
+            <div class="flex mt-5 text-xs space-x-3 items-center justify-center">
+                <h3 class="text-sm text-gray-500">フィルタ:</h3>
+
+                {% if session['date'] %}
+                    <p class="font-bold text-blue-700">{{ session['date'] }}</p>
+                    {% endif %}
+                    {% if session['staff'] %}
+                    <p class="font-bold text-blue-700">担当者</p>
+                    {% endif %}
+                    {% if session['shipped'] %}
+                    <p class="font-bold text-blue-700">出荷済み</p>
+                    {% endif %}
+                    {% if session['q'] %}
+                    <p class="font-bold text-blue-700">出荷先</p>
+                    {% endif %}
+                <a href="/drop-session" class="rounded-full border border-gray-700 shadow-lg text-gray-700 text-sm px-5 hover:bg-gray-200">
+                    クリア
+                </a>
+            </div>
+        {% endif %} -->
+        </div>
+
+        <div class="mx-auto w-full">
+            <p class="mt-8 mb-3">
                 {% for page_num in orders.iter_pages(left_edge=3, right_edge=2) %}
                 {% if page_num %}
-                {% if orders.page == page_num %}
-                <a class="text-blue-500 underline hover:text-blue-800" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+    
+                {% if session['date'] or session['staff'] or session['shipped'] or session['q'] %}
+                    {% if orders.page == page_num %}
+                    <a class="text-blue-500 underline hover:text-blue-800" href="/search?date={{ session['date']}}&staff={{ session['staff'] }}&shipped={{ session['shipped']}}&q={{ session['q']}}&page={{ page_num }}">{{ page_num }}</a>
+                    {% else %}
+                    <a class="text-blue-500 hover:text-blue-800" href="/search?date={{ session['date']}}&staff={{ session['staff'] }}&shipped={{ session['shipped']}}&q={{ session['q']}}&page={{ page_num }}">{{ page_num }}</a>
+                    {% endif %}
+
                 {% else %}
-                <a class="text-blue-500 hover:text-blue-800" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+                    {% if orders.page == page_num %}
+                    <a class="text-blue-500 underline hover:text-blue-800" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+                    {% else %}
+                    <a class="text-blue-500 hover:text-blue-800" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+                    {% endif %}
+
                 {% endif %}
                 {% else %}
                 ...
                 {% endif %}
                 {% endfor %}
             </p>
-    
+
+<!-- <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+  <div class="flex flex-1 justify-between sm:hidden">
+    <a href="#" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">戻る</a>
+    <a href="#" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">次へ</a>
+  </div>
+  <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+    <div>
+      <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+        <a href="#" class="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">
+          <span class="sr-only">戻る</span>
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+          </svg>
+        </a>
+        <a href="#" aria-current="page" class="relative z-10 inline-flex items-center border border-indigo-500 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600 focus:z-20">1</a>
+        <a href="#" class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">2</a>
+        <a href="#" class="relative hidden items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20 md:inline-flex">3</a>
+        <span class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700">...</span>
+        <a href="#" class="relative hidden items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20 md:inline-flex">8</a>
+        <a href="#" class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">9</a>
+        <a href="#" class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">10</a>
+        <a href="#" class="relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">
+          <span class="sr-only">次へ</span>
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </div>
+</div> -->
+
             <ul>
                 {% for order in orders.items %}
+                {% if order.shippings %}
+                <li class="border bg-gray-100 mb-2 py-2 px-3 rounded-lg text-sm text-gray-600 hover:border-blue-500 hover:shadow-lg">
+                {% else %}
                 <li class="border mb-2 py-2 px-3 rounded-lg text-sm text-gray-600 hover:border-blue-500 hover:shadow-lg">
+                {% endif %}
                     <a href="/order/{{ order.id }}">
-                        {{ '{:06d}'.format(order.id) }}<span class="ml-10">{{ order.date.strftime('%Y-%m-%d') }}</span>
+                        <div class="flex justify-between items-center">
+                            <div class="flex gap-x-10">
+                                <p>{{ '{:06d}'.format(order.id) }}</p>
+                                <p>{{ order.date.strftime('%Y-%m-%d') }}</p>    
+                            </div>
+                            <div class="flex gap-x-5">
+                                {% if order.request %}
+                                <p class="rounded-lg p-1 text-xs bg-yellow-500 text-white">配送依頼あり</p>
+                                {% endif %}
+                                {% if order.shippings %}
+                                <p class="rounded-lg p-1 text-xs bg-gray-700 text-white">出荷済み</p>
+                                {% endif %}    
+                            </div>
+                        </div>
                         <p class="mt-2 text-base font-bold">{{ order.shop.name }}</p>
-                        <p class="mt-1 text-base text-right">
-                            {{ order.product.name }} {{ '{:,d}'.format(order.price) }}円 x {{ order.qty }} 個
-                        </p>    
+                        <p class="text-right text-gray-800">{{ order.product.name }} {{ '{:,d}'.format(order.price) }}円 x {{ order.qty }} 個</p>
                     </a>
                 </li>
                 {% endfor %}
