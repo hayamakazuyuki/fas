@@ -15,8 +15,8 @@
     {{ form.csrf_token }}
     <div class="my-5">
         {{ render_field_with_errors(form.id, class_="w-full text-gray-700 focus:outline-none
-           focus:bg-gray-100 border-b border-gray-300 focus:border-blue-500 transition duration-500 px-3 pb-1",
-           **{'x-model' : 'id'} )}}
+           focus:bg-gray-100 border-b border-gray-300 focus:border-blue-500 transition duration-500 px-3 pb-1", 
+           placeholder="ブライセンの取引先番号、最大5桁の数字", **{'x-model' : 'id'} )}}
     </div>
 
     <div class="my-5">
