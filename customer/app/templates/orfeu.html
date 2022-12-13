@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+{% include "_flashing.html" -%}
+
+<div class="container md:max-w-lg mx-auto">
+
+    <div class="mt-8 flex justify-between px-3" x-data="getToday">
+        <h1 class="font-bold text-lg text-gray-700">{{ customer.name }}<span class="text-sm ml-3 text-gray-500">様</span></h1>
+        <p class="text-sm text-gray-500 self-end" x-text="today"></p>
+    </div>
+
+    <div class="mt-8">
+        <h2 class="font-bold text-lg text-gray-500 px-3">受発注一覧</h2>
+
+        <p class="mt-5 mb-3 px-3">
+            {% for page_num in orders.iter_pages(left_edge=3, right_edge=2) %}
+                {% if page_num %}
+
+                {% if orders.page == page_num %}
+                <a class="text-blue-500 underline hover:text-blue-800" href="{{ url_for('cs.index', page=page_num) }}">{{ page_num }}</a>
+                {% else %}
+                <a class="text-blue-500 hover:text-blue-800" href="{{ url_for('cs.index', page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+
+            {% else %}
+            ...
+            {% endif %}
+            {% endfor %}
+        </p>
+
+        {% if orders %}
+        <ul>
+            {% for order in orders.items %}
+            {% if order.shippings %}
+            <li class="border bg-gray-100 mb-2 py-2 px-3 rounded-lg text-sm text-gray-600 hover:border-blue-500 hover:shadow-lg">
+            {% else %}
+            <li class="border mb-2 py-2 px-3 rounded-lg text-sm text-gray-600 hover:border-blue-500 hover:shadow-lg">
+            {% endif %}
+                <a href="/order/{{ order.id }}">
+                    <div class="flex justify-between items-center">
+                        <div class="flex gap-x-10">
+                            <p>{{ '{:06d}'.format(order.id) }}</p>
+                            <p>{{ order.date.strftime('%Y-%m-%d') }}</p>    
+                        </div>
+                        <div class="flex gap-x-5">
+                            {% if order.shippings %}
+                            <p class="rounded-lg p-1 text-xs bg-gray-700 text-white">出荷済み</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <p class="mt-2 text-base font-bold">{{ order.shop.name }}</p>
+                    <p class="text-right text-gray-800">{{ order.product.name }} {{ '{:,d}'.format(order.price) }}円 x {{ order.qty }} 個</p>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p class="my-5 mx-2">...なし</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- alpine.js -->
+<script>
+    const getToday = () => {
+        let now = new Date();
+        let year = now.getFullYear();
+        let month = now.getMonth() + 1;
+        let date = now.getDate();
+        let hours = now.getHours().toString().padStart(2, '0');
+        let minutes = now.getMinutes().toString().padStart(2, '0');
+        return {
+            today: year + "年" + month + "月" + date + "日" + "　" + hours + ":" + minutes
+        }
+    }
+</script>
+
+{% endblock %}

@@ -15,12 +15,22 @@ def index():
     customer_id = current_user.customer_id
     shop_id = current_user.shop_id
 
-    shop = Shop.query.get_or_404((customer_id, shop_id))
-    orders = ProductOrder.query.filter_by(customer_id=customer_id).filter_by(shop_id=shop_id).order_by(ProductOrder.id.desc()).all()
+    if customer_id == 15615:
+        page = request.args.get('page', 1, type=int)
+        customer = Customer.query.get(customer_id)
 
-    items = CustomerPrice.query.filter_by(customer_id=customer_id).all()
+        orders = ProductOrder.query.filter_by(customer_id=customer_id).order_by(ProductOrder.id.desc()).paginate(page=page, per_page=20)
 
-    return render_template('index.html', shop=shop, orders=orders, items=items)
+        return render_template('orfeu.html', customer=customer, orders=orders, page=page)
+
+    else:
+
+        shop = Shop.query.get_or_404((customer_id, shop_id))
+        orders = ProductOrder.query.filter_by(customer_id=customer_id).filter_by(shop_id=shop_id).order_by(ProductOrder.id.desc()).all()
+
+        items = CustomerPrice.query.filter_by(customer_id=customer_id).all()
+
+        return render_template('index.html', shop=shop, orders=orders, items=items)
 
 
 @cs.route('/order', methods=['POST'])
@@ -52,6 +62,14 @@ def order():
     flash('商品を発注しました。', 'success')
 
     return redirect(url_for('cs.index'))
+
+
+@cs.route('/order/<int:id>')
+@login_required
+def order_detail(id):
+    order = ProductOrder.query.get(id)
+
+    return render_template('order-detail.html', order=order)
 
 
 # delete order
