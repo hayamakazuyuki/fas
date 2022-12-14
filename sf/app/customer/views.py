@@ -183,3 +183,12 @@ def shop_profile(customer_id, id, mode=None):
 
     return render_template('customer/shop-profile.html', shop=shop, orders=orders)
 
+
+@customer.route('/<int:id>/register-contract-price')
+@login_required
+def register_contract_price(id):
+
+    customer = Customer.query.get(id)
+    # form = ContractPriceForm()
+
+    return render_template('customer/register-contract-price.html', customer=customer)

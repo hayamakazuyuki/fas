@@ -122,6 +122,17 @@ class CustomerPrice(db.Model):
         db.UniqueConstraint('customer_id', 'product_id'),
     )
 
+
+class CustomerContractPrice(db.Model):
+    id = db.Column(db.Integer, primary_key=True, auto_increment=True)
+    customer_id = db.Column(db.Integer, nullable=False)
+    product_id = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+    __table_args__ = (
+        db.UniqueConstraint('customer_id', 'product_id'),
+    )
+
+
 class DeliveryRequest(db.Model):
     __tablename__ = 'delivery_request'
     id = db.Column(db.Integer, primary_key=True)
@@ -177,7 +188,7 @@ def hash_staff_password(target, value, oldvalue, initiator):
 
 
 class CustomerUser(db.Model):
-    __tablename__ = 'customer_user'
+    # __tablename__ = 'customer_user'
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, nullable=False)
     shop_id = db.Column(db.Integer, nullable=True)
