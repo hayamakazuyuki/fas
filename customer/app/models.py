@@ -83,7 +83,6 @@ class Product(db.Model):
 
 
 class ProductOrder(db.Model):
-    __tablename__ = 'product_order'
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, default=func.now())
     sales_by = db.Column(db.Integer)
@@ -94,9 +93,22 @@ class ProductOrder(db.Model):
     qty = db.Column(db.Integer)
     delivery_check = db.Column(db.Integer, nullable=True)
     exported = db.Column(db.Integer, nullable=True)
+    request = db.relationship('DeliveryRequest', backref='product_order', uselist=False,
+                              cascade="save-update, merge, delete")
     shippings = db.relationship('Shipping', backref='product_order')
 
     __table_args__ = (ForeignKeyConstraint(['customer_id', 'shop_id'], ['shop.customer_id', 'shop.id']),)
+
+
+
+class DeliveryRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('product_order.id'), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime, default=datetime.now(JST))
+    requested_by = db.Column(db.Integer, nullable=False)
+    delivery_date = db.Column(db.Date, nullable=True)
+    time_range = db.Column(db.String(5), nullable=True)
+    memo = db.Column(db.String(255), nullable=True)
 
 
 class Shipping(db.Model):
