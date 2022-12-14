@@ -95,7 +95,6 @@ class Shop(db.Model):
 
 
 class ProductOrder(db.Model):
-    # __tablename__ = 'product_order'
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, default=func.now())
     sales_by = db.Column(db.Integer, db.ForeignKey('staff.id'))
