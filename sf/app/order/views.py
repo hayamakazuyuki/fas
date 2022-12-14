@@ -261,6 +261,18 @@ def order_delete(id):
     return redirect(url_for('main.index'))
 
 
+# delete delivery request
+@order.route('/<int:order_id>/delete/<int:id>')
+@login_required
+def request_delete(order_id, id):
+    delivery_request = DeliveryRequest.query.get(id)
+    db.session.delete(delivery_request)
+    db.session.commit()
+    
+    flash('配送依頼を削除しました。', 'success')
+
+    return redirect(url_for('order.order_detail', id=order_id))
+
 @order.route('/data')
 @login_required
 def data():
