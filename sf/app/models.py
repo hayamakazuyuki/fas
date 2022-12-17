@@ -58,6 +58,7 @@ class Product(db.Model):
     pcr = db.Column(db.Numeric(5,2))
     shipper = db.Column(db.Boolean, nullable=True, default=0)
     orders = db.relationship('ProductOrder', backref=db.backref('product', lazy=True))
+    contract_items = db.relationship('CustomerContractPrice', backref=db.backref('product', lazy=True))
 
 
 class Parent(db.Model):
@@ -125,7 +126,7 @@ class CustomerPrice(db.Model):
 class CustomerContractPrice(db.Model):
     id = db.Column(db.Integer, primary_key=True, auto_increment=True)
     customer_id = db.Column(db.Integer, nullable=False)
-    product_id = db.Column(db.Integer, nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
     price = db.Column(db.Integer, nullable=False)
     __table_args__ = (
         db.UniqueConstraint('customer_id', 'product_id'),
