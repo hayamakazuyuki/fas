@@ -36,8 +36,3 @@ class ShopForm(FlaskForm):
     building = StringField('建物名他')
     telephone = StringField('電話番号', validators=[InputRequired('電話番号を入力して下さい。'),
                                                 Regexp('[0-9]+-[0-9]+-[0-9]+', message='数字-数字-数字です。')])
-
-
-# class ContractPriceForm(FlaskForm):
-#     item = SelectField('商品', validators=[InputRequired('商品を選択して下さい。')])
-#     price = IntegerField('単価', validators=[DataRequired('契約単価を入力して下さい。')])
