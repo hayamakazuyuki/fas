@@ -7,7 +7,7 @@ import csv
 
 from ..extentions import db
 
-from ..models import DeliveryRequest, Shop, ProductOrder, Customer, Shipping
+from ..models import DeliveryRequest, Shop, ProductOrder, Customer, Shipping, CustomerContractPrice
 
 from .forms import order_edit_form, DeliveryRequestForm
 
@@ -34,6 +34,7 @@ def index(customer_id, id):
 def register(customer_id, id):
 
     shop = Shop.query.get((customer_id, id))
+    registered_items = CustomerContractPrice.query.filter_by(customer_id=customer_id).all()
 
     # generate min and max dates for delivery date request.
     min_date = datetime.now(JST) + timedelta(days=4)
@@ -149,7 +150,181 @@ def register(customer_id, id):
 
         return redirect(url_for('main.index'))
 
-    return render_template('order/register.html', shop=shop, min_date=min_date, max_date=max_date)
+    if registered_items:
+        return redirect(url_for('order.register_with_items', customer_id=customer_id, id=id))
+    
+    else:
+
+        return render_template('order/register.html', shop=shop, min_date=min_date, max_date=max_date)
+
+
+@order.route('/<int:customer_id>/<int:id>/register-with-items', methods=['GET', 'POST'])
+@login_required
+def register_with_items(customer_id, id):
+    
+    shop = Shop.query.get((customer_id, id))
+    registered_items = CustomerContractPrice.query.filter_by(customer_id=customer_id).all()
+
+    # generate min and max dates for delivery date request.
+    min_date = datetime.now(JST) + timedelta(days=4)
+    max_date = datetime.now(JST) + timedelta(days=29)
+
+    if request.method == 'POST':
+        staff = shop.customer.staff
+
+        item1 = request.form.get('item1')
+        item2 = request.form.get('item2')
+        item3 = request.form.get('item3')
+        item4 = request.form.get('item4')
+        item5 = request.form.get('item5')
+
+        delivery_date = request.form.get('delivery_date')
+        time_range = request.form.get('time_range')
+        memo = request.form.get('memo')
+
+        if item1:
+            order = ProductOrder()
+            order.sales_by = staff
+            order.customer_id = customer_id
+            order.shop_id = id
+            order.item = item1
+            order.price = request.form['price1']
+            order.qty = request.form['qty1']
+
+            db.session.add(order)
+            db.session.commit()
+
+            if item1 != '901':
+                if delivery_date or time_range or memo:
+                    order_id = order.id
+                    delivery_request = DeliveryRequest()
+
+                    delivery_request.order_id = order_id
+                    delivery_request.requested_by = current_user.id
+                    if delivery_date:
+                        delivery_request.delivery_date = delivery_date
+                    delivery_request.time_range = time_range
+                    delivery_request.memo = memo
+
+                    db.session.add(delivery_request)
+                    db.session.commit()
+
+        if item2:
+            order2 = ProductOrder()
+            order2.sales_by = staff
+            order2.customer_id = customer_id
+            order2.shop_id = id
+            order2.item = item2
+            order2.price = request.form['price2']
+            order2.qty = request.form['qty2']
+
+            db.session.add(order2)
+            db.session.commit()
+
+            if item2 != '901':
+                if delivery_date or time_range or memo:
+                    order_id = order2.id
+                    delivery_request = DeliveryRequest()
+
+                    delivery_request.order_id = order_id
+                    delivery_request.requested_by = current_user.id
+                    if delivery_date:
+                        delivery_request.delivery_date = delivery_date
+                    delivery_request.time_range = time_range
+                    delivery_request.memo = memo
+
+                    db.session.add(delivery_request)
+                    db.session.commit()
+
+        if item3:
+            order3 = ProductOrder()
+            order3.sales_by = staff
+            order3.customer_id = customer_id
+            order3.shop_id = id
+            order3.item = item3
+            order3.price = request.form['price3']
+            order3.qty = request.form['qty3']
+
+            db.session.add(order3)
+            db.session.commit()
+
+            if item3 != '901':
+                if delivery_date or time_range or memo:
+                    order_id = order3.id
+
+                    delivery_request = DeliveryRequest()
+
+                    delivery_request.order_id = order_id
+                    delivery_request.requested_by = current_user.id
+                    if delivery_date:
+                        delivery_request.delivery_date = delivery_date
+                    delivery_request.time_range = time_range
+                    delivery_request.memo = memo
+
+                    db.session.add(delivery_request)
+                    db.session.commit()
+
+        if item4:
+            order4 = ProductOrder()
+            order4.sales_by = staff
+            order4.customer_id = customer_id
+            order4.shop_id = id
+            order4.item = item4
+            order4.price = request.form['price4']
+            order4.qty = request.form['qty4']
+
+            db.session.add(order4)
+            db.session.commit()
+
+            if item4 != '901':
+                if delivery_date or time_range or memo:
+                    order_id = order4.id
+
+                    delivery_request = DeliveryRequest()
+
+                    delivery_request.order_id = order_id
+                    delivery_request.requested_by = current_user.id
+                    if delivery_date:
+                        delivery_request.delivery_date = delivery_date
+                    delivery_request.time_range = time_range
+                    delivery_request.memo = memo
+
+                    db.session.add(delivery_request)
+                    db.session.commit()
+
+        if item5:
+            order5 = ProductOrder()
+            order5.sales_by = staff
+            order5.customer_id = customer_id
+            order5.shop_id = id
+            order5.item = item5
+            order5.price = request.form['price5']
+            order5.qty = request.form['qty5']
+
+            db.session.add(order5)
+            db.session.commit()
+
+            if item5 != '901':
+                if delivery_date or time_range or memo:
+                    order_id = order5.id
+
+                    delivery_request = DeliveryRequest()
+
+                    delivery_request.order_id = order_id
+                    delivery_request.requested_by = current_user.id
+                    if delivery_date:
+                        delivery_request.delivery_date = delivery_date
+                    delivery_request.time_range = time_range
+                    delivery_request.memo = memo
+
+                    db.session.add(delivery_request)
+                    db.session.commit()
+
+        flash('受注を登録しました。', 'success')
+
+        return redirect(url_for('main.index'))
+
+    return render_template('order/register-with-items.html', shop=shop, min_date=min_date, max_date=max_date, registered_items=registered_items)
 
 
 @order.route('/<int:id>')

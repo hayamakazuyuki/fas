@@ -1,0 +1,112 @@
+{% extends "layout.html" -%}
+{% block content -%}
+{% include "nav.html" -%}
+{% include "_flashing.html" -%}
+
+<div x-data="{ openDelete : false,
+                openEdit : false,
+                price : {{ registered_item.price }} }" class="container max-w-2xl mx-auto mt-7 px-2">
+    <div class="max-w-lg mx-auto">
+        <p class="font-bold text-lg my-5 text-gray-800">単価の変更</p>
+        <div class="max-w-xl rounded shadow-lg my-5 p-5">
+            <p class="text-gray-500">{{ customer.parent.name or '' }}</p>
+            <p class="mt-3 mb-1 text-lg font-bold">{{ '%05d' % customer.id }}</p>
+            <p class="text-2xl">{{ customer.name }}</p>
+            <hr class="mt-8 mb-3">
+            <div class="flex justify-between">
+                <p class="text-gray-500 text-sm">
+                    <span class="text-xs">{{ customer.sales.id or '' }}</span> {{ customer.sales.last_name ~ customer.sales.first_name or '営業担当 未登録' }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-lg my-10 mx-auto">
+        <form method="post" class="" x-ref="form">
+            <div class="flex my-5 px-3 text-sm text-gray-700 justify-around">
+                <div>
+                    {{ registered_item.product_id }}<span class="ml-3 font-bold">{{ registered_item.product.name }}</span>
+                </div>
+                <div>
+                    <label>単価
+                        <input type="number" class="ml-3 border-b text-right" name="price" value="{{ registered_item.price }}" x-model="price">
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex justify-center my-10 space-x-10">
+                <a href="#" class="flex items-center bg-red-700 text-white py-1 px-4 rounded-full shadow-lg hover:bg-red-500" 
+                x-on:click="openDelete = true">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    削除</a>
+                <button type="button" x-on:click="openEdit = true" class="bg-blue-700 text-white py-1 px-7 rounded-full shadow-lg hover:bg-blue-500">編集</button>
+            </div>
+        </form>
+
+    </div>
+
+    <!-- confirmation modal starts -->
+    <div class="relative z-50" aria-labelledby="confirm-modal" role="dialog" aria-modal="true" x-cloak="" x-show="openEdit">
+
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+      
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <h3 class="text-lg font-bold leading-6 text-blue-800" id="modal-title">変更内容の確認</h3>
+                  <div class="mt-8 space-y-3">
+                    <p class="text-sm text-gray-700 font-bold">{{ registered_item.product_id }} {{ registered_item.product.name }}</p>
+                    <p class="text-sm text-gray-500">{{ '{:,d}'.format(registered_item.price) }}<span class="mx-3">&#8594;</span><span class="ml-5 text-lg text-gray-700 font-bold" x-text="price"></span></p>
+                </div>
+              </div>
+              <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <button type="button" 
+                x-on:click="$refs.form.submit()"
+                class="inline-flex w-full justify-center rounded-full border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">変更する</button>
+                <button type="button" 
+                x-on:click="openEdit = false"
+                class="mt-3 inline-flex w-full justify-center rounded-full border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm">戻る</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- confirmation modal ends -->
+
+    <!-- openDelete modal starts -->
+    <div class="relative z-50" aria-labelledby="confirm-modal" role="dialog" aria-modal="true" x-cloak="" x-show="openDelete">
+
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+      
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <h3 class="text-lg font-bold leading-6 text-red-600" id="modal-title">登録商品の削除</h3>
+                  <div class="mt-8 space-y-3">
+                    <p class="text-sm text-gray-500">本当に削除しますか？</p>
+                </div>
+              </div>
+              <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <a href="/customer/{{ customer.id }}/delete-contract-price/{{ registered_item.id }}" 
+                class="inline-flex w-full justify-center rounded-full border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
+                    削除する
+                </a>
+                <button type="button" 
+                x-on:click="openDelete = ! openDelete"
+                class="mt-3 inline-flex w-full justify-center rounded-full border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm">やめる</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- openDelete modal ends -->
+
+</div>
+
+{% endblock %}

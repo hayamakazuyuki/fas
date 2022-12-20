@@ -24,20 +24,22 @@
             </div>
         </div>
     </div>
+
     <div class="max-w-lg mx-auto px-5">
         <div class="flex justify-between text-sm">
             <a href="/customer/{{ customer.id }}/register" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">
                 事業所を追加 &#x2192;
             </a>
-            <!-- <a href="/customer/{{ customer.id }}/register-contract-price" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">商品を登録・編集 &#x2192;</a> -->
+            {% if not items_prices %}
+            <a href="/customer/{{ customer.id }}/register-contract-price" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">商品を登録 &#x2192;</a>
+            {% endif %}
         </div>
     </div>
-
     <div class="max-w-lg my-10 mx-auto">
         <!-- tab items -->
         <ul class="flex cursor-pointer text-center text-sm text-gray-500 border-b">
             <li class="w-1/2 py-2 hover:font-bold" x-on:click="tab = 1" :class="{'text-blue-700 border-b-2 border-blue-600': tab === 1}">事業所</li>
-            <!-- <li class="w-1/2 py-2 hover:font-bold" x-on:click="tab = 2" :class="{'text-blue-700 border-b-2 border-blue-600': tab === 2}">商品</li> -->
+            <li class="w-1/2 py-2 hover:font-bold" x-on:click="tab = 2" :class="{'text-blue-700 border-b-2 border-blue-600': tab === 2}">契約商品と単価</li>
         </ul>
 
         <div x-show="tab ===1">
@@ -75,21 +77,39 @@
         </div>
 
         <div x-show="tab === 2">
-            {% if shops %}
+            {% if items_prices %}
             <div class="my-5 px-3">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr>
-                            <th class="font-normal">#</th>
-                            <th class="font-normal">商品名</th>
-                            <th class="font-normal">単価</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
-
+                <ul>
+                    {% for item_price in items_prices %}
+                    {% if item_price.product_id == 606 or item_price.product_id == 607 or item_price.product_id == 608 or item_price.product_id == 624 %}
+                    <li  class="bg-blue-50 border mb-2 py-2 px-3 rounded-lg text-sm text-gray-600 hover:border-blue-500 hover:shadow-lg">
+                    {% elif item_price.product_id == 609 or item_price.product_id == 610 or item_price.product_id == 611 or item_price.product_id == 625 %}
+                    <li  class="bg-yellow-50 border mb-2 py-2 px-3 rounded-lg text-sm text-gray-600 hover:border-blue-500 hover:shadow-lg">
+                    {% else %}
+                    <li  class="border mb-2 py-2 px-3 rounded-lg text-sm text-gray-600 hover:border-blue-500 hover:shadow-lg">
+                    {% endif %}
+                        <a href="/customer/{{ customer.id }}/edit-contract-price/{{ item_price.id }}" class="flex justify-between">
+                            <div class="space-x-3">
+                                {{ item_price.product_id }}<span class="ml-3 font-bold">{{ item_price.product.name }}</span>
+                            </div>
+                            <div>
+                                ¥ {{ '{:,d}'.format(item_price.price) }}
+                            </div>    
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% if items_prices|length >= 1 and items_prices|length <= 4  %}
+                <div class="my-5 text-center text-sm text-blue-500 hover:underline hover:text-blue-700">
+                    <a href="/customer/{{ customer.id }}/add-contract-price">
+                        商品を追加する  &#x2192;
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="my-10 px-3 text-center">
+                契約商品と単価の登録はありません。
             </div>
             {% endif %}
         </div>

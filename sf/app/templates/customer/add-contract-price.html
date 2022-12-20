@@ -1,0 +1,149 @@
+{% extends "layout.html" -%}
+{% block content -%}
+{% include "nav.html" -%}
+{% include "_flashing.html" -%}
+
+<div x-data="{ open : false }"
+ class="container max-w-2xl mx-auto mt-7 px-2">
+    <div class="max-w-lg mx-auto">
+        <p class="font-bold text-lg my-5">商品と単価の追加</p>
+        <div class="max-w-xl rounded shadow-lg my-5 p-5">
+            <p class="mt-3 mb-1 text-lg font-bold">{{ '%05d' % customer.id }}</p>
+            <p class="text-2xl">{{ customer.name }}</p>
+            <hr class="mt-8 mb-3">
+            <div class="flex justify-between">
+                <p class="text-gray-500 text-sm">
+                    <span class="text-xs">{{ customer.sales.id or '' }}</span> {{ customer.sales.last_name ~ customer.sales.first_name or '営業担当 未登録' }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-lg my-10 mx-auto">
+        <smal class="text-red-500">ポイント &#9758; 使用する商品だけを登録</small>
+
+            {% if registered_items %}
+            <div class="my-5 px-3">
+                <ul>
+                    {% for item in registered_items %}
+                    {% if item.product_id == 606 or item.product_id == 607 or item.product_id == 608 or item.product_id == 624 %}
+                    <li  class="flex bg-blue-50 border mb-2 py-2 px-3 rounded-lg text-sm text-gray-600 justify-between">
+                    {% elif item.product_id == 609 or item.product_id == 610 or item.product_id == 611 or item.product_id == 625 %}
+                    <li  class="flex bg-yellow-50 border mb-2 py-2 px-3 rounded-lg text-sm text-gray-600 justify-between">
+                    {% else %}
+                    <li  class="flex border mb-2 py-2 px-3 rounded-lg text-sm text-gray-600 justify-between">
+                    {% endif %}
+                        <div class="space-x-3">
+                            {{ item.product_id }}<span class="ml-3 font-bold">{{ item.product.name }}</span>
+                        </div>
+                        <div>
+                            ¥ {{ '{:,d}'.format(item.price) }}
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+        <form method="post" x-ref="form">
+
+            {% if registered_items|length < 2 %}
+            <div class="flex my-5 px-3 text-sm text-gray-700 justify-around">
+                <div>
+                    <label>商品 2</label><select class="border-b ml-3" name="item2">
+                        <option value=""></option>
+                        {% for item in items %}
+                        <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>単価<input type="number" min="1" class="ml-3 border-b text-right" name="itemPrice2"></label>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if registered_items|length < 3 %}
+            <div class="flex my-5 px-3 text-sm text-gray-700 justify-around">
+                <div>
+                    <label>商品 3</label><select class="border-b ml-3" name="item3">
+                        <option value=""></option>
+                        {% for item in items %}
+                        <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>単価<input type="number" min="1" class="ml-3 border-b text-right" name="itemPrice3"></label>
+                </div>
+            </div>
+            {% endif %}
+            {% if registered_items|length < 4 %}
+            <div class="flex my-5 px-3 text-sm text-gray-700 justify-around">
+                <div>
+                    <label>商品 4</label><select class="border-b ml-3" name="item4">
+                        <option value=""></option>
+                        {% for item in items %}
+                        <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>単価<input type="number" min="1" class="ml-3 border-b text-right" name="itemPrice4"></label>
+                </div>
+            </div>
+            {% endif %}
+            {% if registered_items|length < 5 %}
+            <div class="flex my-5 px-3 text-sm text-gray-700 justify-around">
+                <div>
+                    <label>商品 5</label><select class="border-b ml-3" name="item5">
+                        <option value=""></option>
+                        {% for item in items %}
+                        <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>単価<input type="number" min="1" class="ml-3 border-b text-right" name="itemPrice5"></label>
+                </div>
+            </div>
+            {% endif %}
+            <div class="flex justify-center my-10">
+                <button type="button" x-on:click="open = ! open"
+                 class="bg-blue-700 text-white py-1 px-7 rounded-full shadow-lg hover:bg-blue-500">確認</button>
+            </div>    
+        </form>
+    </div>
+
+    <!-- confirmation modal starts -->
+    <div class="relative z-50" aria-labelledby="confirm-modal" role="dialog" aria-modal="true" x-cloak="" x-show="open">
+
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+      
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <h3 class="text-lg font-bold leading-6 text-blue-800" id="modal-title">追加内容の確認</h3>
+                  <div class="mt-8 space-y-3">
+                    <p class="text-sm text-gray-700 font-bold"></p>
+                    <p class="text-sm text-gray-500"><span class="mx-3">&#8594;</span><span class="ml-5 text-lg text-gray-700 font-bold" x-text="price"></span></p>
+                </div>
+              </div>
+              <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <button type="button" 
+                x-on:click="$refs.form.submit()"
+                class="inline-flex w-full justify-center rounded-full border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">追加する</button>
+                <button type="button" 
+                x-on:click="open = false"
+                class="mt-3 inline-flex w-full justify-center rounded-full border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm">戻る</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- confirmation modal ends -->
+
+</div>
+{% endblock %}

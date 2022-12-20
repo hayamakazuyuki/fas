@@ -3,7 +3,7 @@
 {% include "nav.html" -%}
 {% include "_flashing.html" -%}
 
-<div x-data="{ tab : 1 }" class="container max-w-2xl mx-auto mt-7 px-2">
+<div class="container max-w-2xl mx-auto mt-7 px-2">
     <div class="max-w-lg mx-auto">
         <p class="font-bold text-lg my-5">商品と単価の登録</p>
         <div class="max-w-xl rounded shadow-lg my-5 p-5">
@@ -20,15 +20,77 @@
     </div>
 
     <div class="max-w-lg my-10 mx-auto">
-        <div class="flex px-3 text-sm text-gray-700 justify-around">
-            <div>
-                <label>商品</label><select></select>
+        <smal class="text-red-500">ポイント &#9758; 使用する商品だけを登録</small>
+        <form method="post" class="">
+            <div class="flex my-5 px-3 text-sm text-gray-700 justify-around">
+                <div>
+                    <label>商品 1</label><select class="border-b ml-3" name="item1">
+                        <option value=""></option>
+                        {% for item in items %}
+                        <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>単価<input type="number" min="1" class="ml-3 border-b text-right" name="itemPrice1"></label>
+                </div>
             </div>
-            <div>
-                <label>単価<input type="number" min="1"></label>
-            </div>
-        </div>
 
+            <div class="flex my-5 px-3 text-sm text-gray-700 justify-around">
+                <div>
+                    <label>商品 2</label><select class="border-b ml-3" name="item2">
+                        <option value=""></option>
+                        {% for item in items %}
+                        <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>単価<input type="number" min="1" class="ml-3 border-b text-right" name="itemPrice2"></label>
+                </div>
+            </div>
+            <div class="flex my-5 px-3 text-sm text-gray-700 justify-around">
+                <div>
+                    <label>商品 3</label><select class="border-b ml-3" name="item3">
+                        <option value=""></option>
+                        {% for item in items %}
+                        <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>単価<input type="number" min="1" class="ml-3 border-b text-right" name="itemPrice3"></label>
+                </div>
+            </div>
+            <div class="flex my-5 px-3 text-sm text-gray-700 justify-around">
+                <div>
+                    <label>商品 4</label><select class="border-b ml-3" name="item4">
+                        <option value=""></option>
+                        {% for item in items %}
+                        <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>単価<input type="number" min="1" class="ml-3 border-b text-right" name="itemPrice4"></label>
+                </div>
+            </div>            <div class="flex my-5 px-3 text-sm text-gray-700 justify-around">
+                <div>
+                    <label>商品 5</label><select class="border-b ml-3" name="item5">
+                        <option value=""></option>
+                        {% for item in items %}
+                        <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>単価<input type="number" min="1" class="ml-3 border-b text-right" name="itemPrice5"></label>
+                </div>
+            </div>
+            <div class="flex justify-center my-10">
+                <button type="submit" class="bg-blue-700 text-white py-1 px-7 rounded-full shadow-lg hover:bg-blue-500">確認</button>
+            </div>    
+        </form>
     </div>
 </div>
 
