@@ -136,13 +136,25 @@
                                 <p>{{ '{:06d}'.format(order.id) }}</p>
                                 <p>{{ order.date.strftime('%Y-%m-%d') }}</p>    
                             </div>
-                            <div class="flex gap-x-5">
-                                {% if order.request %}
-                                <p class="rounded-lg p-1 text-xs bg-yellow-500 text-white">配送依頼あり</p>
+                            <div class="flex gap-x-3">
+                                {% if order.request.delivery_date %}
+                                    <p class="rounded-lg p-1 text-xs bg-yellow-500 text-white">{{ order.request.delivery_date.strftime('%m/%d') }}</p>
                                 {% endif %}
+                                {% if order.request.time_range == '1' %}
+                                    <p class="rounded-lg p-1 text-xs bg-yellow-500 text-white">午前</p>
+                                {% elif order.request.time_range == '2' %}
+                                    <p class="rounded-lg p-1 text-xs bg-yellow-500 text-white">午後</p>
+                                {% else %}
+                                {% endif %}
+                                {% if order.request.memo %}
+                                    <p class="rounded-lg p-1 text-xs bg-yellow-500 text-white">備考</p>
+                                {% endif %}                                
                                 {% if order.shippings %}
-                                <p class="rounded-lg p-1 text-xs bg-gray-700 text-white">出荷済み</p>
-                                {% endif %}    
+                                <p class="rounded-lg p-1 text-xs bg-gray-700 text-white">出荷</p>
+                                {% elif order.delivery_check %}
+                                <p class="rounded-lg p-1 text-xs bg-gray-200 text-gray-700">DL</p>
+                                {% else %}
+                                {% endif %}
                             </div>
                         </div>
                         <p class="mt-2 text-base font-bold">{{ order.shop.name }}</p>

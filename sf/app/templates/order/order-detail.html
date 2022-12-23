@@ -26,10 +26,11 @@
                 <p class="font-bold my-3"><span class="text-base font-normal text-gray-500">
                     {{ order.item }}
                 </span> {{ order.product.name }}</p>
-                <p class="font-bold my-3">{{ order.price }}
-                    <span class="text-sm font-normal text-gray-500">円</span>
-                </p>
-                <p class="font-bold my-3">{{ order.qty }} <span class="text-sm font-normal text-gray-500">個</span></p>
+                <div class="flex gap-x-5">
+                  <p class="font-bold">{{ order.price }}<span class="text-sm font-normal text-gray-500"> 円</span></p>
+                  <p class="text-gray-500">x</p>
+                  <p class="font-bold">{{ order.qty }}<span class="text-sm font-normal text-gray-500"> 個</span></p>
+                </div>
 
                 {% if order.exported is none %}
                 <div class="mt-8 mx-5 flex justify-between">
