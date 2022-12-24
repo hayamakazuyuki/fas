@@ -25,16 +25,7 @@
         </div>
     </div>
 
-    <div class="max-w-lg mx-auto px-5">
-        <div class="flex justify-between text-sm">
-            <a href="/customer/{{ customer.id }}/register" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">
-                事業所を追加 &#x2192;
-            </a>
-            {% if not items_prices %}
-            <a href="/customer/{{ customer.id }}/register-contract-price" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">商品を登録 &#x2192;</a>
-            {% endif %}
-        </div>
-    </div>
+    <div class="max-w-lg mx-auto px-5">    </div>
     <div class="max-w-lg my-10 mx-auto">
         <!-- tab items -->
         <ul class="flex cursor-pointer text-center text-sm text-gray-500 border-b">
@@ -43,8 +34,13 @@
         </ul>
 
         <div x-show="tab ===1">
+            <div class="mt-5 text-center text-sm">
+                <a href="/customer/{{ customer.id }}/register" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">
+                事業所を追加 &#x2192;
+            </a>
+            </div>
             {% if shops %}
-            <div class="my-5 px-3">
+            <div class="my-3 px-3">
                 <p class="">
                     {% for page_num in shops.iter_pages(left_edge=3, right_edge=2) %}
                     {% if page_num %}
@@ -108,8 +104,9 @@
                 {% endif %}
             </div>
             {% else %}
-            <div class="my-10 px-3 text-center">
-                契約商品と単価の登録はありません。
+
+            <div class="my-5 px-3 text-center text-sm">
+                <a href="/customer/{{ customer.id }}/register-contract-price" class="inline-block text-blue-500 hover:text-blue-700 hover:underline">商品を登録 &#x2192;</a>
             </div>
             {% endif %}
         </div>
