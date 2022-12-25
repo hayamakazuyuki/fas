@@ -38,7 +38,7 @@ def register(customer_id, id):
 
     # generate min and max dates for delivery date request.
     min_date = datetime.now(JST) + timedelta(days=4)
-    max_date = datetime.now(JST) + timedelta(days=29)
+    max_date = datetime.now(JST) + timedelta(days=15)
 
     if request.method == 'POST':
 
