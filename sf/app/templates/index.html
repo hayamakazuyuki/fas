@@ -10,8 +10,8 @@
             <h2 class="text-base text-center text-gray-700">{{ current_user.last_name }}<span class="text-xs">さん</span></h2>
             <h3 class="text-sm text-center text-gray-500"><span class="text-gray-800 text-lg font-bold" x-text="thisYear"></span>年
                 <span class="text-gray-800 text-lg font-bold" x-text="thisMonth"></span>月</h3>
-            <p class="text-right text-lg font-bold mt-3">{{ my_qty_month or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
-            <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(my_amount_month) if my_amount_month else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
+            <p class="text-right text-lg font-bold mt-3">{{ qty_month or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
+            <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(amount_month) if amount_month else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
         </div>
         <div class="w-full border p-3 bg-white shadow-lg rounded-lg">
             <h2 class="text-base text-center text-gray-700">{{ current_user.last_name }}<span class="text-xs">さん</span></h2>
@@ -19,8 +19,8 @@
                 <span class="text-gray-800 text-lg font-bold" x-text="thisMonth"></span>月
                 <span class="text-gray-800 text-lg font-bold" x-text="today"></span>日
             </h3>
-            <p class="text-right text-lg font-bold mt-3">{{ my_qty_today or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
-            <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(my_amount_today) if my_amount_today else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
+            <p class="text-right text-lg font-bold mt-3">{{ qty_today or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
+            <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(amount_today) if amount_today else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
         </div>
         <div class="w-full border p-3 bg-white shadow-lg rounded-lg">
             <h2 class="text-base text-center text-gray-700">全社</h2>

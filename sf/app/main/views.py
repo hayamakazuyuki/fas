@@ -9,6 +9,8 @@ from ..email import send_email
 
 from ..models import Product, ProductOrder, Staff, Shop
 
+from ..calcs import get_total_amount_today, get_total_qty_today, get_amount_today, get_qty_today, get_qty_month, get_amount_month
+
 from app import db
 
 
@@ -18,46 +20,6 @@ JST = datetime.timezone(datetime.timedelta(hours=+9), 'JST')
 this_year  = datetime.datetime.now(JST).strftime('%Y')
 this_month = datetime.datetime.now(JST).strftime('%m')
 today = datetime.date.today()
-
-
-def get_my_qty_month():
-    my_qty_month = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.sales_by ==current_user.id)\
-        .filter(extract('year', ProductOrder.date) == this_year).filter(extract('month', ProductOrder.date) == this_month)\
-        .filter(ProductOrder.item != 901).scalar()
-    return my_qty_month
-
-
-def get_my_amount_month():
-    my_amount_month = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
-        .filter(ProductOrder.sales_by == current_user.id)\
-        .filter(extract('year', ProductOrder.date) == this_year).filter(extract('month', ProductOrder.date) == this_month)\
-        .scalar()
-    return my_amount_month
-
-
-def get_my_qty_today():
-    my_qty_today = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.sales_by ==current_user.id)\
-        .filter(func.date(ProductOrder.date) == today).filter(ProductOrder.item != 901).scalar()
-    return my_qty_today
-
-
-def get_my_amount_today():
-    my_amount_today = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
-        .filter(ProductOrder.sales_by == current_user.id).filter(func.date(ProductOrder.date) == today).scalar()
-    return my_amount_today
-
-
-def get_total_qty_today():
-    total_qty_today = db.session.query(func.sum(ProductOrder.qty))\
-        .filter(func.date(ProductOrder.date) == today).filter(ProductOrder.item != 901).scalar()
-    return total_qty_today
-
-
-def get_total_amount_today():
-    total_amount_today = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
-        .filter(func.date(ProductOrder.date) == today).scalar()
-    return total_amount_today
-
 
 
 # index: sf.furoshiki.in
@@ -105,47 +67,17 @@ def index():
 
     staffs = Staff.query.filter(Staff.is_inactive==False).all()
 
-    # orders = ProductOrder.query.filter(func.DATE(ProductOrder.date) == date)\
-    #     .filter_by(sales_by=staff)\
-    #         .order_by(ProductOrder.id.desc()).paginate(page=page, per_page=20)
-
-    # this_year  = datetime.datetime.now(JST).strftime('%Y')
-    # this_month = datetime.datetime.now(JST).strftime('%m')
-    # today = datetime.date.today()
-
-    my_qty_month = get_my_qty_month()
-    my_amount_month = get_my_amount_month()
-    my_qty_today = get_my_qty_today()
-    my_amount_today = get_my_amount_today()
+    qty_month = get_qty_month()
+    amount_month = get_amount_month()
+    qty_today = get_qty_today()
+    amount_today = get_amount_today()
     total_qty_today = get_total_qty_today()
     total_amount_today = get_total_amount_today()
 
-    # my_qty_month = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.sales_by ==current_user.id)\
-    #     .filter(extract('year', ProductOrder.date) == this_year).filter(extract('month', ProductOrder.date) == this_month)\
-    #     .filter(ProductOrder.item != 901).scalar()
-
-    # my_amount_month = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
-    #     .filter(ProductOrder.sales_by == current_user.id)\
-    #     .filter(extract('year', ProductOrder.date) == this_year).filter(extract('month', ProductOrder.date) == this_month)\
-    #     .scalar()
-
-    # my_qty_today = db.session.query(func.sum(ProductOrder.qty)).filter(ProductOrder.sales_by ==current_user.id)\
-    #     .filter(func.date(ProductOrder.date) == today).filter(ProductOrder.item != 901).scalar()
-
-    # my_amount_today = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
-    #     .filter(ProductOrder.sales_by == current_user.id).filter(func.date(ProductOrder.date) == today).scalar()
-
-    # total_qty_today = db.session.query(func.sum(ProductOrder.qty))\
-    #     .filter(func.date(ProductOrder.date) == today).filter(ProductOrder.item != 901).scalar()
-
-    # total_amount_today = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
-    #     .filter(func.date(ProductOrder.date) == today).scalar()
-
-    return render_template('index.html', orders=orders, page=page, staffs=staffs, my_qty_today=my_qty_today,
-     my_amount_today=my_amount_today, my_qty_month=my_qty_month, my_amount_month=my_amount_month, total_qty_today=total_qty_today,
+    return render_template('index.html', orders=orders, page=page, staffs=staffs, qty_today=qty_today,
+     amount_today=amount_today, qty_month=qty_month, amount_month=amount_month, total_qty_today=total_qty_today,
      total_amount_today=total_amount_today)
 
-    # today = datetime.now(JST).strftime('%Y-%m-%d')
 
 @main.route('/search')
 def search():
@@ -179,25 +111,16 @@ def search():
 
     staffs = Staff.query.filter(Staff.is_inactive==False).all()
 
-    my_qty_month = get_my_qty_month()
-    my_amount_month = get_my_amount_month()
-    my_qty_today = get_my_qty_today()
-    my_amount_today = get_my_amount_today()
+    qty_month = get_qty_month()
+    amount_month = get_amount_month()
+    qty_today = get_qty_today()
+    amount_today = get_amount_today()
     total_qty_today = get_total_qty_today()
     total_amount_today = get_total_amount_today()
 
-    return render_template('index.html', orders=orders, page=page, staffs=staffs, my_qty_today=my_qty_today,
-     my_amount_today=my_amount_today, my_qty_month=my_qty_month, my_amount_month=my_amount_month, total_qty_today=total_qty_today,
+    return render_template('index.html', orders=orders, page=page, staffs=staffs, qty_today=qty_today,
+     amount_today=amount_today, qty_month=qty_month, amount_month=amount_month, total_qty_today=total_qty_today,
      total_amount_today=total_amount_today)
-
-
-# @main.route('/drop-session')
-# def drop_session():
-
-#     for key in list(session.keys()):
-#         session.pop(key)
-
-#     return redirect(url_for('main.index'))
 
 
 # show products/items list
@@ -288,14 +211,3 @@ def test():
     #     db.session.commit()
 
     return '完了'
-
-# @main.route('/args')
-# def args():
-#     date = request.args.get('date')
-
-#     if date:
-
-#         return f'{date}'
-
-#     else:
-#         return 'なし'
