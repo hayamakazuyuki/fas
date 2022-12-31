@@ -1,166 +1,56 @@
 {% extends "layout.html" %}
 {% block content %}
 {% include "nav.html" %}
-<div class="container max-w-4xl mx-auto" x-data="{open: 1}">
-    <h1 class="md:max-w-md md:mx-auto mx-2 mt-8 text-xl font-bold text-gray-500">受注データ ダウンロード</h1>
+<div class="container max-w-4xl mx-auto">
+    <h1 class="md:max-w-md md:mx-auto mx-2 mt-8 text-xl font-bold text-gray-500">受注データのダウンロード</h1>
 
-    <!-- date or dates range select and display summary -->
     <div class="md:max-w-md md:mx-auto mx-2 mt-5 p-5 border rounded-lg shadow-lg">
         <h2>データ選択</h2>
 
-        <!-- date range == 2-->
-        <div class="mt-8" x-show="open === 1">
-            <div class="my-5">
-                <form action="/order/range" method="GET">
-                    <div class="text-base text-center">
-                        <label for="date_from" class="hidden">から</label>
-                        <input class="border-b" type="date" min="2020-09-01" name="date_from" id="date_from" required>
-                        <label for="date_to" class="px-3">〜</label>
-                        <input class="border-b" type="date" min="2020-09-01" name="date_to" id="date_to" required>    
-                    </div>
-                    <button type="submit" class="block w-full bg-blue-500 hover:bg-blue-800 text-sm text-white mt-8 py-1 px-5 rounded-full shadow-xl">検索</button>
-                </form>
+        <div x-data="{ range : false }">
+            <div class="text-center my-3">
+                <label class="text-sm">範囲で選択する<input type="checkbox" class="ml-3" x-on:change="range = ! range"></label>
             </div>
-            <!-- <div class="mt-6 text-center">
-                <div class="px-3 text-xl"><span class="text-sm text-gray-500">対象 </span>{{ date_from or '' }} <span class="text-gray-300">〜</span> {{ date_to or '' }}</div> -->
-                <!-- <p class="mt-3 ml-5 text-sm tetx-gray-500">箱数　　　<span class="text-gray-800 text-2xl">{{ r_sum_qty or 0 }}</span></p>
-                <p class="ml-5 text-sm tetx-gray-500">商品売上　<span class="text-gray-800 text-2xl">{{ '{:,}'.format(r_sum_price) if r_sum_price else 0 }}</span></p>
-                <p class="ml-5 text-sm tetx-gray-500">送料売上　<span class="text-gray-800 text-2xl">{{ '{:,}'.format(r_sum_delivery_price) if r_sum_delivery_price else 0 }}</span></p>
-                <p class="ml-5 text-sm tetx-gray-500">売上合計　<span class="text-gray-800 text-2xl">{{ '{:,}'.format(r_total_price) if r_total_price else 0 }}</span></p> -->
-            <!-- </div>   -->
+
+            <form class="mx-auto" action="" method="GET">
+                <div class="flex justify-center">
+                    <div>
+                        <input class="border-b text-center" type="date" min="2020-09-01" name="date_from" required>
+                    </div>
+                    <div>
+                        <template x-if="range">
+                            <div><span class="px-3">〜</span>
+                                <input class="border-b text-center" type="date" min="2020-09-01" name="date_to" id="date_to" required>        
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="bg-blue-700 text-sm text-white mt-8 py-1 px-6 rounded-full shadow-xl hover:bg-blue-500">検索</button>
+                </div>
+            </form>
         </div>
     </div>
-
-    <!-- date result == 1 table -->
-    <div class="my-8 mx-2" x-show="open === 2">
-        <div class="flex justify-between md:mx-auto md:max-w-md">
-            <p class="text-xl"><span class="text-sm text-gray-500">対象日 </span>{{ target }}</p>
-
+    <div class="md:max-w-md md:mx-auto mx-2 mt-5 p-5 border rounded-lg shadow-lg">
+        <div class="flex justify-between">
+            <h2>データ集計</h2>
             <div class="flex text-blue-500 items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
                 <a href="/order/data?dl=csv&target={{ target }}" class="text-sm hover:underline">
-                    csvダウンロード
+                    リストのダウンロード
                 </a>
-            </div>
+            </div>    
         </div>
-    
-        <table class="mt-8 table-auto w-full text-sm">
-            <thead>
-                <tr class="border-b border-black">
-                    <th clss="py-2">番号</th>
-                    <th class="py-2">登録日時</th>
-                    <th class="py-2">担当</th>
-                    <th class="py-2">事業所</th>
-                    <th class="py-2">商品</th>
-                    <th class="py-2">単価</th>
-                    <th class="py-2">数量</th>
-                    <th class="py-2">出荷日</th>
-                    <th class="py-2">問い合わせ番号</th>
-                </tr>
-            </thead>
-            {% for order in orders %}
-            <tbody>
-                <tr class="border-b">
-                    <td>{{ '{:06d}'.format(order.id) }}</td>
-                    <td>{{ order.date.strftime('%m-%d %H:%M') }}</td>
-                    <td>{{ order.staff.last_name }}</td>
-                    <td>{{ order.shop.name }}</td>
-                    <td>{{ order.product.abbre }}</td>
-                    <td class="text-right">{{ '{:,d}'.format(order.price) }}</td>
-                    <td class="text-right">{{ order.qty }}</td>
-                    <td class=" text-center">
-                        {% if order.shippings %}
-                            {% for shipping in order.shippings %}
-                            <ul>
-                                <li>{{ shipping.shipped_on.strftime('%m-%d') }}</li>
-                            </ul>
-                            {% endfor %}
-                        {% endif %}
-                    </td>
-                    <td class="text-center">
-                        {% if order.shippings %}
-                            {% for shipping in order.shippings %}
-                            <ul>
-                                <li>{{ shipping.code }}</li>
-                            </ul>
-                            {% endfor %}
-                        {% endif %}
-                    </td>
-                </tr>
-            </tbody> 
-            {% endfor %}
-        </table>
-    </div>
-
-
-    <!-- range result == 2 table -->
-    <div class="my-8 mx-2" x-show="open === 1">
-
-        {% if range_orders %}
-        <div class="md:mx-auto md:max-w-md text-center">
-            <div class="text-xl"><span class="text-sm text-gray-500">対象 </span>{{ date_from or '' }} <span class="text-gray-300">〜</span> {{ date_to or '' }}</div>
+        <div class="flex justify-center md:mx-auto my-3">
+            <p class="text-xl"><span class="text-sm text-gray-500">対象 </span>{{ target }}</p>
         </div>
-
-        <p class="mt-8 text-blue-500">
-        {% for page_num in range_orders.iter_pages(left_edge=3, right_edge=2) %}
-            {% if page_num %}
-                {% if range_orders.page == page_num %}
-                <a class="underline" href="{{ url_for('order.range', date_from=date_from, date_to=date_to,
-                page=page_num) }}">{{ page_num }}</a>
-                {% else %}
-                <a class="hover:text-blue-800" href="{{ url_for('order.range', date_from=date_from,
-                date_to=date_to, page=page_num) }}">{{ page_num }}</a>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-        </p>
-
-        <table class="table-auto w-full text-sm">
-            <thead>
-                <tr class="border-b border-black">
-                    <th class="py-2">番号</th>
-                    <th class="py-2">受注日</th>
-                    <th class="py-2">担当</th>
-                    <th class="py-2">事業所</th>
-                    <th class="py-2">住所</th>
-                    <th class="py-2">商品</th>
-                    <th class="py-2">単価</th>
-                    <th class="py-2">数量</th>
-                </tr>
-            </thead>
-            {% for range_order in range_orders.items %}
-            <tbody>
-                <tr class="border-b">
-                    <td>{{ '{:06d}'.format(range_order.id) }}</td>
-                    <td>{{ range_order.date.strftime('%m-%d %H:%M') }}</td>
-                    <td>{{ range_order.staff.last_name }}</td>
-                    <td>{{ range_order.customer_id }}-{{ range_order.shop_id }} {{ range_order.shop.name }}</td>
-                    <td>{{ range_order.shop.prefecture }}</td>
-                    <td>{{ range_order.product.name }}</td>
-                    <td class="text-right">{{ '{:,d}'.format(range_order.price) }}</td>
-                    <td class="text-right">{{ range_order.qty }}</td>
-                </tr>
-            </tbody>
-            {% endfor %}
-        </table>
-        {% endif %}
-
     </div>
-    {% if posts %}
-    <ul>
-        {% for post in posts %}
-        <li>{{ post.order_id }} = {{ post.id }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
 </div>
 {% endblock %}
 
 {% block script %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/dateRange.js') }}"></script>
-
 {% endblock %}
 
