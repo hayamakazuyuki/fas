@@ -53,3 +53,40 @@ def get_total_amount_today():
         .filter(func.date(ProductOrder.date) == func.date(today)).scalar()
 
     return total_amount_today
+
+
+def get_total_qty(target_date=None, from_date=None, to_date=None):
+
+    filters = []
+
+    if target_date:
+        filters.append(func.date(ProductOrder.date) == target_date)
+
+    if from_date:
+        filters.append(func.date(ProductOrder.date) >= from_date)
+
+    if to_date:
+        filters.append(func.date(ProductOrder.date) <= to_date)
+
+    total_qty = db.session.query(func.sum(ProductOrder.qty)).filter(*filters).filter(ProductOrder.item != 901).scalar()
+
+    return total_qty
+
+
+def get_total_amount(target_date=None, from_date=None, to_date=None):
+
+    filters = []
+
+    if target_date:
+        filters.append(func.date(ProductOrder.date) == target_date)
+
+    if from_date:
+        filters.append(func.date(ProductOrder.date) >= from_date)
+
+    if to_date:
+        filters.append(func.date(ProductOrder.date) <= to_date)
+
+    total_amount = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty))).filter(*filters).scalar()
+
+    return total_amount
+
