@@ -2,7 +2,7 @@
 {% block content %}
 {% include "nav.html" %}
 <div class="container max-w-4xl mx-auto">
-    <h1 class="md:max-w-md md:mx-auto mx-2 mt-8 text-xl font-bold text-gray-500">受注データのダウンロード</h1>
+    <h1 class="md:max-w-md md:mx-auto mx-2 mt-8 text-xl font-bold text-gray-500">データのダウンロード</h1>
 
     <!-- date or dates range select -->
     <div x-data="{ open : 1 }" class="md:max-w-md md:mx-auto mx-2 mt-5 p-5 border rounded-lg shadow-lg">
@@ -50,9 +50,9 @@
         </div>
     </div>
 
-    <div class="md:max-w-md md:mx-auto mx-2 mt-5 p-5 border rounded-lg shadow-lg">
+    <div class="md:max-w-md md:mx-auto mx-2 my-5 p-5 border rounded-lg shadow-lg">
         <div class="mb-5 flex justify-between">
-            <h2>データ集計</h2>
+            <h2 class="font-bold">データ集計</h2>
             <div class="flex text-blue-500 items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -75,6 +75,29 @@
         <div class="text-center">
             <p class="text-sm text-gray-500">売上<span class="text-lg text-gray-800"> {{ "{:,}".format(total_amount) if total_amount else 0 }}</span> 円</p>
             <p class="text-sm text-gray-500">箱数<span class="text-lg text-gray-800"> {{ "{:,}".format(total_qty) if total_qty else 0 }}</span> 箱</p>
+            {% if sum_by_item %}
+            <div class="my-8 text-sm">
+                <h3 class="text-left font-bold">商品別</h3>
+                <ul class="px-5 my-3 text-gray-700">
+                    <li class="flex border-b my-3 justify-between font-bold"><p class="w-3/5">商品</p><p class="w-1/5">数量</p><p class="w-fit">売上（円）</p></li>
+                    {% for item in sum_by_item %}
+                    <li class="flex border-b my-3 justify-between"><p class="w-3/5 text-left">{{ item[0] }} {{ item[1] }}</p><p class="w-1/5 text-center">{{ item[2] }}</p><p class="w-fit text-right">{{ "{:,}".format(item[3]) }}</p></li>
+                    {% endfor %}
+                </ul>    
+            </div>
+            {% endif %}
+            {% if sum_by_staff %}
+            <div class="my-8 text-sm">
+                <h3 class="text-left font-bold">担当別</h3>
+                <ul class="px-5 my-3 text-gray-700">
+                    <li class="flex border-b my-3 justify-around font-bold"><p class="">担当</p><p class="">売上（円）</p></li>
+                    {% for item in sum_by_staff %}
+                    <li class="flex border-b my-3 justify-around"><p class="">{{ item[0] }} {{ item[1] }}{{ item[2] }}</p><p class="">{{ "{:,}".format(item[3]) }}</p></li>
+                    {% endfor %}
+                </ul>    
+            </div>
+            {% endif %}
+
         </div>
 
     </div>

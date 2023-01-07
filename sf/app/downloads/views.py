@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
 from flask_login import login_required
-from ..calcs import get_total_qty, get_total_amount
+from ..calcs import get_total_qty, get_total_amount, get_sum_by_item, get_sum_by_staff
 import datetime
 
 downloads = Blueprint('downloads', __name__, url_prefix='/downloads')
@@ -19,6 +19,8 @@ def index():
 
         total_qty = get_total_qty(target_date, from_date, to_date)
         total_amount = get_total_amount(target_date, from_date, to_date)
+        sum_by_item = get_sum_by_item(target_date, from_date, to_date)
+        sum_by_staff = get_sum_by_staff(target_date, from_date, to_date)
 
     else:
 
@@ -30,6 +32,8 @@ def index():
 
         total_qty = get_total_qty(target_date, from_date, to_date)
         total_amount = get_total_amount(target_date, from_date, to_date)
+        sum_by_item = get_sum_by_item(target_date)
+        sum_by_staff = get_sum_by_staff(target_date, from_date, to_date)
 
     return render_template('downloads/index.html', target_date=target_date, from_date=from_date, to_date=to_date,
-     total_qty=total_qty, total_amount=total_amount)
+     total_qty=total_qty, total_amount=total_amount, sum_by_item=sum_by_item, sum_by_staff=sum_by_staff)

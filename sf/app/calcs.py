@@ -3,7 +3,7 @@ import datetime
 from sqlalchemy import func
 from flask_login import current_user
 from .extentions import db
-from .models import ProductOrder
+from .models import ProductOrder, Product, Staff
 
 JST = datetime.timezone(datetime.timedelta(hours=+9), 'JST')
 
@@ -90,3 +90,42 @@ def get_total_amount(target_date=None, from_date=None, to_date=None):
 
     return total_amount
 
+
+def get_sum_by_item(target_date=None, from_date=None, to_date=None):
+
+    filters = []
+
+    if target_date:
+        filters.append(func.date(ProductOrder.date) == target_date)
+
+    if from_date:
+        filters.append(func.date(ProductOrder.date) >= from_date)
+
+    if to_date:
+        filters.append(func.date(ProductOrder.date) <= to_date)
+
+    sum_by_item = db.session.query(Product.id, Product.name, func.sum(ProductOrder.qty), func.sum(ProductOrder.price * ProductOrder.qty))\
+        .join(ProductOrder, Product.id == ProductOrder.item).filter(*filters)\
+        .group_by(Product.id).order_by(Product.id).all()
+
+    return sum_by_item
+
+
+def get_sum_by_staff(target_date=None, from_date=None, to_date=None):
+
+    filters = []
+
+    if target_date:
+        filters.append(func.date(ProductOrder.date) == target_date)
+
+    if from_date:
+        filters.append(func.date(ProductOrder.date) >= from_date)
+
+    if to_date:
+        filters.append(func.date(ProductOrder.date) <= to_date)
+
+    sum_by_staff = db.session.query(Staff.id, Staff.last_name, Staff.first_name, func.sum(ProductOrder.price * ProductOrder.qty))\
+        .join(ProductOrder, Staff.id == ProductOrder.sales_by).filter(*filters)\
+        .group_by(Staff.id).order_by(Staff.id).all()
+
+    return sum_by_staff
