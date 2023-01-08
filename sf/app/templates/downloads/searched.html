@@ -15,7 +15,7 @@
         <!-- date target == 1 -->
         <div class="mt-8" x-show="open === 1">
             <div class="my-5">
-                <form action="/downloads/search" method="GET">
+                <form method="GET">
                     <div class="flex justify-center">
                         <input class="text-base text-center border-b-2 w-1/2" type="date" min="2020-09-01" name="targetDate" required>
                     </div>
@@ -31,7 +31,7 @@
         <!-- date range == 2-->
         <div class="mt-8" x-show="open === 2">
             <div class="my-5">
-                <form action="/downloads/search" method="GET">
+                <form method="GET">
                     <div class="text-base text-center">
                         <label><span class="hidden">from</span>
                             <input class="border-b-2 text-center" type="date" min="2020-09-01" name="fromDate" id="fromDate" required>
@@ -66,10 +66,19 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                <a href="/downloads/today" class="text-sm hover:underline">
+                <a href="/downloads/general" class="text-sm hover:underline">
                     一覧のダウンロード
-                </a>
+                </a>    
             </div>
+            <div class="flex">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <a href="/downloads/checking" class="text-sm hover:underline">
+                    山ちゃん用
+                </a>    
+            </div>
+
         </div>
         <div class="mb-5">
             <h2 class="font-bold">データ集計</h2>

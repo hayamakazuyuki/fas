@@ -126,6 +126,24 @@ def get_sum_by_staff(target_date=None, from_date=None, to_date=None):
 
     sum_by_staff = db.session.query(Staff.id, Staff.last_name, Staff.first_name, func.sum(ProductOrder.price * ProductOrder.qty))\
         .join(ProductOrder, Staff.id == ProductOrder.sales_by).filter(*filters)\
-        .group_by(Staff.id).order_by(Staff.id).all()
+        .group_by(Staff.id).order_by(func.sum(ProductOrder.price * ProductOrder.qty).desc()).all()
 
     return sum_by_staff
+
+
+def get_orders(target_date=None, from_date=None, to_date=None):
+
+    filters = []
+
+    if target_date:
+        filters.append(func.date(ProductOrder.date) == target_date)
+
+    if from_date:
+        filters.append(func.date(ProductOrder.date) >= from_date)
+
+    if to_date:
+        filters.append(func.date(ProductOrder.date) <= to_date)
+
+    orders = ProductOrder.query.filter(*filters).all()
+
+    return orders
