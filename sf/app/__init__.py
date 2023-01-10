@@ -6,6 +6,7 @@ from .customer.views import customer
 from .downloads.views import downloads
 from .order.views import order
 from .staff.views import staff
+from .scheduled import scheduled
 from .models import MyAdminIndexView
 
 
@@ -34,5 +35,6 @@ def create_app():
     app.register_blueprint(downloads)
     app.register_blueprint(staff)
     app.register_blueprint(order)
+    app.register_blueprint(scheduled)
 
     return app
