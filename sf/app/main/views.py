@@ -6,7 +6,7 @@ import datetime
 
 from ..models import Product, ProductOrder, Staff, Shop
 
-from ..calcs import get_total_amount_today, get_total_qty_today, get_amount_today, get_qty_today, get_qty_month, get_amount_month
+from ..calcs import get_amount_today, get_qty_today, get_qty_month, get_amount_month
 
 
 main = Blueprint('main', __name__)
@@ -64,12 +64,9 @@ def index():
     amount_month = get_amount_month()
     qty_today = get_qty_today()
     amount_today = get_amount_today()
-    total_qty_today = get_total_qty_today()
-    total_amount_today = get_total_amount_today()
 
     return render_template('index.html', orders=orders, page=page, staffs=staffs, qty_today=qty_today,
-     amount_today=amount_today, qty_month=qty_month, amount_month=amount_month, total_qty_today=total_qty_today,
-     total_amount_today=total_amount_today)
+     amount_today=amount_today, qty_month=qty_month, amount_month=amount_month)
 
 
 @main.route('/search')
@@ -108,12 +105,9 @@ def search():
     amount_month = get_amount_month()
     qty_today = get_qty_today()
     amount_today = get_amount_today()
-    total_qty_today = get_total_qty_today()
-    total_amount_today = get_total_amount_today()
 
     return render_template('index.html', orders=orders, page=page, staffs=staffs, qty_today=qty_today,
-     amount_today=amount_today, qty_month=qty_month, amount_month=amount_month, total_qty_today=total_qty_today,
-     total_amount_today=total_amount_today)
+     amount_today=amount_today, qty_month=qty_month, amount_month=amount_month)
 
 
 # show products/items list

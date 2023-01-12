@@ -5,33 +5,28 @@
 
 <div class="container max-w-xl mx-auto px-5 md:px-0">
 
-    <div class="my-10 grid gap-3 md:flex" x-data="getToday">
-        <div class="w-full border p-3 bg-white shadow-lg rounded-lg">
-            <h2 class="text-base text-center text-gray-700">{{ current_user.last_name }}<span class="text-xs">さん</span></h2>
-            <h3 class="text-sm text-center text-gray-500"><span class="text-gray-800 text-lg font-bold" x-text="thisYear"></span>年
-                <span class="text-gray-800 text-lg font-bold" x-text="thisMonth"></span>月</h3>
-            <p class="text-right text-lg font-bold mt-3">{{ qty_month or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
-            <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(amount_month) if amount_month else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
-        </div>
-        <div class="w-full border p-3 bg-white shadow-lg rounded-lg">
-            <h2 class="text-base text-center text-gray-700">{{ current_user.last_name }}<span class="text-xs">さん</span></h2>
-            <h3 class="text-sm text-center text-gray-500"><span class="text-gray-800 text-lg font-bold" x-text="thisYear"></span>年
-                <span class="text-gray-800 text-lg font-bold" x-text="thisMonth"></span>月
-                <span class="text-gray-800 text-lg font-bold" x-text="today"></span>日
-            </h3>
-            <p class="text-right text-lg font-bold mt-3">{{ qty_today or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
-            <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(amount_today) if amount_today else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
-        </div>
-        <div class="w-full border p-3 bg-white shadow-lg rounded-lg">
-            <h2 class="text-base text-center text-gray-700">全社</h2>
-            <h3 class="text-sm text-center text-gray-500"><span class="text-gray-800 text-lg font-bold" x-text="thisYear"></span>年
-                <span class="text-gray-800 text-lg font-bold" x-text="thisMonth"></span>月
-                <span class="text-gray-800 text-lg font-bold" x-text="today"></span>日
-            </h3>
-            <p class="text-right text-lg font-bold mt-3">{{ total_qty_today or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
-            <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(total_amount_today) if total_amount_today else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
-        </div>
+    <div class="my-10 w-full border py-5 px-4 bg-white shadow-lg rounded-lg" x-data="getToday">
+        <h2 class="text-base text-left text-gray-700 font-bold">{{ current_user.last_name }}<span class="text-xs font-normal"> さんの受注</span></h2>
 
+        <div class="flex mt-5 justify-around">
+
+            <div class="">
+                <h3 class="text-sm text-center text-gray-500">
+                    <span class="text-gray-800 text-lg font-bold" x-text="thisYear"></span>年
+                    <span class="text-gray-800 text-lg font-bold" x-text="thisMonth"></span>月 合計
+                </h3>
+                <p class="text-right text-lg font-bold mt-3">{{ qty_month or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
+                <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(amount_month) if amount_month else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>
+            </div>
+            <div class="">
+                <h3 class="text-sm text-center text-gray-500">（今日） 
+                    <span class="text-gray-800 text-lg font-bold" x-text="thisMonth"></span>月
+                    <span class="text-gray-800 text-lg font-bold" x-text="today"></span>日
+                </h3>
+                <p class="text-right text-lg font-bold mt-3">{{ qty_today or 0 }}<span class="ml-3 text-sm font-normal">箱</span></p>
+                <p class="text-right text-lg font-bold mt-1">{{ "{:,}".format(amount_today) if amount_today else 0  }}<span class="ml-3 text-sm font-normal">円</span></p>    
+            </div>
+        </div>
     </div>
 
     <div class="my-8 max-w-xl">
