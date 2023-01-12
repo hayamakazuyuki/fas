@@ -41,18 +41,18 @@ def get_amount_month():
     return amount_month
 
 
-def get_total_qty_today():
-    total_qty_today = db.session.query(func.sum(ProductOrder.qty))\
-        .filter(func.date(ProductOrder.date) == func.date(today)).filter(ProductOrder.item != 901).scalar()
+# def get_total_qty_today():
+#     total_qty_today = db.session.query(func.sum(ProductOrder.qty))\
+#         .filter(func.date(ProductOrder.date) == func.date(today)).filter(ProductOrder.item != 901).scalar()
 
-    return total_qty_today
+#     return total_qty_today
 
 
-def get_total_amount_today():
-    total_amount_today = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
-        .filter(func.date(ProductOrder.date) == func.date(today)).scalar()
+# def get_total_amount_today():
+#     total_amount_today = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
+#         .filter(func.date(ProductOrder.date) == func.date(today)).scalar()
 
-    return total_amount_today
+#     return total_amount_today
 
 
 def get_total_qty(target_date=None, from_date=None, to_date=None):
