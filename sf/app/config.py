@@ -1,4 +1,11 @@
 import os
+# from dotenv import find_dotenv, load_dotenv
+
+
+# ENV_FILE  = find_dotenv()
+
+# if ENV_FILE:
+#     load_dotenv(ENV_FILE)
 
 class BaseConfig(object):
     DEBUG = False
@@ -13,6 +20,7 @@ class BaseConfig(object):
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    X_CHATWORK_TOKE = os.environ.get('X_CHATWORK_TOKEN')
 
 class ProductionConfig(BaseConfig):
     SECRET_KEY = os.environ.get('SECRET_KEY')
