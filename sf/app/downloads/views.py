@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, make_response
+from flask import Blueprint, render_template, request, redirect, url_for, make_response, session
 from flask_login import login_required
 from io import StringIO
 from sqlalchemy import func
@@ -11,14 +11,15 @@ import datetime
 import csv
 
 
-
 downloads = Blueprint('downloads', __name__, url_prefix='/downloads')
 JST = datetime.timezone(datetime.timedelta(hours=+9), 'JST')
+now = datetime.datetime.now(JST)
 
 
 @downloads.route('/')
+@downloads.route('/<dl>')
 @login_required
-def index():
+def index(dl=None):
 
     target_date = datetime.datetime.now(JST).strftime('%Y-%m-%d')
 
@@ -27,19 +28,8 @@ def index():
     sum_by_item = get_sum_by_item(target_date)
     sum_by_staff = get_sum_by_staff(target_date)
 
-    return render_template('downloads/index.html', target_date=target_date, total_qty=total_qty,
-         total_amount=total_amount, sum_by_item=sum_by_item, sum_by_staff=sum_by_staff)
-
-
-@downloads.route('/<type>')
-@login_required
-def download_csv(type):
-
-    if type == 'today':
-        
-        target_date = datetime.datetime.now(JST).strftime('%Y-%m-%d')
+    if dl:
         orders = ProductOrder.query.filter(func.DATE(ProductOrder.date) == target_date).all()
-
 
         file = StringIO()
         writer = csv.writer(file, lineterminator="\n")
@@ -57,23 +47,52 @@ def download_csv(type):
         response.data = file.getvalue().encode('sjis', 'replace')
         response.headers['Content-Type'] = 'text/csv'
         response.headers['Content-Disposition'] = 'attachment; filename=orders-' + target_date + '.csv'
-    
+
         return response
 
+    return render_template('downloads/index.html', target_date=target_date, total_qty=total_qty,
+         total_amount=total_amount, sum_by_item=sum_by_item, sum_by_staff=sum_by_staff)
 
-    elif type == 'search':
 
-        target_date = request.args.get('targetDate')
-        from_date = request.args.get('fromDate')
-        to_date = request.args.get('toDate')
+@downloads.route('/search')
+@login_required
+def search():
 
-        total_qty = get_total_qty(target_date, from_date, to_date)
-        total_amount = get_total_amount(target_date, from_date, to_date)
-        sum_by_item = get_sum_by_item(target_date, from_date, to_date)
-        sum_by_staff = get_sum_by_staff(target_date, from_date, to_date)
+    target_date = request.args.get('targetDate')
+    from_date = request.args.get('fromDate')
+    to_date = request.args.get('toDate')
+    layout = request.args.get('layout')
 
-        return render_template('downloads/searched.html', target_date=target_date, from_date=from_date, to_date=to_date,
+    total_qty = get_total_qty(target_date, from_date, to_date)
+    total_amount = get_total_amount(target_date, from_date, to_date)
+    sum_by_item = get_sum_by_item(target_date, from_date, to_date)
+    sum_by_staff = get_sum_by_staff(target_date, from_date, to_date)
+
+    orders = get_orders(target_date, from_date, to_date)
+
+    if layout == 'general':
+
+        # file = StringIO()
+        # writer = csv.writer(file, lineterminator="\n")
+        # writer.writerow(
+        #     ['注文番号', '登録日', '取引先', '事業所', '事業所名', '商品番号', '商品名', '単価', '数量', '出荷日', '出荷場所']
+        #     )
+
+        # for order in orders:
+        #     writer.writerow([
+        #         order.id, order.date, order.customer_id, order.shop_id, order.shop.name, 
+        #         order.item, order.product.name, order.price, order.qty, '', ''
+        #     ])
+
+        # response = make_response()
+        # response.data = file.getvalue().encode('sjis', 'replace')
+        # response.headers['Content-Type'] = 'text/csv'
+        # response.headers['Content-Disposition'] = 'attachment; filename=orders-' + now.strftime('%Y-%m-%d') + '.csv'
+
+        return target_date
+
+    elif layout == 'accounting':
+        return '山ちゃん'
+
+    return render_template('downloads/searched.html', target_date=target_date, from_date=from_date, to_date=to_date,
          total_qty=total_qty, total_amount=total_amount, sum_by_item=sum_by_item, sum_by_staff=sum_by_staff)
-
-    else:
-        return redirect(url_for('.index'))
