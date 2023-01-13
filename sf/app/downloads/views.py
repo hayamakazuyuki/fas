@@ -72,27 +72,48 @@ def search():
 
     if layout == 'general':
 
-        # file = StringIO()
-        # writer = csv.writer(file, lineterminator="\n")
-        # writer.writerow(
-        #     ['注文番号', '登録日', '取引先', '事業所', '事業所名', '商品番号', '商品名', '単価', '数量', '出荷日', '出荷場所']
-        #     )
+        file = StringIO()
+        writer = csv.writer(file, lineterminator="\n")
+        writer.writerow(
+            ['注文番号', '登録日', '営業担当', '顧客ID', '事業所ID', '事業所名', '都道府県', '商品番号', '商品名', '単価', '数量']
+            )
 
-        # for order in orders:
-        #     writer.writerow([
-        #         order.id, order.date, order.customer_id, order.shop_id, order.shop.name, 
-        #         order.item, order.product.name, order.price, order.qty, '', ''
-        #     ])
+        for order in orders:
+            writer.writerow([
+                order.id, order.date, order.staff.last_name, order.customer_id, order.shop_id, order.shop.name, 
+                order.shop.prefecture, order.item, order.product.name, order.price, order.qty
+            ])
 
-        # response = make_response()
-        # response.data = file.getvalue().encode('sjis', 'replace')
-        # response.headers['Content-Type'] = 'text/csv'
-        # response.headers['Content-Disposition'] = 'attachment; filename=orders-' + now.strftime('%Y-%m-%d') + '.csv'
+        response = make_response()
+        response.data = file.getvalue().encode('sjis', 'replace')
+        response.headers['Content-Type'] = 'text/csv'
+        response.headers['Content-Disposition'] = 'attachment; filename=orders-' + target_date + '.csv'
 
-        return target_date
+        return response
 
     elif layout == 'accounting':
-        return '山ちゃん'
+
+        file = StringIO()
+        writer = csv.writer(file, lineterminator="\n")
+        writer.writerow(
+            ['注文番号', '登録日', '取引先', '事業所', '事業所名', '商品番号', '商品名', '単価', '数量', '出荷日', '出荷場所']
+            )
+
+        for order in orders:
+            writer.writerow([
+                order.id, order.date, order.customer_id, order.shop_id, order.shop.name, 
+                order.item, order.product.name, order.price, order.qty, '', ''
+            ])
+
+        response = make_response()
+        response.data = file.getvalue().encode('sjis', 'replace')
+        response.headers['Content-Type'] = 'text/csv'
+        response.headers['Content-Disposition'] = 'attachment; filename=orders-' + now.strftime('%Y-%m-%d') + '.csv'
+
+        return response
+
+    else:
+        pass
 
     return render_template('downloads/searched.html', target_date=target_date, from_date=from_date, to_date=to_date,
          total_qty=total_qty, total_amount=total_amount, sum_by_item=sum_by_item, sum_by_staff=sum_by_staff)
