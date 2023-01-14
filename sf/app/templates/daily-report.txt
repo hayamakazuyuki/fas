@@ -1,8 +1,9 @@
-送信： {{ now.strftime('%Y-%m-%d %H:%M:%S') }}\n
-\n
-{{ yesterday.strftime('%m月%d日') }}のFUROSHIKI受注は以下の通りです。\n
-\n
-{{ total_qty_today or 0 }} 箱\n
-{{ total_amount_today or 0 }} 円\n
-\n
+送信： {{ now.strftime('%Y-%m-%d %H:%M:%S') }}
+
+{{ yesterday.strftime('%m月%d日') }}のFUROSHIKI受注
+
+（合計）
+{{ total_qty or 0 }} 箱
+{{ total_amount or 0 }} 円
+
 --- 以上 ---

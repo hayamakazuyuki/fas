@@ -27,8 +27,6 @@ def daily_report():
         "x-chatworktoken": api_key
         }
 
-    # payload = "self_unread=1"
-
     params = { "self_unread" : 1,
                 "body" : body }
 
