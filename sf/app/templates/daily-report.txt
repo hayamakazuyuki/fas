@@ -6,4 +6,10 @@
 {{ total_qty or 0 }} 箱
 {{ total_amount or 0 }} 円
 
+（担当者別）
+担当者 - 箱数 - 売上(円)
+{% for staff in sum_by_staff %}
+{{ staff[1] }}{{ staff[2] }} - {{ staff[3] }} - {{ "{:,}".format(item[4]) }}
+{% endfor %}
+
 --- 以上 ---
