@@ -9,7 +9,7 @@ scheduled = Blueprint('scheduled', __name__)
 JST = datetime.timezone(datetime.timedelta(hours=+9), 'JST')
 now = datetime.datetime.now(JST)
 
-
+# cron.yaml every day 00:05
 @scheduled.route('/daily-report')
 def daily_report():
 
