@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import func
+from sqlalchemy import func, case
 from flask_login import current_user
 from .extentions import db
 from .models import ProductOrder, Product, Staff
@@ -124,7 +124,9 @@ def get_sum_by_staff(target_date=None, from_date=None, to_date=None):
     if to_date:
         filters.append(func.date(ProductOrder.date) <= to_date)
 
-    sum_by_staff = db.session.query(Staff.id, Staff.last_name, Staff.first_name, func.sum(ProductOrder.price * ProductOrder.qty))\
+    sum_by_staff = db.session.query(Staff.id, Staff.last_name, Staff.first_name,
+         func.sum(case([(ProductOrder.item != 901, ProductOrder.qty)], else_=0)),
+         func.sum(ProductOrder.price * ProductOrder.qty))\
         .join(ProductOrder, Staff.id == ProductOrder.sales_by).filter(*filters)\
         .group_by(Staff.id).order_by(func.sum(ProductOrder.price * ProductOrder.qty).desc()).all()
 

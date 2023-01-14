@@ -96,9 +96,9 @@
             <div class="my-8 text-sm">
                 <h3 class="text-left font-bold">担当別</h3>
                 <ul class="px-5 my-3 text-gray-700">
-                    <li class="flex border-b my-3 justify-around font-bold"><p class="">担当</p><p class="">売上（円）</p></li>
+                    <li class="flex border-b my-3 justify-around font-bold"><p class="">担当</p><p class="">箱数</p><p class="">売上（円）</p></li>
                     {% for item in sum_by_staff %}
-                    <li class="flex border-b my-3 justify-around"><p class="">{{ item[0] }} {{ item[1] }}{{ item[2] }}</p><p class="">{{ "{:,}".format(item[3]) }}</p></li>
+                    <li class="flex border-b my-3 justify-around"><p class="">{{ item[0] }} {{ item[1] }}{{ item[2] }}</p><p>{{ item[3] }}</p><p class="">{{ "{:,}".format(item[4]) }}</p></li>
                     {% endfor %}
                 </ul>    
             </div>
