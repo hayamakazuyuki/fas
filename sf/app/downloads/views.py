@@ -100,9 +100,19 @@ def search():
             )
 
         for order in orders:
+            shipped_on = None
+            shipped_by = None
+
+            if order.shippings:
+                shipped_on = order.shippings.shipped_on
+                shipped_by = order.shippings.registered_by
+
+            else:
+                pass
+            
             writer.writerow([
                 order.id, order.date, order.customer_id, order.shop_id, order.shop.name, 
-                order.item, order.product.name, order.price, order.qty, '', ''
+                order.item, order.product.name, order.price, order.qty, shipped_on, shipped_by
             ])
 
         response = make_response()
