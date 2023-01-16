@@ -41,26 +41,12 @@ def get_amount_month():
     return amount_month
 
 
-# def get_total_qty_today():
-#     total_qty_today = db.session.query(func.sum(ProductOrder.qty))\
-#         .filter(func.date(ProductOrder.date) == func.date(today)).filter(ProductOrder.item != 901).scalar()
-
-#     return total_qty_today
-
-
-# def get_total_amount_today():
-#     total_amount_today = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty)))\
-#         .filter(func.date(ProductOrder.date) == func.date(today)).scalar()
-
-#     return total_amount_today
-
-
 def get_total_qty(target_date=None, from_date=None, to_date=None):
 
     filters = []
 
     if target_date:
-        filters.append(func.date(ProductOrder.date) == target_date)
+        filters.append(func.date(ProductOrder.date) == func.date(target_date))
 
     if from_date:
         filters.append(func.date(ProductOrder.date) >= from_date)
@@ -78,7 +64,7 @@ def get_total_amount(target_date=None, from_date=None, to_date=None):
     filters = []
 
     if target_date:
-        filters.append(func.date(ProductOrder.date) == target_date)
+        filters.append(func.date(ProductOrder.date) == func.date(target_date))
 
     if from_date:
         filters.append(func.date(ProductOrder.date) >= from_date)
@@ -116,7 +102,7 @@ def get_sum_by_staff(target_date=None, from_date=None, to_date=None):
     filters = []
 
     if target_date:
-        filters.append(func.date(ProductOrder.date) == target_date)
+        filters.append(func.date(ProductOrder.date) == func.date(target_date))
 
     if from_date:
         filters.append(func.date(ProductOrder.date) >= from_date)

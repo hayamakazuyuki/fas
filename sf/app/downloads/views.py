@@ -21,7 +21,7 @@ now = datetime.datetime.now(JST)
 @login_required
 def index(dl=None):
 
-    target_date = datetime.datetime.now(JST).strftime('%Y-%m-%d')
+    target_date = datetime.datetime.now(JST)
 
     total_qty = get_total_qty(target_date)
     total_amount = get_total_amount(target_date)
@@ -46,7 +46,7 @@ def index(dl=None):
         response = make_response()
         response.data = file.getvalue().encode('sjis', 'replace')
         response.headers['Content-Type'] = 'text/csv'
-        response.headers['Content-Disposition'] = 'attachment; filename=orders-' + target_date + '.csv'
+        response.headers['Content-Disposition'] = 'attachment; filename=orders-' + target_date.strftime('%Y%m%d-%H%M') + '.csv'
 
         return response
 
