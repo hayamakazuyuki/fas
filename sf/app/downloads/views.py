@@ -29,7 +29,7 @@ def index(dl=None):
     sum_by_staff = get_sum_by_staff(target_date)
 
     if dl:
-        orders = ProductOrder.query.filter(func.DATE(ProductOrder.date) == target_date).all()
+        orders = ProductOrder.query.filter(func.DATE(ProductOrder.date) == func.date(target_date)).all()
 
         file = StringIO()
         writer = csv.writer(file, lineterminator="\n")
@@ -100,12 +100,17 @@ def search():
             )
 
         for order in orders:
-            shipped_on = None
-            shipped_by = None
+            shipped_on = []
+            shipped_by = []
 
             if order.shippings:
-                shipped_on = order.shippings.shipped_on
-                shipped_by = order.shippings.registered_by
+                for date in order.shippings.shipped_on:
+                    shipped_on.append(date)
+
+                for shipper in order.shippings.registered_by:
+                    shipped_by.append(shipper)
+                # shipped_on = order.shippings.shipped_on
+                # shipped_by = order.shippings.registered_by
 
             else:
                 pass
