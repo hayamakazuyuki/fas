@@ -54,7 +54,7 @@
         <div class="flex px-5">
             <p class="text-xl"><span class="text-sm text-gray-500">対象 </span>
                 {% if target_date %}
-                {{ target_date }}
+                {{ target_date.strftime('%Y-%m-%d') }}
                 {% elif from_date and to_date %}
                 {{ from_date }}<span class="text-sm text-gray-500"> 〜 </span>{{ to_date }}
                 {% else %}
