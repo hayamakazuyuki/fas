@@ -1,10 +1,13 @@
-送信： {{ now.strftime('%Y-%m-%d %H:%M:%S') }}
+{{ now.strftime('%Y-%m-%d %H:%M:%S') }}
 
 [info][title]{{ yesterday.strftime('%m月%d日') }}のFUROSHIKI受注[/title]
 【合計】
-{{ "{:,}".format(total_qty) or 0 }} 箱
-{{ "{:,}".format(total_amount) or 0 }} 円
+{% if total_qty %}{{ "{:,}".format(total_qty) }}{% else %}0{% endif %} 箱 - {% if total_amount %}{{ "{:,}".format(total_amount) }}{% else %}0{% endif %} 円
 
+【商品別】
+{% for item in sum_by_item %}{{ item[2] }} - {{ item[3] }}箱 - {{ "{:,}".format(item[4]) }}円
+{% endfor %}
 【担当者別】
-{% for staff in sum_by_staff %}{{ staff[1] }}{{ staff[2] }} - {{ staff[3] }}箱 - {{ "{:,}".format(staff[4]) }}円{% endfor %}
+{% for staff in sum_by_staff %}{{ staff[1] }}{{ staff[2] }} - {{ staff[3] }}箱 - {{ "{:,}".format(staff[4]) }}円
+{% endfor %}
 [/info]

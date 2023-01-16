@@ -82,7 +82,7 @@ def get_sum_by_item(target_date=None, from_date=None, to_date=None):
     filters = []
 
     if target_date:
-        filters.append(func.date(ProductOrder.date) == target_date)
+        filters.append(func.date(ProductOrder.date) == func.date(target_date))
 
     if from_date:
         filters.append(func.date(ProductOrder.date) >= from_date)
@@ -90,7 +90,7 @@ def get_sum_by_item(target_date=None, from_date=None, to_date=None):
     if to_date:
         filters.append(func.date(ProductOrder.date) <= to_date)
 
-    sum_by_item = db.session.query(Product.id, Product.name, func.sum(ProductOrder.qty), func.sum(ProductOrder.price * ProductOrder.qty))\
+    sum_by_item = db.session.query(Product.id, Product.name, Product.abbre, func.sum(ProductOrder.qty), func.sum(ProductOrder.price * ProductOrder.qty))\
         .join(ProductOrder, Product.id == ProductOrder.item).filter(*filters)\
         .group_by(Product.id).order_by(Product.id).all()
 

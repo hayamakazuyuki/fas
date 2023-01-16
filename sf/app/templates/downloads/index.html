@@ -87,7 +87,7 @@
                 <ul class="px-5 my-3 text-gray-700">
                     <li class="flex border-b my-3 justify-between font-bold"><p class="w-3/5">商品</p><p class="w-1/5">数量</p><p class="w-fit">売上（円）</p></li>
                     {% for item in sum_by_item %}
-                    <li class="flex border-b my-3 justify-between"><p class="w-3/5 text-left">{{ item[0] }} {{ item[1] }}</p><p class="w-1/5 text-center">{{ item[2] }}</p><p class="w-fit text-right">{{ "{:,}".format(item[3]) }}</p></li>
+                    <li class="flex border-b my-3 justify-between"><p class="w-3/5 text-left">{{ item[0] }} {{ item[1] }}</p><p class="w-1/5 text-center">{{ item[3] }}</p><p class="w-fit text-right">{{ "{:,}".format(item[4]) }}</p></li>
                     {% endfor %}
                 </ul>    
             </div>
