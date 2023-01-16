@@ -13,13 +13,10 @@ now = datetime.datetime.now(JST)
 @scheduled.route('/daily-report')
 def daily_report():
 
-    yesterday = now - datetime.timedelta(days=4)
+    yesterday = now - datetime.timedelta(days=1)
 
-    # summary
     total_qty = get_total_qty(yesterday)
     total_amount = get_total_amount(yesterday)
-
-    # group_by item and staff
     sum_by_item = get_sum_by_item(yesterday)
     sum_by_staff = get_sum_by_staff(yesterday)
 
@@ -27,9 +24,10 @@ def daily_report():
             total_amount=total_amount, sum_by_item=sum_by_item, sum_by_staff=sum_by_staff)
 
     api_key = os.environ.get('X_CHATWORK_TOKEN')
-    # url = "https://api.chatwork.com/v2/rooms/281437593/messages"
+    url = "https://api.chatwork.com/v2/rooms/281437593/messages"
 
-    url = "https://api.chatwork.com/v2/rooms/280330138/messages"
+    # for test => my chat
+    # url = "https://api.chatwork.com/v2/rooms/280330138/messages" 
 
     headers = {
         "x-chatworktoken": api_key
