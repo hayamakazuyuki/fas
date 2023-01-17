@@ -41,7 +41,7 @@ def get_amount_month():
     return amount_month
 
 
-def get_total_qty(target_date=None, from_date=None, to_date=None):
+def get_total_qty(target_date=None, from_date=None, to_date=None, target_month=None):
 
     filters = []
 
@@ -53,13 +53,16 @@ def get_total_qty(target_date=None, from_date=None, to_date=None):
 
     if to_date:
         filters.append(func.date(ProductOrder.date) <= to_date)
+
+    if target_month:
+        filters.append(func.date_format(ProductOrder.date, '%Y-%m') == func.date_format(target_month, '%Y-%m'))
 
     total_qty = db.session.query(func.sum(ProductOrder.qty)).filter(*filters).filter(ProductOrder.item != 901).scalar()
 
     return total_qty
 
 
-def get_total_amount(target_date=None, from_date=None, to_date=None):
+def get_total_amount(target_date=None, from_date=None, to_date=None, target_month=None):
 
     filters = []
 
@@ -71,6 +74,9 @@ def get_total_amount(target_date=None, from_date=None, to_date=None):
 
     if to_date:
         filters.append(func.date(ProductOrder.date) <= to_date)
+
+    if target_month:
+        filters.append(func.date_format(ProductOrder.date, '%Y-%m') == func.date_format(target_month, '%Y-%m'))
 
     total_amount = db.session.query(func.sum((ProductOrder.price * ProductOrder.qty))).filter(*filters).scalar()
 

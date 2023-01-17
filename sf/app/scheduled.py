@@ -17,11 +17,14 @@ def daily_report():
 
     total_qty = get_total_qty(yesterday)
     total_amount = get_total_amount(yesterday)
+    total_month_qty = get_total_qty(target_month=yesterday)
+    total_month_amount = get_total_amount(target_month=yesterday)
     sum_by_item = get_sum_by_item(yesterday)
     sum_by_staff = get_sum_by_staff(yesterday)
 
     body = render_template('daily-report.jinja', now=now, yesterday=yesterday, total_qty=total_qty, 
-            total_amount=total_amount, sum_by_item=sum_by_item, sum_by_staff=sum_by_staff)
+                total_month_qty=total_month_qty, total_month_amount=total_month_amount, total_amount=total_amount, 
+                sum_by_item=sum_by_item, sum_by_staff=sum_by_staff)
 
     api_key = os.environ.get('X_CHATWORK_TOKEN')
     url = "https://api.chatwork.com/v2/rooms/281437593/messages"

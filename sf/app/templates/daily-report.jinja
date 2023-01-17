@@ -3,6 +3,7 @@
 [info][title]{{ yesterday.strftime('%m月%d日') }}のFUROSHIKI受注[/title]
 【合計】
 {% if total_qty %}{{ "{:,}".format(total_qty) }}{% else %}0{% endif %} 箱 - {% if total_amount %}{{ "{:,}".format(total_amount) }}{% else %}0{% endif %} 円
+※{{ yesterday.strftime('%m月') }}合計 {% if total_month_qty %}{{ "{:,}".format(total_month_qty) }}{% else %}0{% endif %}箱 - {% if total_month_amount %}{{ "{:,}".format(total_month_amount) }}{% else %}0{% endif %}円
 
 【商品別】
 {% if sum_by_item %}{% for item in sum_by_item %}{{ item[2] }} - {{ item[3] }}箱 - {{ "{:,}".format(item[4]) }}円
