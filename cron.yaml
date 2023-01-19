@@ -3,4 +3,4 @@ cron:
   target: default
   url: /daily-report
   timezone: Asia/Tokyo
-  schedule: every day 00:05
+  schedule: every day 00:03
