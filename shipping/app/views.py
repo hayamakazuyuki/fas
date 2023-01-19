@@ -233,7 +233,7 @@ def shipped():
 
     form = FileUploadForm()
 
-    shipped_items = get_shipped_items(today)
+    # shipped_items = get_shipped_items(today)
 
     if form.validate_on_submit():
 
@@ -272,4 +272,4 @@ def shipped():
             flash('登録するファイルを確認して下さい。', 'error')
             return redirect(url_for('shipping.shipped'))
 
-    return render_template('shipped.html', form=form, shippings=shippings, a_week_ago=a_week_ago, today=today, shipped_items=shipped_items)
+    return render_template('shipped.html', form=form, shippings=shippings, a_week_ago=a_week_ago, today=today)
