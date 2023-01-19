@@ -1,21 +1,21 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response
 from flask_login import login_required, current_user
-from datetime import datetime, timezone, timedelta
+import datetime
 
 from io import StringIO
-from sqlalchemy import or_, and_
 
 from .forms import FileUploadForm
 
 import io
 import csv
 
-from .models import ProductOrder, DeliveryRequest, Shipping
+from .models import ProductOrder, Shipping
 from .extentions import db
+from .calcs import get_shipped_items
 
 
 shipping = Blueprint('shipping', __name__)
-JST = timezone(timedelta(hours=+9), 'JST')
+JST = datetime.timezone(datetime.timedelta(hours=+9), 'JST')
 
 
 def prepare_csv(orders, filename):
@@ -126,7 +126,7 @@ def prepare_csv(orders, filename):
 @login_required
 def index(dl=None):
 
-    now = datetime.now(JST).strftime('%Y%m%d-%H%M')
+    now = datetime.datetime.now(JST).strftime('%Y%m%d-%H%M')
     shipper = current_user.shipper_id
 
     # get orders
@@ -179,38 +179,38 @@ def index(dl=None):
     return render_template('index.html', orders=orders)
 
 
-@shipping.route('/requests', methods=['GET', 'POST'])
-@login_required
-def requests():
+# @shipping.route('/requests', methods=['GET', 'POST'])
+# @login_required
+# def requests():
 
-    requests = DeliveryRequest.query.filter(DeliveryRequest.checked.is_(None)).order_by(DeliveryRequest.id.desc()).all()
+#     requests = DeliveryRequest.query.filter(DeliveryRequest.checked.is_(None)).order_by(DeliveryRequest.id.desc()).all()
 
-    if request.method == 'POST':
-        id = request.form['request_id']
-        target_request = DeliveryRequest.query.get(id)
-        target_request.checked = 1
-        db.session.commit()
+#     if request.method == 'POST':
+#         id = request.form['request_id']
+#         target_request = DeliveryRequest.query.get(id)
+#         target_request.checked = 1
+#         db.session.commit()
 
-        flash('1件非表示にしました。')
-        return redirect(url_for('shipping.requests'))
+#         flash('1件非表示にしました。')
+#         return redirect(url_for('shipping.requests'))
 
-    return render_template('requests.html', requests=requests)
+#     return render_template('requests.html', requests=requests)
 
 
-@shipping.route('/request_detail/<int:id>', methods=['GET', 'POST'])
-@login_required
-def request_detail(id):
+# @shipping.route('/request_detail/<int:id>', methods=['GET', 'POST'])
+# @login_required
+# def request_detail(id):
 
-    delivery_request = DeliveryRequest.query.get(id)
+#     delivery_request = DeliveryRequest.query.get(id)
 
-    if request.method == 'POST':
-        delivery_request.reply = request.form['reply']
-        db.session.commit()
+#     if request.method == 'POST':
+#         delivery_request.reply = request.form['reply']
+#         db.session.commit()
 
-        flash('回答を登録しました。', 'success')
-        return redirect(url_for('shipping.requests'))
+#         flash('回答を登録しました。', 'success')
+#         return redirect(url_for('shipping.requests'))
 
-    return render_template('request-detail.html', delivery_request=delivery_request)
+#     return render_template('request-detail.html', delivery_request=delivery_request)
 
 
 
@@ -220,17 +220,20 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 @shipping.route('/shipped', methods=['GET', 'POST'])
 @login_required
 def shipped():
 
-    today = datetime.today()
-    a_week_ago = today - timedelta(weeks=1)
+    today = datetime.datetime.now(JST)
+    a_week_ago = today - datetime.timedelta(weeks=1)
 
     page = request.args.get('page', 1, type=int)
     shippings = Shipping.query.filter(Shipping.registered_at >= a_week_ago).filter_by(registered_by = current_user.shipper_id).order_by(Shipping.id.desc()).paginate(page=page, per_page=20)
 
     form = FileUploadForm()
+
+    shipped_items = get_shipped_items(today)
 
     if form.validate_on_submit():
 
@@ -269,4 +272,4 @@ def shipped():
             flash('登録するファイルを確認して下さい。', 'error')
             return redirect(url_for('shipping.shipped'))
 
-    return render_template('shipped.html', form=form, shippings=shippings, a_week_ago=a_week_ago)
+    return render_template('shipped.html', form=form, shippings=shippings, a_week_ago=a_week_ago, today=today, shipped_items=shipped_items)

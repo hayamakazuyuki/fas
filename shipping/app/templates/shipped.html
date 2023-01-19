@@ -4,11 +4,28 @@
 {% include "_flashing.html" %}
 <div x-data="" class="container mx-auto">
     <div class="my-8 px-3 mx-auto w-full md:max-w-md">
-        <h1 class="font-bold text-lg text-gray-500">出荷データ登録</h1>
-        <form class="mt-5" method="post" enctype="multipart/form-data">
-            {{ form.csrf_token }}
-            {{ form.file(class_="text-sm") }}{{ form.submit(class_="py-2 px-5 text-white text-sm bg-blue-500 shadow-lg rounded-full cursor-pointer hover:bg-blue-700") }}
-        </form>
+        <div class="p-5 border rounded-lg shadow-md">
+            <h1 class="font-bold text-lg text-gray-500">出荷実績の登録</h1>
+            <form class="mt-5" method="post" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                {{ form.file(class_="text-sm") }}{{ form.submit(class_="py-2 px-4 text-white text-sm bg-blue-700 shadow-lg rounded-full cursor-pointer hover:bg-blue-500") }}
+            </form>
+        </div>
+
+        <div class="my-5 p-5 border rounded-lg shadow-md">
+            <h1 class="font-bold text-lg mb-3">{{ today.month }}<span class="text-sm text-gray-500"> 月の出荷実績</span></h1>
+            {% if shipped_items %}
+            <ul class="px-3">
+                {% for shipped_item in shipped_items %}
+                <li class="flex w-full border-b my-2 text-sm text-gray-500">
+                    <div class="w-2/3">{{ shipped_item[0] }}<span> {{ shipped_item[1] }}</span></div>
+                    <div class="w-1/3 text-right">{{ shipped_item[2] }}<span> 箱</span></div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
         <div>
             <h1 class="mt-10 mb-2 font-bold text-lg text-gray-500">登録済みデータ</h1>
             <p>{{ a_week_ago.strftime('%Y-%m-%d') }} <span class="text-xs text-gray-500">以降の登録分のみ</span></p>
