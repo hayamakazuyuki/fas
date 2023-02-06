@@ -330,12 +330,6 @@ def register_with_items(customer_id, id):
 def order_detail(id, edit=None, request_id=None):
 
     order = ProductOrder.query.get(id)
-    # mode = request.args.get('mode')
-
-    # get 2hours before and remove timezone info
-    # before2hours = datetime.now(JST) - timedelta(seconds=7200)
-    # before2h = before2hours.replace(tzinfo=None)
-
  
     if edit == 'order':
         current_item = order.product.id
