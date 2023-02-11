@@ -1,6 +1,6 @@
 cron:
-- description: "daily sales summary"
-  target: default
-  url: /daily-report
-  timezone: Asia/Tokyo
-  schedule: every day 00:03
+# - description: "daily sales summary"
+#   target: default
+#   url: /daily-report
+#   timezone: Asia/Tokyo
+#   schedule: every day 00:03
