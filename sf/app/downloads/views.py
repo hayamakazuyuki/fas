@@ -104,13 +104,13 @@ def search():
             shipped_by = []
 
             if order.shippings:
-                for date in order.shippings.shipped_on:
-                    shipped_on.append(date)
+                # for date in order.shippings.shipped_on:
+                #     shipped_on.append(date)
 
-                for shipper in order.shippings.registered_by:
-                    shipped_by.append(shipper)
-                # shipped_on = order.shippings.shipped_on
-                # shipped_by = order.shippings.registered_by
+                # for shipper in order.shippings.registered_by:
+                #     shipped_by.append(shipper)
+                shipped_on = order.shippings.shipped_on
+                shipped_by = order.shippings.registered_by
 
             else:
                 pass
